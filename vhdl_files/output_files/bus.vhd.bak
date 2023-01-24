@@ -1,0 +1,25 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity mypal
+port( input a : std_logic;)
+
+end mypal
+
+
+
+architecture sim of mypal is
+
+component reg is
+port( signal reg_input : in std_logic_vector(31 downto 0);
+signal clk: in std_logic;
+signal clear: in std_logic;
+signal writeEnable: in std_logic;
+signal reg_out : out std_logic_vector(31 downto 0);
+);
+end component;
+
+begin
+
+
+my_reg_0: reg port map( clk => a(0));
