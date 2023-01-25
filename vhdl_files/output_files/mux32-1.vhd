@@ -20,6 +20,15 @@ entity mux32_1
 			signal bus_mux_in_13 : in std_logic_vector(31 downto 0);
 			signal bus_mux_in_14 : in std_logic_vector(31 downto 0);
 			signal bus_mux_in_15 : in std_logic_vector(31 downto 0);
+
+			signal bus_mux_in_HI : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_LO : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_Z_high : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_Z_low : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_PC : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_MDR : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_InPort : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_C_sign_extended : in std_logic_vector(31 downto 0);
 			
 			signal bus_mux_out: out std_logic_vector(31 downto 0)
 	);
@@ -37,6 +46,7 @@ signal clear: in std_logic;
 signal writeEnable: in std_logic;
 signal reg_out : out std_logic_vector(31 downto 0);
 );
+--we need to do something with portmapping I believe?
 end component;
 
 begin
@@ -73,7 +83,23 @@ begin
 		when "01110" =>
 			bus_mux_out <= bus_mux_in_14;
 		when "01111" =>
-			bus_mux_out <= bus_mux_in_15;
+			bus_mux_out <= bus_mux_in_15; --general registers stop here, default register for now
+		when "10000" =>
+			bus_mux_out <= bus_mux_in_HI;
+		when "10001" =>
+			bus_mux_out <= bus_mux_in_LO;
+		when "10010" =>
+			bus_mux_out <= bus_mux_in_Z_high;
+		when "10011" =>
+			bus_mux_out <= bus_mux_in_Z_low;
+		when "10100" =>
+			bus_mux_out <= bus_mux_in_PC;
+		when "10101" =>
+			bus_mux_out <= bus_mux_in_MDR;
+		when "10110" =>
+			bus_mux_out <= bus_mux_in_InPort;
+		when "10111" =>
+			bus_mux_out <= bus_mux_in_C_sign_extended;
 		when others =>
 			bus_mux_out <= bus_mux_in_15;
 	end case;
