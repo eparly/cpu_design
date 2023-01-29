@@ -6,11 +6,13 @@ entity encoder32_5
         signal encoderOutput : out std_logic_vector(4 downto 0);
 	    signal encoderInput : in std_logic_vector(31 downto 0);
 	);
-
-architecture enbehavior of encoder32_5 is
+end encoder32_5;
+architecture behavior of encoder32_5 is
 
 begin
 --encoding input from the registers is the same order as in the 32-1 MUX
+process
+begin
 case encoderInput is
 		when "00000000000000000000000000000001" =>
 			encoderOutput <= "00000";
@@ -62,7 +64,7 @@ case encoderInput is
 			encoderOutput <= "10111";
 		when others =>
 			encoderOutput <= "01111";
-	end case;
-
-end enbehavior;
+		end case;
+end process;
+end behavior;
 

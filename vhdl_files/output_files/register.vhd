@@ -5,7 +5,7 @@ entity reg is
 port( signal reg_input : in std_logic_vector(31 downto 0);
 signal clk: in std_logic;
 signal clear: in std_logic;
-signal writeEnable: in std_logic;
+signal writeEnable: in std_logic; --R#In
 signal reg_out : out std_logic_vector(31 downto 0)
 );
 end reg;

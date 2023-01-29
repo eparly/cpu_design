@@ -50,7 +50,8 @@ signal reg_out : out std_logic_vector(31 downto 0);
 end component;
 
 begin
-
+process
+begin
 	case sel is
 		when "00000" =>
 			bus_mux_out <= bus_mux_in_0;
@@ -103,6 +104,6 @@ begin
 		when others =>
 			bus_mux_out <= bus_mux_in_15;
 	end case;
-
+	end process;
 
 end behavior;
