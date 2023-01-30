@@ -31,7 +31,7 @@ port( signal reg_input : in std_logic_vector(31 downto 0);
 end component;
 
 begin 
-MDRReg: reg port map(reg_input => regIn, reg_out => MDROut, clear => MDRclear, writeEnable=>MDRwriteEnable, clk=>MDRclk);
+MDRReg: reg port map(reg_input => RegIn, reg_out => MDROut, clear => MDRclear, writeEnable=>MDRwriteEnable, clk=>MDRclk);
 
 process 
 begin
