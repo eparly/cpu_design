@@ -15,6 +15,10 @@ port(
 );
 end entity;
 --opcode is listed as constants to make future code more bearable, idk the actual opcodes yet so they are all 0's for now
+
+architecture behavior of ALU is
+begin
+
 constant ALU_And: std_logic_vector(4 downto 0):= "00000";
 constant Alu_Or: std_logic_vector(4 downto 0):= "00000";
 constant ALU_Add: std_logic_vector(4 downto 0):= "00000";
@@ -27,4 +31,6 @@ constant ALU_Ror: std_logic_vector(4 downto 0):= "00000";
 constant ALU_Rol: std_logic_vector(4 downto 0):= "00000";
 constant ALU_Neg: std_logic_vector(4 downto 0):= "00000";
 constant ALU_Not: std_logic_vector(4 downto 0):= "00000";
-constant ALU_Shra: std_logic_vector(4 downto 0):= "00000"
+constant ALU_Shra: std_logic_vector(4 downto 0):= "00000";
+
+end behavior;
