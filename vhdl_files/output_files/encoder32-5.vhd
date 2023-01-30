@@ -3,8 +3,8 @@ use IEEE.std_logic_1164.all;
 
 entity encoder32_5
     port( 
-        signal encoderOutput : out std_logic_vector(4 downto 0);
-	    signal encoderInput : in std_logic_vector(31 downto 0);
+        encoderOutput : out std_logic_vector(4 downto 0);
+	    encoderInput : in std_logic_vector(31 downto 0);
 	);
 end encoder32_5;
 architecture behavior of encoder32_5 is
