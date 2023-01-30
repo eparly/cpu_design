@@ -1,0 +1,7 @@
+base register component - DONE
+32-1 mux - DONE
+32-5 encoder - DONE
+MD register - DONE?
+ALU plus ALL operations
+
+somehow combine it all into one main.vhd file for phase 1?
