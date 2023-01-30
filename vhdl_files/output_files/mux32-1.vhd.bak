@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity mux32_1 is
+entity mux32_1
 	port( signal sel : in std_logic_vector(4 downto 0);
 	
 			signal bus_mux_in_0 : in std_logic_vector(31 downto 0);
@@ -44,7 +44,7 @@ port( signal reg_input : in std_logic_vector(31 downto 0);
 signal clk: in std_logic;
 signal clear: in std_logic;
 signal writeEnable: in std_logic;
-signal reg_out : out std_logic_vector(31 downto 0)
+signal reg_out : out std_logic_vector(31 downto 0);
 );
 --we need to do something with portmapping I believe?
 end component;

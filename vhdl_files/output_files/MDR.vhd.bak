@@ -5,33 +5,32 @@ use IEEE.std_logic_1164.all;
 
 entity MDR is
     port(
-        BusInput: in std_logic_vector(31 downto 0);
-        MemDataIn: in std_logic_vector(31 downto 0);
-        sel: in std_logic;
-        MDROut: out std_logic_vector(31 downto 0); --will need to be configured later to go to bus or memory chip (phase 3)
+        signal BusInput: in std_logic_vector(31 downto 0);
+        signal MemDataIn: in std_logic_vector(31 downto 0);
+        signal sel: in std_logic;
+        signal RegIn: out std_logic_vector(31 downto 0); --whatever the sel selects, goes into the register component
+        signal MDROut: out std_logic_vector(31 downto 0); --will need to be configured later to go to bus or memory chip (phase 3)
         --i think i need the following for the register component?
         --signal MDRclk: in std_logic; maybe not the clk? irdk
-		  MDRclk: in std_logic;
-        MDRclear: in std_logic;
-        MDRwriteEnable: in std_logic
+        signal MDRclear: in std_logic;
+        signal MDRwriteEnable: in std_logic;
     );
 end MDR;
 
 architecture behavior of MDR is
-    signal RegIn: std_logic_vector(31 downto 0); --whatever the sel selects, goes into the register component
 
 component reg is
 port( signal reg_input : in std_logic_vector(31 downto 0);
-	clk: in std_logic;
-	clear: in std_logic;
-	writeEnable: in std_logic;
-	reg_out : out std_logic_vector(31 downto 0)
+signal clk: in std_logic;
+signal clear: in std_logic;
+signal writeEnable: in std_logic;
+signal reg_out : out std_logic_vector(31 downto 0);
 );
 --first time using port mapping, i have no idea if this is right, trying to feed RegIn to reg_input, and reg_out to MDROut
 end component;
 
 begin 
-MDRReg: reg port map(reg_input => regIn, reg_out => MDROut, clear => MDRclear, writeEnable=>MDRwriteEnable, clk=>MDRclk);
+MDRReg: reg port map(reg_input=>RegIn,MDROut=>reg_out,clear=>MDRclear,writeEnable=>MDRwriteEnable);
 
 process 
 begin
@@ -44,7 +43,6 @@ case sel is
         RegIn <=BusInput; --we don't have the memory stuff setup yet, default to recieve from bus
 end case;
 end process;
-end architecture;
+end behavior;
 
 -- i have no idea if this is right
---test
