@@ -4,4 +4,6 @@ base register component - DONE
 MD register - DONE?
 ALU plus ALL operations
 
+create all the testbench stuff for each component and for phase 1 as a whole
+
 somehow combine it all into one main.vhd file for phase 1?
