@@ -11,7 +11,7 @@ entity MDR is
         MDROut: out std_logic_vector(31 downto 0); --will need to be configured later to go to bus or memory chip (phase 3)
         --i think i need the following for the register component?
         --signal MDRclk: in std_logic; maybe not the clk? irdk
-		  MDRclk: in std_logic;
+		MDRclk: in std_logic;
         MDRclear: in std_logic;
         MDRwriteEnable: in std_logic
     );
