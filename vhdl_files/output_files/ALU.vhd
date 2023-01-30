@@ -33,4 +33,9 @@ constant ALU_Neg: std_logic_vector(4 downto 0):= "00000";
 constant ALU_Not: std_logic_vector(4 downto 0):= "00000";
 constant ALU_Shra: std_logic_vector(4 downto 0):= "00000";
 
+--how to implement ALU with all of its operations
+--every operation has a defined signal for its output, when port mapping the operation to the alu, its output will be mapped to its specific signal
+--in the switch-case, if the opcode matches, have the c register (ALU's output) grab the output signal of the given operation
+--then pray it works
+
 end behavior;
