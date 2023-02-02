@@ -18,7 +18,7 @@ entity MDR is
 end MDR;
 
 architecture behavior of MDR is
-    signal RegIn: std_logic_vector(31 downto 0); --whatever the sel selects, goes into the register component
+signal RegIn: std_logic_vector(31 downto 0); --whatever the sel selects, goes into the register component
 
 component reg is
 port( signal reg_input : in std_logic_vector(31 downto 0);
