@@ -34,6 +34,8 @@ signal Shra_result: std_logic_vector(31 downto 0);
 --paste ALL the components for all the operations in here
 begin
 --port mapping EVERYTHING
+
+--actual process of checking opcode to determine what operation to do
 process
 case opcode is
     when "00000" => --ALU_And:
