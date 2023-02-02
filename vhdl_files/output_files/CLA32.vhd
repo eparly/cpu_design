@@ -28,6 +28,6 @@ end component;
 begin
 
 CFA161: reg port map(ra => ra(15 downto 0), rb => rb(15 downto 0), cin => cin, sum=>sum(15 downto 0), cout=>cout1);
-CFA162: reg port map(ra => ra(31 downto 16), rb => rb(31 downto 16), cin => cin, sum=>sum(31 downto 16), cout=>cout);
+CFA162: reg port map(ra => ra(31 downto 16), rb => rb(31 downto 16), cin => cout1, sum=>sum(31 downto 16), cout=>cout);
 
 end behavior;

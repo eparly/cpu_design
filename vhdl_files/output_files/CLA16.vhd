@@ -29,8 +29,8 @@ end component;
 
 begin
 CFA41: reg port map(ra => ra(3 downto 0), rb => rb(3 downto 0), cin => cin, sum=>sum(3 downto 0), cout=>cout1);
-CFA42: reg port map(ra => ra(7 downto 4), rb => rb(7 downto 4), cin => cin, sum=>sum(7 downto 4), cout=>cout2);
-CFA43: reg port map(ra => ra(11 downto 8), rb => rb(11 downto 8), cin => cin, sum=>sum(11 downto 8), cout=>cout3);
-CFA44: reg port map(ra => ra(15 downto 12), rb => rb(15 downto 12), cin => cin, sum=>sum(15 downto 12), cout=>cout);
+CFA42: reg port map(ra => ra(7 downto 4), rb => rb(7 downto 4), cin => cout1, sum=>sum(7 downto 4), cout=>cout2);
+CFA43: reg port map(ra => ra(11 downto 8), rb => rb(11 downto 8), cin => cout2, sum=>sum(11 downto 8), cout=>cout3);
+CFA44: reg port map(ra => ra(15 downto 12), rb => rb(15 downto 12), cin => cout3, sum=>sum(15 downto 12), cout=>cout);
 
 end behavior;
