@@ -4,10 +4,22 @@ base register component - DONE
 MD register - DONE?
 
 ALU plus ALL operations
-DONE:
+operations that are completed:
 Add
 And
 Or
+Shr
+Shl
+Shra
+Shla
+Not
+Neg
+Ror
+Rol
+
+Still to do:
+Mul
+Div
 
 create all the testbench stuff for each component and for phase 1 as a whole
 

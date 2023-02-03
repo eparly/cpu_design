@@ -31,6 +31,7 @@ signal Rol_result: std_logic_vector(31 downto 0);
 signal Neg_result: std_logic_vector(31 downto 0);
 signal Not_result: std_logic_vector(31 downto 0);
 signal Shra_result: std_logic_vector(31 downto 0);
+signal Shla_result: std_logic_vector(31 downto 0);
 --paste ALL the components for all the operations in here
 begin
 --port mapping EVERYTHING
@@ -74,6 +75,9 @@ case opcode is
         ZReg(63 downto 32) <= (others => '0');
     when "00000" => --ALU_Shra:
         Zreg(31 downto 0) <= Shra_result;
+        ZReg(63 downto 32) <= (others => '0');
+    when "00000" => --ALU_Shla:
+        Zreg(31 downto 0) <= Shla_result;
         ZReg(63 downto 32) <= (others => '0');
 end case;
 end process;
