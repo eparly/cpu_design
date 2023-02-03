@@ -20,14 +20,14 @@ signal C : std_logic_vector(3 downto 0);
 begin
 process
 begin
-P = Ra xor Rb;
-G = Ra and Rb;
-C(0) = cin;
-c(1) = G(0) or (P(0) and C(0));
-c(2) = G[1] or (P[1] and G[0]) or (P[1] and P[0] and c[0]);
-c(3) = G[2] and (P[2] and G[1]) or (P[2] and P[1] and G[0]) or (P[2] and P[1] and P[0] and c[0]);
-cout = G[3] or (P[3] and G[2]) or (P[3] and P[2] and G[1]) or (P[3] and P[2] and P[1] and G[0]) or (P[3] and P[2] and P[1] and P[0] and c[0]);
-sum = P xor c;
+P <= Ra xor Rb;
+G <= Ra and Rb;
+C(0) <= cin;
+C(1) <= G(0) or (P(0) and C(0));
+C(2) <= G(1) or (P(1) and G(0)) or (P(1) and P(0) and C(0));
+C(3) <= G(2) and (P(2) and G(1)) or (P(2) and P(1) and G(0)) or (P(2) and P(1) and P(0) and C(0));
+cout <= G(3) or (P(3) and G(2)) or (P(3) and P(2) and G(1)) or (P(3) and P(2) and P(1) and G(0)) or (P(3) and P(2) and P(1) and P(0) and C(0));
+sum <= P xor C;
 
 end process;
 end behavior;

@@ -61,6 +61,20 @@ set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_tes
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id register_test
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME register_test -section_id register_test
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/register_test.vhd -section_id register_test
+set_global_assignment -name VHDL_FILE output_files/Sub32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shra32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shr32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shla32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shl32.vhd
+set_global_assignment -name VHDL_FILE output_files/Ror32.vhd
+set_global_assignment -name VHDL_FILE output_files/Rol32.vhd
+set_global_assignment -name VHDL_FILE output_files/Or32.vhd
+set_global_assignment -name VHDL_FILE output_files/Not32.vhd
+set_global_assignment -name VHDL_FILE output_files/Neg32.vhd
+set_global_assignment -name VHDL_FILE output_files/CLA32.vhd
+set_global_assignment -name VHDL_FILE output_files/CLA16.vhd
+set_global_assignment -name VHDL_FILE output_files/CLA4.vhd
+set_global_assignment -name VHDL_FILE output_files/And32.vhd
 set_global_assignment -name VHDL_FILE output_files/register.vhd
 set_global_assignment -name VHDL_FILE testbenches/register_test.vhd
 set_global_assignment -name VHDL_FILE "output_files/mux32-1.vhd"
@@ -68,4 +82,5 @@ set_global_assignment -name VHDL_FILE output_files/MDR.vhd
 set_global_assignment -name VHDL_FILE "output_files/encoder32-5.vhd"
 set_global_assignment -name VHDL_FILE output_files/ALU.vhd
 set_global_assignment -name BDF_FILE cpu_design.bdf
+set_global_assignment -name VHDL_FILE output_files/CLA4_tb.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

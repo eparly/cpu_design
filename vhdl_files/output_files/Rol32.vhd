@@ -110,7 +110,7 @@ begin
             ZReg(31) <= AReg(0);
             ZReg(30 downto 0) <= AReg(31 downto 1);
         when others =>  --anything under 1 or over 31 just gets ignored
-            ZReg <= AReg();
+            ZReg <= AReg;
     end case;
 end process;
 end behavior;
