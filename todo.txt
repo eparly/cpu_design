@@ -2,7 +2,12 @@ base register component - DONE
 32-1 mux - DONE
 32-5 encoder - DONE
 MD register - DONE?
+
 ALU plus ALL operations
+DONE:
+Add
+And
+Or
 
 create all the testbench stuff for each component and for phase 1 as a whole
 
