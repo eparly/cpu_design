@@ -3,24 +3,13 @@ base register component - DONE
 32-5 encoder - DONE
 MD register - DONE?
 
-ALU plus ALL operations
-operations that are completed:
-Add
-And
-Or
-Shr
-Shl
-Shra
-Shla
-Not
-Neg
-Ror
-Rol
+ALU plus ALL operations -> DONE
 
-Still to do:
-Mul
-Div
+Tie everything together todo (CPU_BUS.vhd):
+port map the 32 MUX
+port map all registers
+port map ALU
+deal with the write/enable of the registers
+its currently 4am so i definetly forgot something
 
 create all the testbench stuff for each component and for phase 1 as a whole
-
-somehow combine it all into one main.vhd file for phase 1?
