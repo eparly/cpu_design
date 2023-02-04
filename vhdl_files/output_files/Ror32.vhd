@@ -12,7 +12,7 @@ end ROR32;
 --im hard coding all possible rotations idgaf, probably better performance
 architecture behavior of ROR32 is
 begin 
-process
+process(AReg, BReg)
 begin
     case BReg is
         when "11111" =>

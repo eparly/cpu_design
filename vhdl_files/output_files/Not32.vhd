@@ -13,7 +13,7 @@ architecture behavior of NOT32 is
 
 begin
 --i assume they expect us to AND one bit at a time
-process
+process(AReg)
 begin
 And_loop : for i in 0 to 31 loop
     Zreg(i) <= not AReg(i);

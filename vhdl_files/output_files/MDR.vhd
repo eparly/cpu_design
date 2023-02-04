@@ -33,7 +33,7 @@ end component;
 begin 
 MDRReg: reg port map(reg_input => RegIn, reg_out => MDROut, clear => MDRclear, writeEnable=>MDRwriteEnable, clk=>MDRclk);
 
-process 
+process (sel, BusInput)
 begin
 case sel is
     when '0' =>

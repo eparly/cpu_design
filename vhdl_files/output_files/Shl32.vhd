@@ -14,7 +14,7 @@ architecture behavior of SHL32 is
 
 begin
 --idk if works
-process
+process(AReg, BReg)
 begin
 Zreg <= AReg sll BReg;
 end process;
