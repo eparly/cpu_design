@@ -1,0 +1,185 @@
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity CPU_BUS is 
+port( --needed to be done this way to implement the control unit later
+    R0out : in std_logic;
+    R1out : in std_logic;
+    R2out : in std_logic;
+    R3out : in std_logic;
+    R4out : in std_logic;
+    R5out : in std_logic;
+    R6out : in std_logic;
+    R7out : in std_logic;
+    R8out : in std_logic;
+    R9out : in std_logic;
+    R10out : in std_logic;
+    R11out : in std_logic;
+    R12out : in std_logic;
+    R13out : in std_logic;
+    R14out : in std_logic;
+    R15out : in std_logic;
+    HIout : in std_logic;
+    LOout : in std_logic;
+    ZHIout : in std_logic;
+    ZLOout : in std_logic;
+    PCout : in std_logic;
+    MDRout : in std_logic;
+    PORTout : in std_logic;
+    Cout : in std_logic;
+
+    BusMuxOut : out std_logic_vector(31 downto 0)
+);
+end CPU_BUS;
+
+architecture behavior of CPU_BUS is
+--for the encoder, indivdual signals tied into one vector to be passed into the encoder (needed because of how we designed the encoder)
+signal encoderInput : std_logic_vector(31 downto 0);
+encoderInput(0) <= R0out;
+encoderInput(1) <= R1out;
+encoderInput(2) <= R2out;
+encoderInput(3) <= R3out;
+encoderInput(4) <= R4out;
+encoderInput(5) <= R5out;
+encoderInput(6) <= R6out;
+encoderInput(7) <= R7out;
+encoderInput(8) <= R8out;
+encoderInput(9) <= R9out;
+encoderInput(10) <= R10out;
+encoderInput(11) <= R11out;
+encoderInput(12) <= R12out;
+encoderInput(13) <= R13out;
+encoderInput(14) <= R14out;
+encoderInput(15) <= R15out;
+encoderInput(16) <= HIout;
+encoderInput(17) <= LOout;
+encoderInput(18) <= ZHIout;
+encoderInput(19) <= ZLOout;
+encoderInput(20) <= PCout;
+encoderInput(21) <= MDRout;
+encoderInput(22) <= PORTout;
+encoderInput(23) <= Cout;
+signal encoderOutput : std_logic_vector(4 downto 0);
+
+--input from the register outputs for the 32-1 MUX
+signal R0in : std_logic_vector(31 downto 0); 
+signal R1in : std_logic_vector(31 downto 0);
+signal R2in : std_logic_vector(31 downto 0);
+signal R3in : std_logic_vector(31 downto 0);
+signal R4in : std_logic_vector(31 downto 0);
+signal R5in : std_logic_vector(31 downto 0);
+signal R6in : std_logic_vector(31 downto 0);
+signal R7in : std_logic_vector(31 downto 0);
+signal R8in : std_logic_vector(31 downto 0);
+signal R9in : std_logic_vector(31 downto 0);
+signal R10in : std_logic_vector(31 downto 0);
+signal R11in : std_logic_vector(31 downto 0);
+signal R12in : std_logic_vector(31 downto 0);
+signal R13in : std_logic_vector(31 downto 0);
+signal R14in : std_logic_vector(31 downto 0);
+signal R15in : std_logic_vector(31 downto 0);
+signal HIin : std_logic_vector(31 downto 0);
+signal LOin : std_logic_vector(31 downto 0);
+signal ZHIin : std_logic_vector(31 downto 0);
+signal ZLOin : std_logic_vector(31 downto 0);
+signal PCin : std_logic_vector(31 downto 0);
+signal MDRin : std_logic_vector(31 downto 0);
+signal PORTin : std_logic_vector(31 downto 0);
+signal Cin : std_logic_vector(31 downto 0);
+
+--components
+component reg is
+port( signal reg_input : in std_logic_vector(31 downto 0);
+signal clk: in std_logic;
+signal clear: in std_logic;
+signal writeEnable: in std_logic; --R#In
+signal reg_out : out std_logic_vector(31 downto 0)
+);
+end component;
+
+component ALU is
+port(
+    signal clk: in std_logic;
+    signal clear: in std_logic;
+    signal IncPC: in std_logic;
+
+    AReg: in std_logic_vector(31 downto 0);
+    BReg: in std_logic_vector(31 downto 0);
+    YReg: in std_logic_vector(31 downto 0);
+    Opcode: in std_logic_vector(4 downto 0);
+    ZReg: out std_logic_vector(63 downto 0)
+);
+end component;
+
+component mux32_1 is
+	port( signal sel : in std_logic_vector(4 downto 0);
+	
+			signal bus_mux_in_0 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_1 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_2 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_3 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_4 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_5 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_6 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_7 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_8 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_9 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_10 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_11 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_12 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_13 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_14 : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_15 : in std_logic_vector(31 downto 0);
+
+			signal bus_mux_in_HI : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_LO : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_Z_high : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_Z_low : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_PC : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_MDR : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_InPort : in std_logic_vector(31 downto 0);
+			signal bus_mux_in_C_sign_extended : in std_logic_vector(31 downto 0);
+			
+			signal bus_mux_out: out std_logic_vector(31 downto 0)
+	);
+
+end component;
+
+component encoder32_5 is
+    port( 
+        signal encoderOutput : out std_logic_vector(4 downto 0);
+	    signal encoderInput : in std_logic_vector(31 downto 0)
+	);
+end component;
+
+begin
+--port mapping
+Encode : encoder32_5 port map(encoderOutput => encoderOutput, encoderInput => encoderInput);
+BusMUX : mux32_1 port map();
+ALU : ALU port map();
+R0 : reg port map();
+R1 : reg port map();
+R2 : reg port map();
+R3 : reg port map();
+R4 : reg port map();
+R5 : reg port map();
+R6 : reg port map();
+R7 : reg port map();
+R8 : reg port map();
+R9 : reg port map();
+R10 : reg port map();
+R11 : reg port map();
+R12 : reg port map();
+R13 : reg port map();
+R14 : reg port map();
+R15 : reg port map();
+RHI : reg port map();
+RLO : reg port map();
+RZHI : reg port map();
+RZLO : reg port map();
+RPC : reg port map();
+RMDR : reg port map();
+RPORT : reg port map();
+RC : reg port map();
+
+end behavior;

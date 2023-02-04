@@ -5,7 +5,7 @@ MD register - DONE?
 
 ALU plus ALL operations -> DONE
 
-Tie everything together todo (CPU_BUS.vhd):
+Tie everything together todo (Cpu_Bus.vhd):
 port map the 32 MUX
 port map all registers
 port map ALU
