@@ -165,20 +165,20 @@ end component;
 
 begin
 --port mapping EVERYTHING
-AddOP : CLA32 port map(ra => AReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
-AndOP : AND32 port map(AReg => AReg, BReg => BReg, ZReg => And_result);
-DivOP : DIV32 port map(ra => AReg, rb => BReg, rz => Div_result);
-MulOP : MUL32 port map(ra => AReg, rb => BReg, rz => Mul_result);
-NegOP : NEG32 port map(AReg => AReg, ZReg => Neg_result);
-NotOP : NOT32 port map(AReg => AReg, ZReg => Not_result);
-OrOP : OR32 port map(AReg => AReg, BReg => BReg, ZReg => Or_result);
-RolOP : ROL32 port map(AReg => AReg, BReg => BReg, ZReg => Rol_result);
-RorOP : ROR32 port map(AReg => AReg, BReg => BReg, ZReg => Ror_result);
-ShlOP : SHL32 port map(AReg => AReg, BReg => BReg, ZReg => Shl_result);
-ShlaOP : SHLA32 port map(AReg => AReg, BReg => BReg, ZReg => Shla_result);
-ShrOP : SHR32 port map(AReg => AReg, BReg => BReg, ZReg => Shr_result);
-ShraOP : SHRA port map(AReg => AReg, BReg => BReg, ZReg => Shra_result);
-SubOP : SUB32 port map(ra => AReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
+AddOP : CLA32 port map(ra => YReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
+AndOP : AND32 port map(AReg => YReg, BReg => BReg, ZReg => And_result);
+DivOP : DIV32 port map(ra => YReg, rb => BReg, rz => Div_result);
+MulOP : MUL32 port map(ra => YReg, rb => BReg, rz => Mul_result);
+NegOP : NEG32 port map(AReg => YReg, ZReg => Neg_result);
+NotOP : NOT32 port map(AReg => YReg, ZReg => Not_result);
+OrOP : OR32 port map(AReg => YReg, BReg => BReg, ZReg => Or_result);
+RolOP : ROL32 port map(AReg => YReg, BReg => BReg, ZReg => Rol_result);
+RorOP : ROR32 port map(AReg => YReg, BReg => BReg, ZReg => Ror_result);
+ShlOP : SHL32 port map(AReg => YReg, BReg => BReg, ZReg => Shl_result);
+ShlaOP : SHLA32 port map(AReg => YReg, BReg => BReg, ZReg => Shla_result);
+ShrOP : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
+ShraOP : SHRA port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
+SubOP : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
 --actual process of checking opcode to determine what operation to do
 process(clk, clear, IncPC, AReg, BReg, Opcode)
 begin
