@@ -5,7 +5,7 @@ entity MUL32 is
 port(
     ra: in std_logic_vector(31 downto 0);
     rb: in std_logic_vector(31 downto 0);
-    cout : out std_logic_vector(63 downto 0)
+    rz : out std_logic_vector(63 downto 0)
 );
 end entity;
 
@@ -18,10 +18,10 @@ variable result, tempResult: std_logic_vector(63 downto 0);
 variable addM, subM, zero: std_logic_vector(31 downto 0);
 begin
 
-addM <= ra;
-subM <= 0-rb; --we are allowed the use +- for mul and div
-result <= "00000000000000000000000000000000000000000000000000000000000000000000";
-zeros <= "00000000000000000000000000000000";
+addM := ra;
+subM := 0-rb; --we are allowed the use +- for mul and div
+result := "00000000000000000000000000000000000000000000000000000000000000000000";
+zeros := "00000000000000000000000000000000";
 
 for i in 0 to 31 loop
     if (i=0) then --first bit is handled differently in booth
@@ -46,6 +46,6 @@ for i in 0 to 31 loop
     tempResult := sll i; --remember in booth algorithm every time we add something its shifted by one
     result := result + tempResult;
 end loop; 
-ZReg <= result;
+rz <= result;
 end process;
 end behavior;
