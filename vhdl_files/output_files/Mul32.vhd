@@ -7,7 +7,7 @@ port(
     rb: in std_logic_vector(31 downto 0);
     rz : out std_logic_vector(63 downto 0)
 );
-end entity;
+end MUL32;
 
 architecture behavior of MUL32 is
 begin
