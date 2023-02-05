@@ -11,7 +11,7 @@ architecture behavior of encoder32_5 is
 
 begin
 --encoding input from the registers is the same order as in the 32-1 MUX
-process
+process(encoderInput)
 begin
 case encoderInput is
 		when "00000000000000000000000000000001" =>

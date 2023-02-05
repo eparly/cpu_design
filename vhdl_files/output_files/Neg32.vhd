@@ -34,10 +34,12 @@ port(
 end component;
 
 begin
-plus1 <= "00000000000000000000000000000001";
-cin <= '0';
+variable plus1 := "00000000000000000000000000000001";
+signal cin <= '0';
 
+process(AReg)
+begin
 Not_1 : NOT32 port map(AReg => AReg, ZReg => temp); --temp will hold the result of the not operation now
 CLA32_1 : CLA32 port map(ra => temp, rb => plus1, cin => cin, sum => ZReg, cout => cout); --at the result of the not operation with 1
-
+end process;
 end behavior;

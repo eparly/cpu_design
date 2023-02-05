@@ -13,7 +13,7 @@ end ROL32;
 --im hard coding all possible rotations idgaf, probably better performance
 architecture behavior of ROL32 is
 begin 
-process
+process(AReg, BReg)
 begin
     case BReg is
         when "00001" =>

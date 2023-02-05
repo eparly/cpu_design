@@ -18,7 +18,7 @@ signal G : std_logic_vector(3 downto 0);
 signal C : std_logic_vector(3 downto 0);
 
 begin
-process
+process(ra, rb, cin)
 begin
 P <= Ra xor Rb;
 G <= Ra and Rb;

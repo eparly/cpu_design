@@ -15,7 +15,7 @@ architecture behavior of SHRA32 is
 
 begin
 --idk if works
-process
+process(AReg, BReg)
 begin
 Zreg <= AReg sra BReg;
 end process;

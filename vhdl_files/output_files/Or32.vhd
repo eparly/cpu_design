@@ -14,7 +14,7 @@ architecture behavior of OR32 is
 
 begin
 --i assume they expect us to AND one bit at a time
-process
+process(AReg, BReg)
 begin
 Or_loop : for i in 0 to 31 loop
     Zreg(i) <= AReg(i) or BReg(i);

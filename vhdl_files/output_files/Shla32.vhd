@@ -14,7 +14,7 @@ architecture behavior of SHLA32 is
 
 begin
 --idk if works
-process
+process(AReg, BReg)
 begin
 Zreg <= AReg sla BReg;
 end process;
