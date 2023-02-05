@@ -65,30 +65,7 @@ end CPU_BUS;
 architecture behavior of CPU_BUS is
 --for the encoder, indivdual signals tied into one vector to be passed into the encoder (needed because of how we designed the encoder)
 signal encoderInput : std_logic_vector(31 downto 0);
-encoderInput(0) <= R0out;
-encoderInput(1) <= R1out;
-encoderInput(2) <= R2out;
-encoderInput(3) <= R3out;
-encoderInput(4) <= R4out;
-encoderInput(5) <= R5out;
-encoderInput(6) <= R6out;
-encoderInput(7) <= R7out;
-encoderInput(8) <= R8out;
-encoderInput(9) <= R9out;
-encoderInput(10) <= R10out;
-encoderInput(11) <= R11out;
-encoderInput(12) <= R12out;
-encoderInput(13) <= R13out;
-encoderInput(14) <= R14out;
-encoderInput(15) <= R15out;
-encoderInput(16) <= HIout;
-encoderInput(17) <= LOout;
-encoderInput(18) <= ZHIout;
-encoderInput(19) <= ZLOout;
-encoderInput(20) <= PCout;
-encoderInput(21) <= MDRout;
-encoderInput(22) <= PORTout;
-encoderInput(23) <= Cout;
+
 signal encoderOutput : std_logic_vector(4 downto 0);
 
 --input from the register outputs for the 32-1 MUX
@@ -120,12 +97,26 @@ signal RamOutput : std_logic_vector(31 downto 0); --currently no memory module, 
 signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
 --components
 component reg is
-port( signal reg_input : in std_logic_vector(31 downto 0);
-signal clk: in std_logic;
-signal clear: in std_logic;
-signal writeEnable: in std_logic; --R#In
-signal reg_out : out std_logic_vector(31 downto 0)
-);
+	port( signal reg_input : in std_logic_vector(31 downto 0);
+		signal clk: in std_logic;
+		signal clear: in std_logic;
+		signal writeEnable: in std_logic; --R#In
+		signal reg_out : out std_logic_vector(31 downto 0)
+	);
+end component;
+
+component MDR is
+    port(
+        BusInput: in std_logic_vector(31 downto 0);
+        MemDataIn: in std_logic_vector(31 downto 0);
+        sel: in std_logic;
+        MDROut: out std_logic_vector(31 downto 0); --will need to be configured later to go to bus or memory chip (phase 3)
+        --i think i need the following for the register component?
+        --signal MDRclk: in std_logic; maybe not the clk? irdk
+		clk: in std_logic;
+        clear: in std_logic;
+        writeEnable: in std_logic
+    );
 end component;
 
 component ALU is
@@ -182,13 +173,43 @@ component encoder32_5 is
 	    signal encoderInput : in std_logic_vector(31 downto 0)
 	);
 end component;
-
 begin
+--encoder inputs
+encoderInput(0) <= R0out;
+encoderInput(1) <= R1out;
+encoderInput(2) <= R2out;
+encoderInput(3) <= R3out;
+encoderInput(4) <= R4out;
+encoderInput(5) <= R5out;
+encoderInput(6) <= R6out;
+encoderInput(7) <= R7out;
+encoderInput(8) <= R8out;
+encoderInput(9) <= R9out;
+encoderInput(10) <= R10out;
+encoderInput(11) <= R11out;
+encoderInput(12) <= R12out;
+encoderInput(13) <= R13out;
+encoderInput(14) <= R14out;
+encoderInput(15) <= R15out;
+encoderInput(16) <= HIout;
+encoderInput(17) <= LOout;
+encoderInput(18) <= ZHIout;
+encoderInput(19) <= ZLOout;
+encoderInput(20) <= PCout;
+encoderInput(21) <= MDRout;
+encoderInput(22) <= PORTout;
+encoderInput(23) <= Cout;
+
+
 --port mapping
 Encode : encoder32_5 port map(encoderOutput => encoderOutput, encoderInput => encoderInput);
 BusMUX : mux32_1 port map(bus_mux_in_0 => R0in,bus_mux_in_1 => R1in, bus_mux_in_2 => R2in, bus_mux_in_3 => R3in, bus_mux_in_4 => R4in, bus_mux_in_5 => R5in, bus_mux_in_6 => R6in, bus_mux_in_7 => R7in, bus_mux_in_8 => R8in, bus_mux_in_9 => R9in, bus_mux_in_10 => R10in, bus_mux_in_11 => R11in, bus_mux_in_12 => R12in, bus_mux_in_13 => R13in, bus_mux_in_14 => R14in, bus_mux_in_15 => R15in, bus_mux_in_HI => HIin, bus_mux_in_LO => LOin, bus_mux_in_Z_high => ZHIin, bus_mux_in_Z_low => ZLOin, bus_mux_in_PC => PCin, bus_mux_in_MDR => MDRin, bus_mux_in_InPort => PORTin, bus_mux_in_C_sign_extended => Cin, Bus_mux_out => BusMuxOut);
+
 --ALU
-ALU : ALU port map();
+--Commenting out ALU port map for now, need to include signals inside the mapping
+----------------------------------
+--ALU : ALU port map();
+----------------------------------
 --all (for now) registers
 R0 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R0En, reg_out => R0in);
 R1 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R1En, reg_out => R1in);
@@ -214,10 +235,11 @@ RPC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnabl
 RPORT : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PORTEn, reg_out => PORTin);
 RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => CEn, reg_out => Cin);
 --special MDR register
-RMDR : reg port map(BusInput => BusMuxOut, MemDataIn => RamOutput, sel => MDRRead, MDROut=> MDRin, clk =>, clear=> , writeEnable=> MDREn);
-
+--getting error on this line, commenting out for now
+-----------------
+--RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => RamOutput, sel => MDRRead, MDROut=> MDRin, clk =>, clear=> , writeEnable=> MDREn);
+-----------------
 end behavior;
-
 
 --this file can change alot depending on how we do this, i've assumed that the memmory chip (RAM) will be imported in and port mapped, hence why every signal relating to RAM is defined internally (not in the entity definition). I've also assumed that the Control Unit will import the CpuBus and connect/port map to it from there, if we instead change this and import the control unit inside of this file, all the ports relating to the control unit will have to be changed into internal signals to make it work
 

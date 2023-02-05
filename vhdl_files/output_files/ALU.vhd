@@ -38,8 +38,7 @@ signal AddCout : std_logic;
 signal SubCout : std_logic;
 signal AddCin : std_logic;
 signal SubCin : std_logic;
-AddCin <= '0';
-SubCin <= '0';
+
 --paste ALL the components for all the operations in here
 component CLA32 is
 port(
@@ -165,6 +164,9 @@ end component;
 
 begin
 --port mapping EVERYTHING
+AddCin <= '0';
+SubCin <= '0';
+
 AddOP : CLA32 port map(ra => YReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
 AndOP : AND32 port map(AReg => YReg, BReg => BReg, ZReg => And_result);
 DivOP : DIV32 port map(ra => YReg, rb => BReg, rz => Div_result);
