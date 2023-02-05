@@ -11,9 +11,9 @@ entity MDR is
         MDROut: out std_logic_vector(31 downto 0); --will need to be configured later to go to bus or memory chip (phase 3)
         --i think i need the following for the register component?
         --signal MDRclk: in std_logic; maybe not the clk? irdk
-		MDRclk: in std_logic;
-        MDRclear: in std_logic;
-        MDRwriteEnable: in std_logic
+		clk: in std_logic;
+        clear: in std_logic;
+        writeEnable: in std_logic
     );
 end MDR;
 
@@ -31,7 +31,7 @@ port( signal reg_input : in std_logic_vector(31 downto 0);
 end component;
 
 begin 
-MDRReg: reg port map(reg_input => RegIn, reg_out => MDROut, clear => MDRclear, writeEnable=>MDRwriteEnable, clk=>MDRclk);
+MDRReg: reg port map(reg_input => RegIn, reg_out => MDROut, clear => clear, writeEnable=>writeEnable, clk=>clk);
 
 process (sel, BusInput)
 begin

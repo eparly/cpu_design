@@ -2,7 +2,35 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity CPU_BUS is 
-port( --needed to be done this way to implement the control unit later
+port( --needed to be done this way to implement the control unit later <- see comments at the bottom
+    signal clk: in std_logic;
+    signal clear: in std_logic;
+--write/enable, goes into each registers "Rin" signal, also comes from the eventual Control Unit, could be moved inside the architecture
+    R0En : in std_logic;
+    R1En : in std_logic;
+    R2En : in std_logic;
+    R3En : in std_logic;
+    R4En : in std_logic;
+    R5En : in std_logic;
+    R6En : in std_logic;
+    R7En : in std_logic;
+    R8En : in std_logic;
+    R9En : in std_logic;
+    R10En : in std_logic;
+    R11En : in std_logic;
+    R12En : in std_logic;
+    R13En : in std_logic;
+    R14En : in std_logic;
+    R15En : in std_logic;
+    HIEn : in std_logic;
+    LOEn : in std_logic;
+    ZHIEn : in std_logic;
+    ZLOEn : in std_logic;
+    PCEn : in std_logic;
+    MDREn : in std_logic;
+    PORTEn : in std_logic;
+    CEn : in std_logic;
+--goes into encoder, comes from the eventual Control unit, could be moved inside the architecture
     R0out : in std_logic;
     R1out : in std_logic;
     R2out : in std_logic;
@@ -24,9 +52,11 @@ port( --needed to be done this way to implement the control unit later
     ZHIout : in std_logic;
     ZLOout : in std_logic;
     PCout : in std_logic;
-    MDRout : in std_logic;
     PORTout : in std_logic;
     Cout : in std_logic;
+    --MDR is slightly different
+    MDRout : in std_logic; --from control unit
+    MDRRead : in std_logic; --from control unit
 
     BusMuxOut : out std_logic_vector(31 downto 0)
 );
@@ -83,10 +113,11 @@ signal LOin : std_logic_vector(31 downto 0);
 signal ZHIin : std_logic_vector(31 downto 0);
 signal ZLOin : std_logic_vector(31 downto 0);
 signal PCin : std_logic_vector(31 downto 0);
-signal MDRin : std_logic_vector(31 downto 0);
 signal PORTin : std_logic_vector(31 downto 0);
 signal Cin : std_logic_vector(31 downto 0);
-
+--MDR is special
+signal RamOutput : std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
+signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
 --components
 component reg is
 port( signal reg_input : in std_logic_vector(31 downto 0);
@@ -155,31 +186,39 @@ end component;
 begin
 --port mapping
 Encode : encoder32_5 port map(encoderOutput => encoderOutput, encoderInput => encoderInput);
-BusMUX : mux32_1 port map();
+BusMUX : mux32_1 port map(bus_mux_in_0 => R0in,bus_mux_in_1 => R1in, bus_mux_in_2 => R2in, bus_mux_in_3 => R3in, bus_mux_in_4 => R4in, bus_mux_in_5 => R5in, bus_mux_in_6 => R6in, bus_mux_in_7 => R7in, bus_mux_in_8 => R8in, bus_mux_in_9 => R9in, bus_mux_in_10 => R10in, bus_mux_in_11 => R11in, bus_mux_in_12 => R12in, bus_mux_in_13 => R13in, bus_mux_in_14 => R14in, bus_mux_in_15 => R15in, bus_mux_in_HI => HIin, bus_mux_in_LO => LOin, bus_mux_in_Z_high => ZHIin, bus_mux_in_Z_low => ZLOin, bus_mux_in_PC => PCin, bus_mux_in_MDR => MDRin, bus_mux_in_InPort => PORTin, bus_mux_in_C_sign_extended => Cin, Bus_mux_out => BusMuxOut);
+--ALU
 ALU : ALU port map();
-R0 : reg port map();
-R1 : reg port map();
-R2 : reg port map();
-R3 : reg port map();
-R4 : reg port map();
-R5 : reg port map();
-R6 : reg port map();
-R7 : reg port map();
-R8 : reg port map();
-R9 : reg port map();
-R10 : reg port map();
-R11 : reg port map();
-R12 : reg port map();
-R13 : reg port map();
-R14 : reg port map();
-R15 : reg port map();
-RHI : reg port map();
-RLO : reg port map();
-RZHI : reg port map();
-RZLO : reg port map();
-RPC : reg port map();
-RMDR : reg port map();
-RPORT : reg port map();
-RC : reg port map();
+--all (for now) registers
+R0 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R0En, reg_out => R0in);
+R1 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R1En, reg_out => R1in);
+R2 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R2En, reg_out => R2in);
+R3 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R3En, reg_out => R3in);
+R4 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R4En, reg_out => R4in);
+R5 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R5En, reg_out => R5in);
+R6 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R6En, reg_out => R6in);
+R7 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R7En, reg_out => R7in);
+R8 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R8En, reg_out => R8in);
+R9 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R9En, reg_out => R9in);
+R10 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R10En, reg_out => R10in);
+R11 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R11En, reg_out => R11in);
+R12 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R12En, reg_out => R12in);
+R13 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R13En, reg_out => R13in);
+R14 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R14En, reg_out => R14in);
+R15 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R15En, reg_out => R15in);
+RHI : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => HIEn, reg_out => HIin);
+RLO : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => LOEn, reg_out => LOin);
+RZHI : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => ZHIEn, reg_out => ZHIin);
+RZLO : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => ZLOEn, reg_out => ZLOin);
+RPC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PCEn, reg_out => PCin);
+RPORT : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PORTEn, reg_out => PORTin);
+RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => CEn, reg_out => Cin);
+--special MDR register
+RMDR : reg port map(BusInput => BusMuxOut, MemDataIn => RamOutput, sel => MDRRead, MDROut=> MDRin, clk =>, clear=> , writeEnable=> MDREn);
 
 end behavior;
+
+
+--this file can change alot depending on how we do this, i've assumed that the memmory chip (RAM) will be imported in and port mapped, hence why every signal relating to RAM is defined internally (not in the entity definition). I've also assumed that the Control Unit will import the CpuBus and connect/port map to it from there, if we instead change this and import the control unit inside of this file, all the ports relating to the control unit will have to be changed into internal signals to make it work
+
+--i've coded this at like 4am i'm almost sure this doesn't work
