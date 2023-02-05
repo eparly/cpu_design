@@ -38,7 +38,9 @@ begin
 
 --actual process of checking opcode to determine what operation to do
 process
+begin
 case opcode is
+
     when "00000" => --ALU_And:
         ZReg(31 downto 0) <= And_result;
         ZReg(63 downto 32) <= (others => '0');
@@ -88,4 +90,4 @@ end behavior;
 --in the switch-case, if the opcode matches, have the c register (ALU's output) grab the output signal of the given operation
 --then pray it works
 
-end behavior;
+--end behavior;
