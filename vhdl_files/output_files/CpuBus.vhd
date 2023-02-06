@@ -97,7 +97,7 @@ signal PORTin : std_logic_vector(31 downto 0);
 signal Cin : std_logic_vector(31 downto 0);
 signal Yin : std_logic_vector(31 downto 0);
 --MDR is special
-signal RamOutput : std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
+signal MemDatain : std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
 signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
 --MAR output needs to go to the mem chip
 signal MARin : std_logic_vector(31 downto 0);
@@ -245,7 +245,7 @@ MARReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEn
 --special MDR register
 --getting error on this line, commenting out for now
 -----------------
---RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => RamOutput, sel => MDRRead, MDROut=> MDRin, clk =>, clear=> , writeEnable=> MDREn);
+--RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => MemDatain, sel => MDRRead, MDROut=> MDRin, clk =>, clear=> , writeEnable=> MDREn);
 -----------------
 end behavior;
 
