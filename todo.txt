@@ -1,21 +1,9 @@
-base register component - DONE
-32-1 mux - DONE
-32-5 encoder - DONE
-MD register - DONE?
-
-ALU plus ALL operations -> DONE
-
-Tie everything together todo (Cpu_Bus.vhd):
-port map the 32 MUX
-port map all registers
-port map ALU
-deal with the write/enable of the registers
-its currently 4am so i definetly forgot something
-
 create all the testbench stuff for each component and for phase 1 as a whole
 
 Things tested in phase 1:
 
+
+"Functional Simulations"
 1. logical AND R1, R2, R3
 2. logical OR R1, R2, R3
 3. add R0, R4, R5
