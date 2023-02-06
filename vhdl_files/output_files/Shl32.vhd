@@ -16,6 +16,6 @@ begin
 --idk if works
 process(AReg, BReg)
 begin
-Zreg <= AReg sll BReg;
+--Zreg <= AReg sll BReg;
 end process;
 end behavior;

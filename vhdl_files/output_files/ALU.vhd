@@ -179,7 +179,7 @@ RorOP : ROR32 port map(AReg => YReg, BReg => BReg, ZReg => Ror_result);
 ShlOP : SHL32 port map(AReg => YReg, BReg => BReg, ZReg => Shl_result);
 ShlaOP : SHLA32 port map(AReg => YReg, BReg => BReg, ZReg => Shla_result);
 ShrOP : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
-ShraOP : SHRA port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
+ShraOP : SHRA32 port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
 SubOP : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
 --actual process of checking opcode to determine what operation to do
 process(clk, clear, IncPC, AReg, BReg, Opcode)
