@@ -8,6 +8,7 @@ port(
 
     AReg: in std_logic_vector(31 downto 0);
     BReg: in std_logic_vector(31 downto 0);
+    YReg: in std_logic_vector(31 downto 0);
     Opcode: in std_logic_vector(4 downto 0);
     ZReg: out std_logic_vector(63 downto 0)
 );
@@ -169,7 +170,7 @@ ShrOP : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
 ShraOP : SHRA32 port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
 SubOP : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
 --actual process of checking opcode to determine what operation to do
-process(clk, clear, IncPC, AReg, BReg, Opcode)
+process(clk, clear, AReg, BReg, Opcode)
 begin
 case opcode is
     when "00001" => --ALU_And:

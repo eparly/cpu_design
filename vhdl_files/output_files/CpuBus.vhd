@@ -57,9 +57,9 @@ port( --needed to be done this way to implement the control unit later <- see co
     Cout : in std_logic;
     --MDR is slightly different
     MDRout : in std_logic; --from control unit
-    MDRRead : in std_logic --from control unit
+    MDRRead : in std_logic; --from control unit
 
-    Opcode : in std_logic_vector(4 downto 0);
+    Opcode : in std_logic_vector(4 downto 0)
 );
 end CPU_BUS;
 
@@ -99,8 +99,7 @@ signal Yin : std_logic_vector(31 downto 0);
 signal RamOutput : std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
 signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
 --Z reg is special
-signal ZLO : std_logic_vector(31 downto 0);
-signal ZHI : std_logic_vector(31 downto 0);
+signal ZOut : std_logic_vector(63 downto 0);
 --components
 component reg is
 	port( signal reg_input : in std_logic_vector(31 downto 0);
@@ -129,11 +128,9 @@ component ALU is
 port(
     signal clk: in std_logic;
     signal clear: in std_logic;
-    signal IncPC: in std_logic;
 
     AReg: in std_logic_vector(31 downto 0);
     BReg: in std_logic_vector(31 downto 0);
-    YReg: in std_logic_vector(31 downto 0);
     Opcode: in std_logic_vector(4 downto 0);
     ZReg: out std_logic_vector(63 downto 0)
 );
@@ -214,7 +211,7 @@ BusMUX : mux32_1 port map(sel => busEncoderOutput, bus_mux_in_0 => R0in,bus_mux_
 --ALU
 --Commenting out ALU port map for now, need to include signals inside the mapping
 ----------------------------------
-ALU : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, Opcode => Opcode, ZReg(31 downto 0) => ZLO, ZReg(63 downto 32 => ZHI));
+ALU1 : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, Opcode => Opcode, ZReg => ZOut);
 ----------------------------------
 --all (for now) registers
 R0 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R0En, reg_out => R0in);
@@ -235,8 +232,8 @@ R14 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnabl
 R15 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R15En, reg_out => R15in);
 RHI : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => HIEn, reg_out => HIin);
 RLO : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => LOEn, reg_out => LOin);
-RZHI : reg port map(reg_input =>ZHI, clk => clk, clear => clear, writeEnable => ZHIEn, reg_out => ZHIin);
-RZLO : reg port map(reg_input =>ZLO, clk => clk, clear => clear, writeEnable => ZLOEn, reg_out => ZLOin);
+RZHI : reg port map(reg_input =>ZOut(63 downto 32), clk => clk, clear => clear, writeEnable => ZHIEn, reg_out => ZHIin);
+RZLO : reg port map(reg_input =>ZOut(31 downto 0), clk => clk, clear => clear, writeEnable => ZLOEn, reg_out => ZLOin);
 RPC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PCEn, reg_out => PCin);
 RPORT : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PORTEn, reg_out => PORTin);
 RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => CEn, reg_out => Cin);
