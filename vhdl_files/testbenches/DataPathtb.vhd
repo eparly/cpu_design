@@ -6,8 +6,8 @@ ENTITY datapath_tb IS
 END ENTITY datapath_tb;
 -- Architecture of the testbench with the signal names
 ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see in your simulation
- SIGNAL PCout, ZLOout, MDRout, R2out, R3out: std_logic;
- SIGNAL MAREn, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb: std_logic;
+ SIGNAL PCout_tb, Zlowout_tb, MDRout_tb, R2out_tb, R3out_tb: std_logic;
+ SIGNAL MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb: std_logic;
  SIGNAL IncPC_tb, Read_tb, AND_tb, R1in_tb, R2in_tb, R3in_tb: std_logic;
  SIGNAL Clock_tb: std_logic; 
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
@@ -18,8 +18,8 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
  -- component instantiation of the datapath
  COMPONENT datapath
  PORT (
- PCout, Zlowout, MDRout, R2out, R3out: in std_logic;
- MARin, Zin, PCin, MDRin, IRin, Yin: in std_logic;
+ PCout, ZLOout, MDRout, R2out, R3out: in std_logic;
+ MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
  IncPC, Read, AND, R1in, R2in, R3in: in std_logic;
  Clock: in Std_logic;
  Mdatain: in std_logic_vector (31 downto 0);

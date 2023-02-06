@@ -26,10 +26,11 @@ port( --needed to be done this way to implement the control unit later <- see co
     LOEn : in std_logic;
     ZEn : in std_logic;
     PCEn : in std_logic;
+    IREn : in std_logic;
     MDREn : in std_logic;
     PORTEn : in std_logic;
     CEn : in std_logic;
-    Yen : in std_logic;
+    YEn : in std_logic;
     MAREn : in std_logic;
 --goes into encoder, comes from the eventual Control unit, could be moved inside the architecture
     R0out : in std_logic;
@@ -92,6 +93,7 @@ signal LOin : std_logic_vector(31 downto 0);
 signal ZHIin : std_logic_vector(31 downto 0);
 signal ZLOin : std_logic_vector(31 downto 0);
 signal PCin : std_logic_vector(31 downto 0);
+signal IRin : std_logic_vector(31 downto 0);
 signal PORTin : std_logic_vector(31 downto 0);
 signal Cin : std_logic_vector(31 downto 0);
 signal Yin : std_logic_vector(31 downto 0);
@@ -237,6 +239,7 @@ RLO : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnabl
 RZHI : reg port map(reg_input =>ZOut(63 downto 32), clk => clk, clear => clear, writeEnable => ZEn, reg_out => ZHIin);
 RZLO : reg port map(reg_input =>ZOut(31 downto 0), clk => clk, clear => clear, writeEnable => ZEn, reg_out => ZLOin);
 RPC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PCEn, reg_out => PCin);
+RIR : reg port map(reg_input => BusmuxOut, clk => clk, clear => clear, writeEnable => IREn, reg_out => IRin);
 RPORT : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PORTEn, reg_out => PORTin);
 RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => CEn, reg_out => Cin);
 YReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => YEn, reg_out => Yin);
