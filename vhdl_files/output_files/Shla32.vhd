@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity SHL32 is
+entity SHLA32 is
 port(
 
     AReg: in std_logic_vector(31 downto 0);
@@ -10,12 +10,12 @@ port(
 );
 end entity;
 
-architecture behavior of SHL32 is
+architecture behavior of SHLA32 is
 
 begin
 --idk if works
 process(AReg, BReg)
 begin
---Zreg <= AReg sll BReg;
+--Zreg <= AReg sla BReg;
 end process;
 end behavior;

@@ -13,3 +13,19 @@ deal with the write/enable of the registers
 its currently 4am so i definetly forgot something
 
 create all the testbench stuff for each component and for phase 1 as a whole
+
+Things tested in phase 1:
+
+1. logical AND R1, R2, R3
+2. logical OR R1, R2, R3
+3. add R0, R4, R5
+4. sub R0, R4, R5
+5. mul R6, R7
+6. div R6, R7
+7. shr R1, R3, R5
+8. shra R1, R3, R5
+9. shl R1, R3, R5
+10. ror R6, R6, R4
+11. rol R6, R6, R4
+12. neg R0, R1
+13. not R0, R1

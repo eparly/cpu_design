@@ -1,5 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+use IEEE.std_logic_signed.all;
 
 entity DIV32 is
 port(
@@ -25,17 +27,18 @@ subM := (0-ra);
 addM := ra;
 
 for i in 0 to 31 loop
-    A := A sll 1;
-    Q := Q sll 1;
+    A := std_logic_vector(SHIFT_LEFT(UNSIGNED(A), 1));
+
+    Q := std_logic_vector(SHIFT_LEFT(UNSIGNED(Q), 1));
     if (A < 0) then
         A := A + addM;
     else
         A := A - subM;
     end if;
     if (A < 0) then
-        Q(0) <= '0';
+        Q(0) := '0';
     else
-        Q(0) <= '1';
+        Q(0) := '1';
     end if;
 end loop;
 if (A<0) then

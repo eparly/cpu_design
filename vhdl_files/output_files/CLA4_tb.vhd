@@ -15,7 +15,8 @@ architecture tb of tb_carry_lookahead_adder is
 	);
 	end component;
 
-   signal ra, rb, sum, cin, cout : std_logic_vector(3 downto 0);
+   signal ra, rb, sum : std_logic_vector(3 downto 0);
+	signal cin, cout : std_logic;
 begin
    dut: CLA4
       port map (ra => ra, rb => rb, sum => sum, cin => cin, cout => cout);

@@ -1,5 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.numeric_std.all;
+use IEEE.std_logic_signed.all;
 
 entity MUL32 is
 port(
@@ -15,18 +17,18 @@ begin
 process(ra, rb)
 
 variable result, tempResult: std_logic_vector(63 downto 0);
-variable addM, subM, zero: std_logic_vector(31 downto 0);
+variable addM, subM, zeros: std_logic_vector(31 downto 0);
 begin
 
 addM := ra;
-subM := 0-rb; --we are allowed the use +- for mul and div
+subM := (0-rb); --we are allowed the use +- for mul and div
 result := "00000000000000000000000000000000000000000000000000000000000000000000";
 zeros := "00000000000000000000000000000000";
 
 for i in 0 to 31 loop
     if (i=0) then --first bit is handled differently in booth
         if (rb(0) = '1') then
-            tempResult(31 downto 0) <= subM;
+            tempResult(31 downto 0) := subM;
         end if;
     else           --not first bit, now we do the normal booth check, having 11 or 00 we can simply ignore (no need to add zeros, just remember to shift afterwarsd)
         if (rb(i)='1' and rb(i-1)='0') then -- -1
@@ -43,7 +45,8 @@ for i in 0 to 31 loop
     else
         tempResult(63 downto 32) := "11111111111111111111111111111111";
     end if;
-    tempResult := tempResult sll i; --remember in booth algorithm every time we add something its shifted by one
+	 tempResult := std_logic_vector(SHIFT_LEFT(UNSIGNED(tempResult), i));
+    --tempResult := tempResult sll i; --remember in booth algorithm every time we add something its shifted by one
     result := result + tempResult;
 end loop; 
 rz <= result;

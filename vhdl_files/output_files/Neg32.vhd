@@ -5,14 +5,13 @@ entity NEG32 is
 port(
 
     AReg: in std_logic_vector(31 downto 0);
-    ZReg: out std_logic_vector(31 downto 0);
+    ZReg: out std_logic_vector(31 downto 0)
 	 
-	 Not_1: out std_logic_vector(31 downto 0);
-	 CLA32_1: out std_logic_vector(31 downto 0)
+
 );
 end entity;
 
-architecture behavior of NOT32 is
+architecture behavior of NEG32 is
 signal temp : std_logic_vector(31 downto 0);
 signal cout : std_logic;
 signal cin : std_logic;
@@ -43,9 +42,8 @@ plus1 <= "00000000000000000000000000000001";
 
 --getting weird errors for process below
 --both lines 45 and 46 have errors regarding text 'port' and ';'
-process(AReg)
-begin
-Not_1 <= NOT32 port map(AReg => AReg, ZReg => temp); --temp will hold the result of the not operation now
-CLA32_1 <= CLA32 port map(ra => temp, rb => plus1, cin => cin, sum => ZReg, cout => cout); --at the result of the not operation with 1
-end process;
+
+Not_1 : NOT32 port map(AReg => AReg, ZReg => temp); --temp will hold the result of the not operation now
+CLA32_1 : CLA32 port map(ra => temp, rb => plus1, cin => cin, sum => ZReg, cout => cout); --at the result of the not operation with 1
+
 end behavior;
