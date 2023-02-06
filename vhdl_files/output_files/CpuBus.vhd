@@ -30,6 +30,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     MDREn : in std_logic;
     PORTEn : in std_logic;
     CEn : in std_logic;
+    Yen : in std_logic;
 --goes into encoder, comes from the eventual Control unit, could be moved inside the architecture
     R0out : in std_logic;
     R1out : in std_logic;
@@ -58,6 +59,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     MDRout : in std_logic; --from control unit
     MDRRead : in std_logic --from control unit
 
+    Opcode : in std_logic_vector(4 downto 0);
 );
 end CPU_BUS;
 
@@ -92,9 +94,13 @@ signal ZLOin : std_logic_vector(31 downto 0);
 signal PCin : std_logic_vector(31 downto 0);
 signal PORTin : std_logic_vector(31 downto 0);
 signal Cin : std_logic_vector(31 downto 0);
+signal Yin : std_logic_vector(31 downto 0);
 --MDR is special
 signal RamOutput : std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
 signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
+--Z reg is special
+signal ZLO : std_logic_vector(31 downto 0);
+signal ZHI : std_logic_vector(31 downto 0);
 --components
 component reg is
 	port( signal reg_input : in std_logic_vector(31 downto 0);
@@ -208,7 +214,7 @@ BusMUX : mux32_1 port map(sel => busEncoderOutput, bus_mux_in_0 => R0in,bus_mux_
 --ALU
 --Commenting out ALU port map for now, need to include signals inside the mapping
 ----------------------------------
---ALU : ALU port map();
+ALU : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, Opcode => Opcode, ZReg(31 downto 0) => ZLO, ZReg(63 downto 32 => ZHI));
 ----------------------------------
 --all (for now) registers
 R0 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R0En, reg_out => R0in);
@@ -229,11 +235,12 @@ R14 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnabl
 R15 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R15En, reg_out => R15in);
 RHI : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => HIEn, reg_out => HIin);
 RLO : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => LOEn, reg_out => LOin);
-RZHI : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => ZHIEn, reg_out => ZHIin);
-RZLO : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => ZLOEn, reg_out => ZLOin);
+RZHI : reg port map(reg_input =>ZHI, clk => clk, clear => clear, writeEnable => ZHIEn, reg_out => ZHIin);
+RZLO : reg port map(reg_input =>ZLO, clk => clk, clear => clear, writeEnable => ZLOEn, reg_out => ZLOin);
 RPC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PCEn, reg_out => PCin);
 RPORT : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PORTEn, reg_out => PORTin);
 RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => CEn, reg_out => Cin);
+YReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => YEn, reg_out => Yin);
 --special MDR register
 --getting error on this line, commenting out for now
 -----------------

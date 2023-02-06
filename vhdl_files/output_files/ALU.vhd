@@ -5,11 +5,9 @@ entity ALU is
 port(
     signal clk: in std_logic;
     signal clear: in std_logic;
-    signal IncPC: in std_logic;
 
     AReg: in std_logic_vector(31 downto 0);
     BReg: in std_logic_vector(31 downto 0);
-    YReg: in std_logic_vector(31 downto 0);
     Opcode: in std_logic_vector(4 downto 0);
     ZReg: out std_logic_vector(63 downto 0)
 );
