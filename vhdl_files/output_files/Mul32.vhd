@@ -25,7 +25,7 @@ zeros := "00000000000000000000000000000000";
 
 for i in 0 to 31 loop
     if (i=0) then --first bit is handled differently in booth
-        if (rb(0) = '1')
+        if (rb(0) = '1') then
             tempResult(31 downto 0) <= subM;
         end if;
     else           --not first bit, now we do the normal booth check, having 11 or 00 we can simply ignore (no need to add zeros, just remember to shift afterwarsd)
@@ -43,7 +43,7 @@ for i in 0 to 31 loop
     else
         tempResult(63 downto 32) := "11111111111111111111111111111111";
     end if;
-    tempResult := sll i; --remember in booth algorithm every time we add something its shifted by one
+    tempResult := tempResult sll i; --remember in booth algorithm every time we add something its shifted by one
     result := result + tempResult;
 end loop; 
 rz <= result;
