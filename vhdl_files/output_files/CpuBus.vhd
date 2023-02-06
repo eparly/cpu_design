@@ -24,8 +24,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     R15En : in std_logic;
     HIEn : in std_logic;
     LOEn : in std_logic;
-    ZHIEn : in std_logic;
-    ZLOEn : in std_logic;
+    ZEn : in std_logic;
     PCEn : in std_logic;
     MDREn : in std_logic;
     PORTEn : in std_logic;
@@ -235,8 +234,8 @@ R14 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnabl
 R15 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R15En, reg_out => R15in);
 RHI : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => HIEn, reg_out => HIin);
 RLO : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => LOEn, reg_out => LOin);
-RZHI : reg port map(reg_input =>ZOut(63 downto 32), clk => clk, clear => clear, writeEnable => ZHIEn, reg_out => ZHIin);
-RZLO : reg port map(reg_input =>ZOut(31 downto 0), clk => clk, clear => clear, writeEnable => ZLOEn, reg_out => ZLOin);
+RZHI : reg port map(reg_input =>ZOut(63 downto 32), clk => clk, clear => clear, writeEnable => ZEn, reg_out => ZHIin);
+RZLO : reg port map(reg_input =>ZOut(31 downto 0), clk => clk, clear => clear, writeEnable => ZEn, reg_out => ZLOin);
 RPC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PCEn, reg_out => PCin);
 RPORT : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PORTEn, reg_out => PORTin);
 RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => CEn, reg_out => Cin);
