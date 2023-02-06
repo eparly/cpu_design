@@ -30,7 +30,6 @@ signal Ror_result: std_logic_vector(31 downto 0);
 signal Rol_result: std_logic_vector(31 downto 0);
 signal Neg_result: std_logic_vector(31 downto 0);
 signal Not_result: std_logic_vector(31 downto 0);
-signal Shra_result: std_logic_vector(31 downto 0);
 
 --additional stuff needed for the add and sub operations
 signal AddCout : std_logic;
@@ -211,7 +210,7 @@ case opcode is
     when "01101" => --ALU_Shra:
         Zreg(31 downto 0) <= Shra_result;
         ZReg(63 downto 32) <= (others => '0');
-        
+
 end case;
 end process;
 end behavior;
