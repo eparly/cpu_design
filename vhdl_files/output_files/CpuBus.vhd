@@ -244,9 +244,7 @@ YReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnab
 MARReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => MAREn, reg_out => MARin);
 --special MDR register
 --getting error on this line, commenting out for now
------------------
---RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => MemDatain, sel => MDRRead, MDROut=> MDRin, clk =>, clear=> , writeEnable=> MDREn);
------------------
+RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => MemDatain, sel => MDRRead, MDROut=> MDRin, clk => clk, clear=> clear, writeEnable=> MDREn);
 end behavior;
 
 --this file can change alot depending on how we do this, i've assumed that the memmory chip (RAM) will be imported in and port mapped, hence why every signal relating to RAM is defined internally (not in the entity definition). I've also assumed that the Control Unit will import the CpuBus and connect/port map to it from there, if we instead change this and import the control unit inside of this file, all the ports relating to the control unit will have to be changed into internal signals to make it work
