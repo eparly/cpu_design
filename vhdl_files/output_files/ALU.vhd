@@ -31,7 +31,6 @@ signal Rol_result: std_logic_vector(31 downto 0);
 signal Neg_result: std_logic_vector(31 downto 0);
 signal Not_result: std_logic_vector(31 downto 0);
 signal Shra_result: std_logic_vector(31 downto 0);
-signal Shla_result: std_logic_vector(31 downto 0);
 
 --additional stuff needed for the add and sub operations
 signal AddCout : std_logic;
@@ -125,15 +124,6 @@ port(
 );
 end component;
 
-component SHLA32 is
-port(
-
-    AReg: in std_logic_vector(31 downto 0);
-    BReg: in std_logic_vector(31 downto 0);
-    ZReg: out std_logic_vector(31 downto 0)
-);
-end component;
-
 component SHR32 is
 port(
 
@@ -177,7 +167,6 @@ OrOP : OR32 port map(AReg => YReg, BReg => BReg, ZReg => Or_result);
 RolOP : ROL32 port map(AReg => YReg, BReg => BReg, ZReg => Rol_result);
 RorOP : ROR32 port map(AReg => YReg, BReg => BReg, ZReg => Ror_result);
 ShlOP : SHL32 port map(AReg => YReg, BReg => BReg, ZReg => Shl_result);
-ShlaOP : SHLA32 port map(AReg => YReg, BReg => BReg, ZReg => Shla_result);
 ShrOP : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
 ShraOP : SHRA port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
 SubOP : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
@@ -222,9 +211,7 @@ case opcode is
     when "01101" => --ALU_Shra:
         Zreg(31 downto 0) <= Shra_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "01110" => --ALU_Shla:
-        Zreg(31 downto 0) <= Shla_result;
-        ZReg(63 downto 32) <= (others => '0');
+        
 end case;
 end process;
 end behavior;
