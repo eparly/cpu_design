@@ -26,6 +26,7 @@ signal Mul_result: std_logic_vector(63 downto 0); --careful
 signal Div_result: std_logic_vector(63 downto 0); --careful
 signal Shr_result: std_logic_vector(31 downto 0);
 signal Shl_result: std_logic_vector(31 downto 0);
+signal Shra_result: std_logic_vector(31 downto 0);
 signal Ror_result: std_logic_vector(31 downto 0);
 signal Rol_result: std_logic_vector(31 downto 0);
 signal Neg_result: std_logic_vector(31 downto 0);
