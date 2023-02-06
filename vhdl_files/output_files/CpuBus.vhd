@@ -59,8 +59,9 @@ port( --needed to be done this way to implement the control unit later <- see co
     --MDR is slightly different
     MDRout : in std_logic; --from control unit
     MDRRead : in std_logic; --from control unit
-
+    MemDatain : in std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
     Opcode : in std_logic_vector(4 downto 0)
+    --opcode signals from control unit (single bit)
 );
 end CPU_BUS;
 
@@ -98,7 +99,6 @@ signal PORTin : std_logic_vector(31 downto 0);
 signal Cin : std_logic_vector(31 downto 0);
 signal Yin : std_logic_vector(31 downto 0);
 --MDR is special
-signal MemDatain : std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
 signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
 --MAR output needs to go to the mem chip
 signal MARin : std_logic_vector(31 downto 0);

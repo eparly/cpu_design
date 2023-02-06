@@ -16,15 +16,15 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
  T2, T3, T4, T5);
  SIGNAL Present_state: State := default;
  -- component instantiation of the datapath
- COMPONENT datapath
+ COMPONENT CPU_BUS
  PORT (
  PCout, ZLOout, MDRout, R2out, R3out: in std_logic;
  MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
- IncPC, Read, AND, R1in, R2in, R3in: in std_logic;
- Clock: in Std_logic;
- Mdatain: in std_logic_vector (31 downto 0);
+ IncPC, MDRRead, AND, R1En, R2En, R3En: in std_logic;
+ clk: in Std_logic;
+ Memdatain: in std_logic_vector (31 downto 0);
  );
-END COMPONENT datapath;
+END COMPONENT CPU_BUS;
 BEGIN
  DUT : datapath
 --port mapping: between the dut and the testbench signals
