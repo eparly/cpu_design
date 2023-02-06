@@ -31,6 +31,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     PORTEn : in std_logic;
     CEn : in std_logic;
     Yen : in std_logic;
+    MAREn : in std_logic;
 --goes into encoder, comes from the eventual Control unit, could be moved inside the architecture
     R0out : in std_logic;
     R1out : in std_logic;
@@ -98,6 +99,8 @@ signal Yin : std_logic_vector(31 downto 0);
 --MDR is special
 signal RamOutput : std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
 signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
+--MAR output needs to go to the mem chip
+signal MARin : std_logic_vector(31 downto 0);
 --Z reg is special
 signal ZOut : std_logic_vector(63 downto 0);
 --components
@@ -238,6 +241,7 @@ RPC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnabl
 RPORT : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => PORTEn, reg_out => PORTin);
 RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => CEn, reg_out => Cin);
 YReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => YEn, reg_out => Yin);
+MARReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => MAREn, reg_out => MARin);
 --special MDR register
 --getting error on this line, commenting out for now
 -----------------
