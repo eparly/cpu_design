@@ -6,7 +6,7 @@ port(
     signal clk: in std_logic;
     signal clear: in std_logic;
 
-    AReg, BReg: in std_logic_vector(31 downto 0);
+    AReg, BReg, YReg: in std_logic_vector(31 downto 0);
 --replacing the opcode with individual signals
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
 
