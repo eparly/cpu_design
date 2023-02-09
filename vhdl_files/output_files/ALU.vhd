@@ -9,8 +9,21 @@ port(
     AReg: in std_logic_vector(31 downto 0);
     BReg: in std_logic_vector(31 downto 0);
     YReg: in std_logic_vector(31 downto 0);
-    Opcode: in std_logic_vector(4 downto 0);
-    ZReg: out std_logic_vector(63 downto 0)
+    ZReg: out std_logic_vector(63 downto 0);
+	 
+	 ADD_select: in std_logic;
+	 SUB_select: in std_logic;
+	 MUL_select: in std_logic;
+	 DIV_select: in std_logic;
+	 SHR_select: in std_logic;
+	 SHRA_select: in std_logic;
+	 SHL_select: in std_logic;
+	 ROR_select: in std_logic;
+	 ROL_select: in std_logic;
+	 AND_select: in std_logic;
+	 OR_select: in std_logic;
+	 NEG_select: in std_logic;
+	 NOT_select: in std_logic
 );
 end entity;
 
@@ -170,48 +183,49 @@ ShrOP : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
 ShraOP : SHRA32 port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
 SubOP : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
 --actual process of checking opcode to determine what operation to do
-process(clk, clear, AReg, BReg, Opcode)
+process(clk, clear, AReg, BReg, AND_select, OR_select, ADD_select, SUB_select,
+			MUL_select, DIV_select, SHR_select, SHL_select, ROR_select, NEG_select, NOT_select, SHRA_select)
 begin
-case opcode is
-    when "00001" => --ALU_And:
+
+    if AND_select then --ALU_And:
         ZReg(31 downto 0) <= And_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "00010" => --Alu_Or:
+    elsif OR_select then --Alu_Or:
         ZReg(31 downto 0) <= Or_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "00011" => --ALU_Add:
+    elsif ADD_select then --ALU_Add:
         Zreg(31 downto 0) <= Add_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "00100" => --ALU_Sub:
+    elsif SUB_select then --ALU_Sub:
         Zreg(31 downto 0) <= Sub_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "00101" => --ALU_Mul:
+    elsif MUL_select then --ALU_Mul:
         Zreg <= Mul_result;
-    when "00110" => --ALU_Div:
+    elsif DIV_select then --ALU_Div:
         Zreg <= Div_result;
-    when "00111" => --ALU_Shr:
+    elsif SHR_select then --ALU_Shr:
         Zreg(31 downto 0) <= Shr_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "01000" => --ALU_Shl:
+    elsif SHL_select then --ALU_Shl:
         Zreg(31 downto 0) <= Shl_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "01001" => --ALU_Ror:
+    elsif ROR_select then --ALU_Ror:
         Zreg(31 downto 0) <= Ror_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "01010" => --ALU_Rol:
+    elsif ROL_select then --ALU_Rol:
         Zreg(31 downto 0) <= Rol_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "01011" => --ALU_Neg:
+    elsif NEG_select then --ALU_Neg:
         Zreg(31 downto 0) <= Neg_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "01100" => --ALU_Not:
+    elsif NOT_select then --ALU_Not:
         Zreg(31 downto 0) <= Not_result;
         ZReg(63 downto 32) <= (others => '0');
-    when "01101" => --ALU_Shra:
+    elsif SHRA_select then --ALU_Shra:
         Zreg(31 downto 0) <= Shra_result;
         ZReg(63 downto 32) <= (others => '0');
 
-end case;
+end if;
 end process;
 end behavior;
 

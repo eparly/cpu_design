@@ -61,6 +61,7 @@ set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_tes
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id register_test
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME register_test -section_id register_test
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/register_test.vhd -section_id register_test
+set_global_assignment -name VHDL_FILE testbenches/DataPathtb.vhd
 set_global_assignment -name VHDL_FILE output_files/CpuBus.vhd
 set_global_assignment -name VHDL_FILE output_files/Mul32.vhd
 set_global_assignment -name VHDL_FILE output_files/Div32.vhd

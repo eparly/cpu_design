@@ -60,7 +60,20 @@ port( --needed to be done this way to implement the control unit later <- see co
     MDRout : in std_logic; --from control unit
     MDRRead : in std_logic; --from control unit
     MemDatain : in std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
-    Opcode : in std_logic_vector(4 downto 0)
+    --signals for each operation
+	 ADD_select: in std_logic;
+	 SUB_select: in std_logic;
+	 MUL_select: in std_logic;
+	 DIV_select: in std_logic;
+	 SHR_select: in std_logic;
+	 SHRA_select: in std_logic;
+	 SHL_select: in std_logic;
+	 ROR_select: in std_logic;
+	 ROL_select: in std_logic;
+	 AND_select: in std_logic;
+	 OR_select: in std_logic;
+	 NEG_select: in std_logic;
+	 NOT_select: in std_logic
     --opcode signals from control unit (single bit)
 );
 end CPU_BUS;
@@ -135,10 +148,25 @@ port(
 
     AReg: in std_logic_vector(31 downto 0);
     BReg: in std_logic_vector(31 downto 0);
-    Opcode: in std_logic_vector(4 downto 0);
-    ZReg: out std_logic_vector(63 downto 0)
+    YReg: in std_logic_vector(31 downto 0);
+    ZReg: out std_logic_vector(63 downto 0);
+	 
+	 ADD_select: in std_logic;
+	 SUB_select: in std_logic;
+	 MUL_select: in std_logic;
+	 DIV_select: in std_logic;
+	 SHR_select: in std_logic;
+	 SHRA_select: in std_logic;
+	 SHL_select: in std_logic;
+	 ROR_select: in std_logic;
+	 ROL_select: in std_logic;
+	 AND_select: in std_logic;
+	 OR_select: in std_logic;
+	 NEG_select: in std_logic;
+	 NOT_select: in std_logic
 );
 end component;
+
 
 component mux32_1 is
 	port( signal sel : in std_logic_vector(4 downto 0);
@@ -213,9 +241,12 @@ Encode : encoder32_5 port map(encoderOutput => busEncoderOutput, encoderInput =>
 BusMUX : mux32_1 port map(sel => busEncoderOutput, bus_mux_in_0 => R0in,bus_mux_in_1 => R1in, bus_mux_in_2 => R2in, bus_mux_in_3 => R3in, bus_mux_in_4 => R4in, bus_mux_in_5 => R5in, bus_mux_in_6 => R6in, bus_mux_in_7 => R7in, bus_mux_in_8 => R8in, bus_mux_in_9 => R9in, bus_mux_in_10 => R10in, bus_mux_in_11 => R11in, bus_mux_in_12 => R12in, bus_mux_in_13 => R13in, bus_mux_in_14 => R14in, bus_mux_in_15 => R15in, bus_mux_in_HI => HIin, bus_mux_in_LO => LOin, bus_mux_in_Z_high => ZHIin, bus_mux_in_Z_low => ZLOin, bus_mux_in_PC => PCin, bus_mux_in_MDR => MDRin, bus_mux_in_InPort => PORTin, bus_mux_in_C_sign_extended => Cin, Bus_mux_out => BusMuxOut);
 
 --ALU
---Commenting out ALU port map for now, need to include signals inside the mapping
 ----------------------------------
-ALU1 : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, Opcode => Opcode, ZReg => ZOut);
+ALU1 : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, Opcode => Opcode, ZReg => ZOut,
+		ADD_select => ADD_select, SUB_select => SUB_select, MUL_select => MUL_select, DIV_select => DIV_select,
+		SHR_select => SHR_select, SHRA_select => SHRA_select, SHL_select => SHL_select, ROR_select => ROR_select,
+		ROL_select => ROL_select, AND_select => AND_select, OR_select => OR_select, NEG_select => NEG_select,
+		NOT_select => NOT_select);
 ----------------------------------
 --all (for now) registers
 R0 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R0En, reg_out => R0in);
@@ -245,7 +276,6 @@ RC : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable
 YReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => YEn, reg_out => Yin);
 MARReg : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => MAREn, reg_out => MARin);
 --special MDR register
---getting error on this line, commenting out for now
 RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => MemDatain, sel => MDRRead, MDROut=> MDRin, clk => clk, clear=> clear, writeEnable=> MDREn);
 end behavior;
 
