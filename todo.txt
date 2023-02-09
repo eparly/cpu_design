@@ -4,8 +4,7 @@ Things tested in phase 1:
 implement IncPC
 - operation in ALU
 - used when ALU gets the IncPC control signal, need another port, fix mapping on main file
-figure out what the AND port is
-- change ALU opcode thing (add, and, etc.), single bit not 5 bit
+- YReg : how tf do we do this
 Cpu_bus fix the opcodes
 
 "Functional Simulations"

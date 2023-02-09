@@ -2,37 +2,13 @@ library IEEE;
 use IEEE.std_logic_1164.all;
 
 entity mux32_1 is
-	port( signal sel : in std_logic_vector(4 downto 0);
-	
-			signal bus_mux_in_0 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_1 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_2 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_3 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_4 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_5 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_6 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_7 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_8 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_9 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_10 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_11 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_12 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_13 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_14 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_15 : in std_logic_vector(31 downto 0);
-
-			signal bus_mux_in_HI : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_LO : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_Z_high : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_Z_low : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_PC : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_MDR : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_InPort : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_C_sign_extended : in std_logic_vector(31 downto 0);
-			
-			signal bus_mux_out: out std_logic_vector(31 downto 0)
+	port( 
+		signal sel : in std_logic_vector(4 downto 0);
+			-- maps to the "in" signals from CpuBus, which is the data output from all the registers (expect for MAR)
+		signal bus_mux_in_0, bus_mux_in_1, bus_mux_in_2, bus_mux_in_3, bus_mux_in_4, bus_mux_in_5, bus_mux_in_6, bus_mux_in_7, bus_mux_in_8, bus_mux_in_9, bus_mux_in_10, bus_mux_in_11, bus_mux_in_12, bus_mux_in_13, bus_mux_in_14, bus_mux_in_15, bus_mux_in_HI, bus_mux_in_LO, bus_mux_in_Z_high, bus_mux_in_Z_low, bus_mux_in_PC, bus_mux_in_MDR, bus_mux_in_InPort, bus_mux_in_C_sign_extended : in std_logic_vector(31 downto 0);
+			-- the actual 'bus' data
+		bus_mux_out: out std_logic_vector(31 downto 0)
 	);
-
 end mux32_1;
 
 
@@ -50,7 +26,7 @@ signal reg_out : out std_logic_vector(31 downto 0)
 end component;
 
 begin
-process
+process(sel)
 begin
 	case sel is
 		when "00000" =>
