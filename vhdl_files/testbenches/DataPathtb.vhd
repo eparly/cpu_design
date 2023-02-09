@@ -11,6 +11,7 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
  SIGNAL IncPC_tb, Read_tb, AND_tb, R1in_tb, R2in_tb, R3in_tb: std_logic;
  SIGNAL Clock_tb: std_logic; 
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
+ SIGNAL Opcode_tb : std_logic_vector(4 downto 0);
  
  TYPE State IS (default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, T0, T1, 
  T2, T3, T4, T5);
@@ -18,11 +19,14 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
  -- component instantiation of the datapath
  COMPONENT CPU_BUS
  PORT (
+
  PCout, ZLOout, MDRout, R2out, R3out: in std_logic;
  MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
- IncPC, MDRRead, AND, R1En, R2En, R3En: in std_logic;
+ IncPC, MDRRead, AND_select, R1En, R2En, R3En: in std_logic;
+ 
  clk: in Std_logic;
- Memdatain: in std_logic_vector (31 downto 0);
+ Memdatain: in std_logic_vector (31 downto 0)
+ 
  );
 END COMPONENT CPU_BUS;
 BEGIN
@@ -30,7 +34,7 @@ BEGIN
 --port mapping: between the dut and the testbench signals
  PORT MAP (
 PCout => PCout_tb,
-Zlowout => Zlowout_tb,
+ZLOout => Zlowout_tb,
 MDRout => MDRout_tb,
 R2out => R2out_tb,
 R3out => R3out_tb, 
@@ -42,7 +46,7 @@ IRin => IRin_tb,
 Yin => Yin_tb,
 IncPC => IncPC_tb,
 Read => Read_tb,
-AND => AND_tb
+AND_select => AND_tb,
 R1in => R1in_tb,
 R2in => R2in_tb,
 R3in => R3in_tb,
@@ -93,7 +97,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  PCout_tb <= '0'; Zlowout_tb <= '0'; MDRout_tb <= '0'; -- initialize the signals
  R2out_tb <= '0'; R3out_tb <= '0'; MARin_tb <= '0'; Zin_tb <= '0'; 
  PCin_tb <='0'; MDRin_tb <= '0'; IRin_tb <= '0'; Yin_tb <= '0'; 
- IncPC_tb <= '0'; Read_tb <= '0'; AND_tb <= '0'; 
+ IncPC_tb <= '0'; Read_tb <= '0';  AND_tb <= '0';
  R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x”00000000”; 
  
  WHEN Reg_load1a => 
@@ -120,7 +124,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  
  WHEN T0 => -- see if you need to de-assert these signals
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
-WHEN T1 => 
+ WHEN T1 => 
  Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1';
  Mdatain_tb <= x”28918000”; -- opcode for “and R1, R2, R3”
  WHEN T2 =>
