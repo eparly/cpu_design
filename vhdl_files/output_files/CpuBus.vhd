@@ -5,76 +5,15 @@ entity CPU_BUS is
 port( --needed to be done this way to implement the control unit later <- see comments at the bottom
     signal clk: in std_logic;
     signal clear: in std_logic;
---write/enable, goes into each registers "Rin" signal, also comes from the eventual Control Unit, could be moved inside the architecture
-    R0En : in std_logic;
-    R1En : in std_logic;
-    R2En : in std_logic;
-    R3En : in std_logic;
-    R4En : in std_logic;
-    R5En : in std_logic;
-    R6En : in std_logic;
-    R7En : in std_logic;
-    R8En : in std_logic;
-    R9En : in std_logic;
-    R10En : in std_logic;
-    R11En : in std_logic;
-    R12En : in std_logic;
-    R13En : in std_logic;
-    R14En : in std_logic;
-    R15En : in std_logic;
-    HIEn : in std_logic;
-    LOEn : in std_logic;
-    ZEn : in std_logic;
-    PCEn : in std_logic;
-    IREn : in std_logic;
-    MDREn : in std_logic;
-    PORTEn : in std_logic;
-    CEn : in std_logic;
-    YEn : in std_logic;
-    MAREn : in std_logic;
---goes into encoder, comes from the eventual Control unit, could be moved inside the architecture
-    R0out : in std_logic;
-    R1out : in std_logic;
-    R2out : in std_logic;
-    R3out : in std_logic;
-    R4out : in std_logic;
-    R5out : in std_logic;
-    R6out : in std_logic;
-    R7out : in std_logic;
-    R8out : in std_logic;
-    R9out : in std_logic;
-    R10out : in std_logic;
-    R11out : in std_logic;
-    R12out : in std_logic;
-    R13out : in std_logic;
-    R14out : in std_logic;
-    R15out : in std_logic;
-    HIout : in std_logic;
-    LOout : in std_logic;
-    ZHIout : in std_logic;
-    ZLOout : in std_logic;
-    PCout : in std_logic;
-    PORTout : in std_logic;
-    Cout : in std_logic;
-    --MDR is slightly different
-    MDRout : in std_logic; --from control unit
-    MDRRead : in std_logic; --from control unit
-    MemDatain : in std_logic_vector(31 downto 0); --currently no memory module, but its needed to connect the ALU
-    --signals for each operation
-	 ADD_select: in std_logic;
-	 SUB_select: in std_logic;
-	 MUL_select: in std_logic;
-	 DIV_select: in std_logic;
-	 SHR_select: in std_logic;
-	 SHRA_select: in std_logic;
-	 SHL_select: in std_logic;
-	 ROR_select: in std_logic;
-	 ROL_select: in std_logic;
-	 AND_select: in std_logic;
-	 OR_select: in std_logic;
-	 NEG_select: in std_logic;
-	 NOT_select: in std_logic
+--Comes from the control unit, maps to each registers 'writeEnable' port
+    R0En, R1En, R2En, R3En, R4En, R5En, R6En, R7En, R8En, R9En, R10En, R11En, R12En, R13En, R14En, R15En, HIEn, LOEn, ZEn, PCEn, IREn, MDREn, PORTEn, CEn, YEn, MAREn : in std_logic;
+--From the control unit, maps into the encoder, dictates which register can put its data onto the bus
+    R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out, HIout, LOout, ZHIout, ZLOout, PCout, PORTout, Cout : in std_logic;
+    --MDR requires a slightly different setup
+    MDRout, MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
+    MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
     --opcode signals from control unit (single bit)
+    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig: in std_logic
 );
 end CPU_BUS;
 
@@ -85,37 +24,13 @@ signal BusMuxOut : std_logic_vector(31 downto 0);
 
 signal busEncoderOutput : std_logic_vector(4 downto 0);
 
---input from the register outputs for the 32-1 MUX
-signal R0in : std_logic_vector(31 downto 0); 
-signal R1in : std_logic_vector(31 downto 0);
-signal R2in : std_logic_vector(31 downto 0);
-signal R3in : std_logic_vector(31 downto 0);
-signal R4in : std_logic_vector(31 downto 0);
-signal R5in : std_logic_vector(31 downto 0);
-signal R6in : std_logic_vector(31 downto 0);
-signal R7in : std_logic_vector(31 downto 0);
-signal R8in : std_logic_vector(31 downto 0);
-signal R9in : std_logic_vector(31 downto 0);
-signal R10in : std_logic_vector(31 downto 0);
-signal R11in : std_logic_vector(31 downto 0);
-signal R12in : std_logic_vector(31 downto 0);
-signal R13in : std_logic_vector(31 downto 0);
-signal R14in : std_logic_vector(31 downto 0);
-signal R15in : std_logic_vector(31 downto 0);
-signal HIin : std_logic_vector(31 downto 0);
-signal LOin : std_logic_vector(31 downto 0);
-signal ZHIin : std_logic_vector(31 downto 0);
-signal ZLOin : std_logic_vector(31 downto 0);
-signal PCin : std_logic_vector(31 downto 0);
-signal IRin : std_logic_vector(31 downto 0);
-signal PORTin : std_logic_vector(31 downto 0);
-signal Cin : std_logic_vector(31 downto 0);
-signal Yin : std_logic_vector(31 downto 0);
---MDR is special
-signal MDRin : std_logic_vector(31 downto 0); --needs to connect to Bus AND RAM
---MAR output needs to go to the mem chip
+--maps to data output from the register that maps to the inputs of the 32-1 MUX
+signal R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in, HIin, LOin, ZHIin, ZLOin, PCin, IRin, PORTin, Cin, Yin : std_logic_vector(31 downto 0);
+--maps to MDR output, and will have to map to the input of both the Bus and RAM
+signal MDRin : std_logic_vector(31 downto 0);
+--maps to the MAR output, maps to the RAM input
 signal MARin : std_logic_vector(31 downto 0);
---Z reg is special
+--Z reg is a different size
 signal ZOut : std_logic_vector(63 downto 0);
 --components
 component reg is
@@ -146,60 +61,23 @@ port(
     signal clk: in std_logic;
     signal clear: in std_logic;
 
-    AReg: in std_logic_vector(31 downto 0);
-    BReg: in std_logic_vector(31 downto 0);
-    YReg: in std_logic_vector(31 downto 0);
-    ZReg: out std_logic_vector(63 downto 0);
-	 
-	 ADD_select: in std_logic;
-	 SUB_select: in std_logic;
-	 MUL_select: in std_logic;
-	 DIV_select: in std_logic;
-	 SHR_select: in std_logic;
-	 SHRA_select: in std_logic;
-	 SHL_select: in std_logic;
-	 ROR_select: in std_logic;
-	 ROL_select: in std_logic;
-	 AND_select: in std_logic;
-	 OR_select: in std_logic;
-	 NEG_select: in std_logic;
-	 NOT_select: in std_logic
+    AReg, BReg, YReg: in std_logic_vector(31 downto 0);
+--replacing the opcode with individual signals
+    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig: in std_logic;
+
+    ZReg: out std_logic_vector(63 downto 0)
 );
 end component;
 
 
 component mux32_1 is
-	port( signal sel : in std_logic_vector(4 downto 0);
-	
-			signal bus_mux_in_0 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_1 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_2 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_3 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_4 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_5 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_6 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_7 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_8 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_9 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_10 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_11 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_12 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_13 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_14 : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_15 : in std_logic_vector(31 downto 0);
-
-			signal bus_mux_in_HI : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_LO : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_Z_high : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_Z_low : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_PC : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_MDR : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_InPort : in std_logic_vector(31 downto 0);
-			signal bus_mux_in_C_sign_extended : in std_logic_vector(31 downto 0);
-			
-			signal bus_mux_out: out std_logic_vector(31 downto 0)
+	port( 
+		signal sel : in std_logic_vector(4 downto 0);
+			-- maps to the "in" signals from CpuBus, which is the data output from all the registers (expect for MAR)
+		signal bus_mux_in_0, bus_mux_in_1, bus_mux_in_2, bus_mux_in_3, bus_mux_in_4, bus_mux_in_5, bus_mux_in_6, bus_mux_in_7, bus_mux_in_8, bus_mux_in_9, bus_mux_in_10, bus_mux_in_11, bus_mux_in_12, bus_mux_in_13, bus_mux_in_14, bus_mux_in_15, bus_mux_in_HI, bus_mux_in_LO, bus_mux_in_Z_high, bus_mux_in_Z_low, bus_mux_in_PC, bus_mux_in_MDR, bus_mux_in_InPort, bus_mux_in_C_sign_extended : in std_logic_vector(31 downto 0);
+			-- the actual 'bus' data
+		bus_mux_out: out std_logic_vector(31 downto 0)
 	);
-
 end component;
 
 component encoder32_5 is
@@ -208,8 +86,9 @@ component encoder32_5 is
 	    signal encoderInput : in std_logic_vector(31 downto 0)
 	);
 end component;
+
 begin
---encoder inputs
+--encoder inputs, putting all of the encoder input signals into 1 vector
 encoderInput(0) <= R0out;
 encoderInput(1) <= R1out;
 encoderInput(2) <= R2out;
@@ -235,18 +114,13 @@ encoderInput(21) <= MDRout;
 encoderInput(22) <= PORTout;
 encoderInput(23) <= Cout;
 
-
---port mapping
+--port mapping, for the main components
 Encode : encoder32_5 port map(encoderOutput => busEncoderOutput, encoderInput => encoderInput);
 BusMUX : mux32_1 port map(sel => busEncoderOutput, bus_mux_in_0 => R0in,bus_mux_in_1 => R1in, bus_mux_in_2 => R2in, bus_mux_in_3 => R3in, bus_mux_in_4 => R4in, bus_mux_in_5 => R5in, bus_mux_in_6 => R6in, bus_mux_in_7 => R7in, bus_mux_in_8 => R8in, bus_mux_in_9 => R9in, bus_mux_in_10 => R10in, bus_mux_in_11 => R11in, bus_mux_in_12 => R12in, bus_mux_in_13 => R13in, bus_mux_in_14 => R14in, bus_mux_in_15 => R15in, bus_mux_in_HI => HIin, bus_mux_in_LO => LOin, bus_mux_in_Z_high => ZHIin, bus_mux_in_Z_low => ZLOin, bus_mux_in_PC => PCin, bus_mux_in_MDR => MDRin, bus_mux_in_InPort => PORTin, bus_mux_in_C_sign_extended => Cin, Bus_mux_out => BusMuxOut);
 
 --ALU
 ----------------------------------
-ALU1 : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, Opcode => Opcode, ZReg => ZOut,
-		ADD_select => ADD_select, SUB_select => SUB_select, MUL_select => MUL_select, DIV_select => DIV_select,
-		SHR_select => SHR_select, SHRA_select => SHRA_select, SHL_select => SHL_select, ROR_select => ROR_select,
-		ROL_select => ROL_select, AND_select => AND_select, OR_select => OR_select, NEG_select => NEG_select,
-		NOT_select => NOT_select);
+ALU1 : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, And_sig => And_sig, Or_sig => Or_sig, Add_sig => Add_sig, Sub_sig => Sub_sig, Mul_sig => Mul_sig, Div_sig => Div_sig, Shr_sig => Shr_sig, Shl_sig => Shl_sig, Shra_sig => Shra_sig, Ror_sig => Ror_sig, Rol_sig => Rol_sig, Neg_sig => Neg_sig, Not_sig => Not_sig, ZReg => ZOut);
 ----------------------------------
 --all (for now) registers
 R0 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R0En, reg_out => R0in);
