@@ -40,9 +40,6 @@ begin
 cin <= '0';
 plus1 <= "00000000000000000000000000000001";
 
---getting weird errors for process below
---both lines 45 and 46 have errors regarding text 'port' and ';'
-
 Not_1 : NOT32 port map(AReg => AReg, ZReg => temp); --temp will hold the result of the not operation now
 CLA32_1 : CLA32 port map(ra => temp, rb => plus1, cin => cin, sum => ZReg, cout => cout); --at the result of the not operation with 1
 

@@ -8,7 +8,7 @@ port(
 
     AReg, BReg: in std_logic_vector(31 downto 0);
 --replacing the opcode with individual signals
-    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig: in std_logic;
+    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
 
     ZReg: out std_logic_vector(63 downto 0)
 );
@@ -17,7 +17,7 @@ end entity;
 
 architecture behavior of ALU is 
 --signal definition
-signal And_result, Or_result, Add_result, Sub_result, Shr_result, Shl_result, Shra_result, Ror_result, Rol_result, Neg_result, Not_result: std_logic_vector(31 downto 0);
+signal And_result, Or_result, Add_result, Sub_result, Shr_result, Shl_result, Shra_result, Ror_result, Rol_result, Neg_result, Not_result, IncPC_result: std_logic_vector(31 downto 0);
 
 signal Mul_result , Div_result: std_logic_vector(63 downto 0); --careful
 
@@ -138,26 +138,37 @@ port(
 );
 end component;
 
+component IncPC is
+port(
+    signal clk: in std_logic;
+
+    PCReg: in std_logic_vector(31 downto 0);
+
+    ZReg: out std_logic_vector(63 downto 0)
+);
+end component;
+
 begin
 --port mapping EVERYTHING
 AddCin <= '0';
 SubCin <= '0';
 
-Add_sig : CLA32 port map(ra => YReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
-And_sig : AND32 port map(AReg => YReg, BReg => BReg, ZReg => And_result);
-Div_sig : DIV32 port map(ra => YReg, rb => BReg, rz => Div_result);
-Mul_sig : MUL32 port map(ra => YReg, rb => BReg, rz => Mul_result);
-Neg_sig : NEG32 port map(AReg => YReg, ZReg => Neg_result);
-Not_sig : NOT32 port map(AReg => YReg, ZReg => Not_result);
-Or_sig : OR32 port map(AReg => YReg, BReg => BReg, ZReg => Or_result);
-Rol_sig : ROL32 port map(AReg => YReg, BReg => BReg, ZReg => Rol_result);
-Ror_sig : ROR32 port map(AReg => YReg, BReg => BReg, ZReg => Ror_result);
-Shl_sig : SHL32 port map(AReg => YReg, BReg => BReg, ZReg => Shl_result);
-Shr_sig : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
-Shra_sig : SHRA32 port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
-Sub_sig : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
+Addop : CLA32 port map(ra => YReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
+Andop : AND32 port map(AReg => YReg, BReg => BReg, ZReg => And_result);
+Divop : DIV32 port map(ra => YReg, rb => BReg, rz => Div_result);
+Mulop : MUL32 port map(ra => YReg, rb => BReg, rz => Mul_result);
+Negop : NEG32 port map(AReg => YReg, ZReg => Neg_result);
+Notop : NOT32 port map(AReg => YReg, ZReg => Not_result);
+Orop : OR32 port map(AReg => YReg, BReg => BReg, ZReg => Or_result);
+Rolop : ROL32 port map(AReg => YReg, BReg => BReg, ZReg => Rol_result);
+Rorop : ROR32 port map(AReg => YReg, BReg => BReg, ZReg => Ror_result);
+Shlop : SHL32 port map(AReg => YReg, BReg => BReg, ZReg => Shl_result);
+Shrop : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
+Shraop : SHRA32 port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
+Subop : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
+IncPCop : IncPC port map(clk => clk, PCReg => YReg, ZReg => IncPC_result);
 --actual process of checking _sigcode to determine what _sigeration to do
-process(clk, clear, AReg, BReg, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig)
+process(clk, clear, AReg, BReg, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig)
 begin
 if And_sig = '1' then
     ZReg(31 downto 0) <= And_result;
@@ -195,6 +206,9 @@ elsif Not_sig = '1' then
     ZReg(63 downto 32) <= (others => '0');
 elsif Shra_sig = '1' then
     ZReg(31 downto 0) <= Shra_result;
+    ZReg(63 downto 32) <= (others => '0');
+elsif IncPC_sig = '1' then
+    ZReg(31 downto 0) <= IncPC_result;
     ZReg(63 downto 32) <= (others => '0');
 else
     ZReg <= "0000000000000000000000000000000000000000000000000000000000000000";
