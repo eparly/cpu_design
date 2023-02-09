@@ -1,12 +1,8 @@
 create all the testbench stuff for each component and for phase 1 as a whole
 
-Things tested in phase 1:
-implement IncPC
-- operation in ALU
-- used when ALU gets the IncPC control signal, need another port, fix mapping on main file
 - YReg : how tf do we do this
-Cpu_bus fix the opcodes
 
+Things tested in phase 1:
 "Functional Simulations"
 1. logical AND R1, R2, R3
 2. logical OR R1, R2, R3
@@ -21,3 +17,19 @@ Cpu_bus fix the opcodes
 11. rol R6, R6, R4
 12. neg R0, R1
 13. not R0, R1
+
+testbench file naming:
+1. logical AND R1, R2, R3 => Test1_tb.vhd
+2. logical OR R1, R2, R3 => Test2_tb.vhd
+3. add R0, R4, R5 => Test3_tb.vhd
+4. sub R0, R4, R5 => Test4_tb.vhd
+5. mul R6, R7 => Test5_tb.vhd
+6. div R6, R7 => Test6_tb.vhd
+7. shr R1, R3, R5 => Test7_tb.vhd
+8. shra R1, R3, R5 => Test8_tb.vhd
+9. shl R1, R3, R5 => Test9_tb.vhd
+10. ror R6, R6, R4 => Test10_tb.vhd
+11. rol R6, R6, R4 => Test11_tb.vhd
+12. neg R0, R1 => Test12_tb.vhd
+13. not R0, R1 => Test13_tb.vhd
+
