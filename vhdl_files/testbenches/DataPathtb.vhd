@@ -22,7 +22,7 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
 
  PCout, ZLOout, MDRout, R2out, R3out: in std_logic;
  MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
- IncPC, MDRRead, AND_select, R1En, R2En, R3En: in std_logic;
+ IncPC, MDRRead, AND_sig, R1En, R2En, R3En: in std_logic;
  
  clk: in Std_logic;
  Memdatain: in std_logic_vector (31 downto 0)
@@ -30,7 +30,7 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
  );
 END COMPONENT CPU_BUS;
 BEGIN
- DUT : datapath
+ DUT : CPU_BUS
 --port mapping: between the dut and the testbench signals
  PORT MAP (
 PCout => PCout_tb,
@@ -38,20 +38,20 @@ ZLOout => Zlowout_tb,
 MDRout => MDRout_tb,
 R2out => R2out_tb,
 R3out => R3out_tb, 
-MARin => MARin_tb,
-Zin => Zin_tb,
-PCin => PCin_tb,
-MDRin => MDRin_tb,
-IRin => IRin_tb,
-Yin => Yin_tb,
+MAREn => MARin_tb,
+ZEn => Zin_tb,
+PCEn => PCin_tb,
+MDREn => MDRin_tb,
+IREn => IRin_tb,
+YEn => Yin_tb,
 IncPC => IncPC_tb,
-Read => Read_tb,
-AND_select => AND_tb,
-R1in => R1in_tb,
-R2in => R2in_tb,
-R3in => R3in_tb,
-Clock => Clock_tb,
-Mdatain => Mdatain_tb);
+MDRRead => Read_tb,
+AND_sig => AND_tb,
+R1En => R1in_tb,
+R2En => R2in_tb,
+R3En => R3in_tb,
+clk => Clock_tb,
+Memdatain => Mdatain_tb);
 --add test logic here
 Clock_process: PROCESS IS
 BEGIN
@@ -98,7 +98,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  R2out_tb <= '0'; R3out_tb <= '0'; MARin_tb <= '0'; Zin_tb <= '0'; 
  PCin_tb <='0'; MDRin_tb <= '0'; IRin_tb <= '0'; Yin_tb <= '0'; 
  IncPC_tb <= '0'; Read_tb <= '0';  AND_tb <= '0';
- R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x”00000000”; 
+ R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; --Mdatain_tb <= x”00000000”; 
  
  WHEN Reg_load1a => 
  Mdatain_tb <= x"00000012"; 
@@ -126,7 +126,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
  WHEN T1 => 
  Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1';
- Mdatain_tb <= x”28918000”; -- opcode for “and R1, R2, R3”
+ --Mdatain_tb <= x”28918000”; -- opcode for “and R1, R2, R3”
  WHEN T2 =>
  MDRout_tb <= '1'; IRin_tb <= '1';
  WHEN T3 =>
