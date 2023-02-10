@@ -10,9 +10,9 @@ ARCHITECTURE datapath_tb_arch OF test1 IS -- Add any other signals to see in you
  SIGNAL PCout_tb, Zlowout_tb, MDRout_tb, R2out_tb, R3out_tb: std_logic;
  SIGNAL MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb: std_logic;
  SIGNAL IncPC_tb, Read_tb, AND_tb, R1in_tb, R2in_tb, R3in_tb: std_logic;
- SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb: in std_logic
- SIGNAL R0out_tb, R1out_tb, R4out_tb, R5out_tb, R6out_tb, R7out_tb, R8out_tb, R9out_tb, R10out_tb, R11out_tb, R12out_tb, R13out_tb, R14out_tb, R15out_tb, HIout_tb, LOout_tb, ZHIout_tb, Portout_tb, Cout_tb : in std_logic;
- SIGNAL R0in_tb, R4in_tb, R5in_tb, R6in_tb, R7in_tb, R8in_tb, R9in_tb, R10in_tb, R11in_tb, R12in_tb, R13in_tb, R14in_tb, R15in_tb, HIin_tb, LOin_tb, Portin_tb, Cin_tb : in std_logic;
+ SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb: std_logic;
+ SIGNAL R0out_tb, R1out_tb, R4out_tb, R5out_tb, R6out_tb, R7out_tb, R8out_tb, R9out_tb, R10out_tb, R11out_tb, R12out_tb, R13out_tb, R14out_tb, R15out_tb, HIout_tb, LOout_tb, ZHIout_tb, Portout_tb, Cout_tb : std_logic;
+ SIGNAL R0in_tb, R4in_tb, R5in_tb, R6in_tb, R7in_tb, R8in_tb, R9in_tb, R10in_tb, R11in_tb, R12in_tb, R13in_tb, R14in_tb, R15in_tb, HIin_tb, LOin_tb, Portin_tb, Cin_tb : std_logic;
  SIGNAL Clock_tb: std_logic; 
  SIGNAL Clear_tb: std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
@@ -46,6 +46,8 @@ BEGIN
 PCout => PCout_tb,
 ZLOout => Zlowout_tb,
 MDRout => MDRout_tb,
+R0out => R0out_tb,
+R1out => R1out_tb,
 R2out => R2out_tb,
 R3out => R3out_tb, 
 --new
@@ -64,7 +66,6 @@ R15out => R15out_tb,
 HIout => HIout_tb,
 LOout => LOout_tb,
 ZHIout => ZHIout_tb,
-ZLOout => ZLOout_tb,
 PORTout => Portout_tb,
 Cout => Cout_tb,
 --en -> in port maps
@@ -96,11 +97,24 @@ PORTEn => Portin_tb,
 CEn => Cin_tb,
 --misc ports
 clk => Clock_tb,
-clear => Clear,
+clear => Clear_tb,
 IncPC_sig => IncPC_tb,
 MDRRead => Read_tb,
 And_sig => AND_tb,
-Memdatain => Mdatain_tb);
+Memdatain => Mdatain_tb,
+--opcode ports
+Or_sig => Or_tb,
+Add_sig => Add_tb,
+Sub_sig => Sub_tb,
+Mul_sig => Mul_tb,
+Div_sig => Div_tb,
+SHR_sig => SHR_tb,
+Shl_sig => Shl_tb,
+shra_sig => shra_tb,
+ror_sig => ror_tb,
+rol_sig => rol_tb,
+Neg_sig => neg_tb,
+Not_sig => not_tb);
 --add test logic here
 Clock_process: PROCESS IS
 BEGIN
