@@ -10,7 +10,11 @@ ARCHITECTURE datapath_tb_arch OF test1 IS -- Add any other signals to see in you
  SIGNAL PCout_tb, Zlowout_tb, MDRout_tb, R2out_tb, R3out_tb: std_logic;
  SIGNAL MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb: std_logic;
  SIGNAL IncPC_tb, Read_tb, AND_tb, R1in_tb, R2in_tb, R3in_tb: std_logic;
+ SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb: in std_logic
+ SIGNAL R0out_tb, R1out_tb, R4out_tb, R5out_tb, R6out_tb, R7out_tb, R8out_tb, R9out_tb, R10out_tb, R11out_tb, R12out_tb, R13out_tb, R14out_tb, R15out_tb, HIout_tb, LOout_tb, ZHIout_tb, Portout_tb, Cout_tb : in std_logic;
+ SIGNAL R0in_tb, R4in_tb, R5in_tb, R6in_tb, R7in_tb, R8in_tb, R9in_tb, R10in_tb, R11in_tb, R12in_tb, R13in_tb, R14in_tb, R15in_tb, HIin_tb, LOin_tb, Portin_tb, Cin_tb : in std_logic;
  SIGNAL Clock_tb: std_logic; 
+ SIGNAL Clear_tb: std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
  SIGNAL Opcode_tb : std_logic_vector(4 downto 0);
  
@@ -18,40 +22,84 @@ ARCHITECTURE datapath_tb_arch OF test1 IS -- Add any other signals to see in you
  T2, T3, T4, T5);
  SIGNAL Present_state: State := default;
  -- component instantiation of the datapath
- COMPONENT CPU_BUS
- PORT (
+component CPU_BUS is 
+port( --needed to be done this way to implement the control unit later <- see comments at the bottom
+    signal clk: in std_logic;
+    signal clear: in std_logic;
+--Comes from the control unit, maps to each registers 'writeEnable' port
+    R0En, R1En, R2En, R3En, R4En, R5En, R6En, R7En, R8En, R9En, R10En, R11En, R12En, R13En, R14En, R15En, HIEn, LOEn, ZEn, PCEn, IREn, MDREn, PORTEn, CEn, YEn, MAREn : in std_logic;
+--From the control unit, maps into the encoder, dictates which register can put its data onto the bus
+    R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out, HIout, LOout, ZHIout, ZLOout, PCout, PORTout, Cout : in std_logic;
+    --MDR requires a slightly different setup
+    MDRout, MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
+    MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
+    --opcode signals from control unit (single bit)
+    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic
+);
+end component;
 
- PCout, ZLOout, MDRout, R2out, R3out: in std_logic;
- MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
- IncPC, MDRRead, And_sig, R1En, R2En, R3En: in std_logic;
- 
- clk: in Std_logic;
- Memdatain: in std_logic_vector (31 downto 0)
- 
- );
-END COMPONENT CPU_BUS;
 BEGIN
  DUT : CPU_BUS
 --port mapping: between the dut and the testbench signals
  PORT MAP (
+--out -> out port maps
 PCout => PCout_tb,
 ZLOout => Zlowout_tb,
 MDRout => MDRout_tb,
 R2out => R2out_tb,
 R3out => R3out_tb, 
+--new
+R4out => R4out_tb,
+R5out => R5out_tb,
+R6out => R6out_tb,
+R7out => R7out_tb,
+R8out => R8out_tb,
+R9out => R9out_tb,
+R10out => R10out_tb,
+R11out => R11out_tb,
+R12out => R12out_tb,
+R13out => R13out_tb,
+R14out => R14out_tb,
+R15out => R15out_tb,
+HIout => HIout_tb,
+LOout => LOout_tb,
+ZHIout => ZHIout_tb,
+ZLOout => ZLOout_tb,
+PORTout => Portout_tb,
+Cout => Cout_tb,
+--en -> in port maps
 MAREn => MARin_tb,
 ZEn => Zin_tb,
 PCEn => PCin_tb,
 MDREn => MDRin_tb,
 IREn => IRin_tb,
 YEn => Yin_tb,
-IncPC => IncPC_tb,
-MDRRead => Read_tb,
-And_sig => AND_tb,
 R1En => R1in_tb,
 R2En => R2in_tb,
 R3En => R3in_tb,
+R0En => R0in_tb,
+R4En => R4in_tb,
+R5En => R5in_tb,
+R6En => R6in_tb,
+R7En => R7in_tb,
+R8En => R8in_tb,
+R9En => R9in_tb,
+R10En => R10in_tb,
+R11En => R11in_tb,
+R12En => R12in_tb,
+R13En => R13in_tb,
+R14En => R14in_tb,
+R15En => R15in_tb,
+HIEn => HIin_tb,
+LOEn => LOin_tb,
+PORTEn => Portin_tb,
+CEn => Cin_tb,
+--misc ports
 clk => Clock_tb,
+clear => Clear,
+IncPC_sig => IncPC_tb,
+MDRRead => Read_tb,
+And_sig => AND_tb,
 Memdatain => Mdatain_tb);
 --add test logic here
 Clock_process: PROCESS IS
