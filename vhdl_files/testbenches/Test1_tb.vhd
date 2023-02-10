@@ -1,4 +1,5 @@
 -- and R1, R2, R3
+--*NOTE* we dont care about address decoding right now, we are manually assigning the signals to tell the system wtf to do, T0, T1, and T2 don't mean much right now
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
@@ -22,7 +23,7 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
 
  PCout, ZLOout, MDRout, R2out, R3out: in std_logic;
  MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
- IncPC, MDRRead, AND_sig, R1En, R2En, R3En: in std_logic;
+ IncPC, MDRRead, And_sig, R1En, R2En, R3En: in std_logic;
  
  clk: in Std_logic;
  Memdatain: in std_logic_vector (31 downto 0)
@@ -46,7 +47,7 @@ IRin => IRin_tb,
 Yin => Yin_tb,
 IncPC => IncPC_tb,
 MDRRead => Read_tb,
-AND_sig => AND_tb,
+And_sig => AND_tb,
 R1in => R1in_tb,
 R2in => R2in_tb,
 R3in => R3in_tb,
