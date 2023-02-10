@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY test4 IS
-END ENTITY test4;
+ENTITY test10 IS
+END ENTITY test10;
 -- Architecture of the testbench with the signal names
-ARCHITECTURE datapath_tb_arch OF test4 IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF test10 IS -- Add any other signals to see in your simulation
  SIGNAL PCout_tb, Zlowout_tb, MDRout_tb, R6out_tb, R4out_tb: std_logic;
  SIGNAL MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb: std_logic;
  SIGNAL IncPC_tb, Read_tb, ROR_tb, R6in_tb, R4in_tb: std_logic;
