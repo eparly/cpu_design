@@ -1,4 +1,4 @@
--- and datapath_tb.vhd file: <This is the filename>
+-- and R1, R2, R3
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
