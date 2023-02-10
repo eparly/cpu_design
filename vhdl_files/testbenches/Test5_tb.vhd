@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY datapath_tb IS
-END ENTITY datapath_tb;
+ENTITY test5 IS
+END ENTITY test5;
 -- Architecture of the testbench with the signal names
-ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF test5 IS -- Add any other signals to see in your simulation
  SIGNAL PCout_tb, Zlowout_tb, Zhiout_tb, MDRout_tb, R6out_tb, R7out_tb: std_logic;
  SIGNAL MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb, LOin_tb, HIin_tb: std_logic;
  SIGNAL IncPC_tb, Read_tb, MUL_tb, R6in_tb, R7in_tb: std_logic;
@@ -23,7 +23,7 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
 
  PCout, ZLOout, ZHIout, MDRout, R6out, R7out: in std_logic;
  MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
- IncPC, MDRRead, Mul_sig, R6En, R7En, LOEn, HIEn: in std_logic;
+ IncPC_sig, MDRRead, Mul_sig, R6En, R7En, LOEn, HIEn: in std_logic;
  
  clk: in Std_logic;
  Memdatain: in std_logic_vector (31 downto 0)
@@ -31,15 +31,15 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
  );
 END COMPONENT CPU_BUS;
 BEGIN
- DUT : datapath
+ DUT : CPU_BUS
 --port mapping: between the dut and the testbench signals
  PORT MAP (
 PCout => PCout_tb,
 ZLOout => Zlowout_tb,
 ZHIout => Zhiout_tb,
 MDRout => MDRout_tb,
-R4out => R4out_tb,
-R5out => R5out_tb, 
+R6out => R6out_tb,
+R7out => R7out_tb, 
 MAREn => MARin_tb,
 ZEn => Zin_tb,
 PCEn => PCin_tb,
@@ -48,7 +48,7 @@ IREn => IRin_tb,
 YEn => Yin_tb,
 LOEn => LOin_tb,
 HIEn => HIin_tb,
-IncPC => IncPC_tb,
+IncPC_sig => IncPC_tb,
 MDRRead => Read_tb,
 Mul_sig => MUL_tb,
 R6En => R6in_tb,
@@ -100,10 +100,10 @@ BEGIN
 CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN Default =>
  PCout_tb <= '0'; Zlowout_tb <= '0'; Zhiout_tb <= '0'; MDRout_tb <= '0'; -- initialize the signals
- R4out_tb <= '0'; R5out_tb <= '0'; MARin_tb <= '0'; Zin_tb <= '0'; 
+ R6out_tb <= '0'; R7out_tb <= '0'; MARin_tb <= '0'; Zin_tb <= '0'; 
  PCin_tb <='0'; MDRin_tb <= '0'; IRin_tb <= '0'; Yin_tb <= '0'; 
  IncPC_tb <= '0'; Read_tb <= '0';  MUL_tb <= '0'; LOin_tb <= '0'; HIin_tb <= '0';
- R6in_tb <= '0'; R7in_tb <= '0'; Mdatain_tb <= x”00000000”; 
+ R6in_tb <= '0'; R7in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
  Mdatain_tb <= x"00000012"; 
@@ -131,7 +131,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
  WHEN T1 => 
  Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1';
- Mdatain_tb <= x”28918000”; -- opcode for “and R1, R2, R3” once again we don't care about the opcode
+ Mdatain_tb <= x"28918000"; -- opcode for “and R1, R2, R3” once again we don't care about the opcode
  WHEN T2 =>
  MDRout_tb <= '1'; IRin_tb <= '1';
  WHEN T3 =>
