@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY datapath_tb IS
-END ENTITY datapath_tb;
+ENTITY test2 IS
+END ENTITY test2;
 -- Architecture of the testbench with the signal names
-ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF test2 IS -- Add any other signals to see in your simulation
  SIGNAL PCout_tb, Zlowout_tb, MDRout_tb, R2out_tb, R3out_tb: std_logic;
  SIGNAL MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb: std_logic;
  SIGNAL IncPC_tb, Read_tb, OR_tb, R1in_tb, R2in_tb, R3in_tb: std_logic;
@@ -31,7 +31,7 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
  );
 END COMPONENT CPU_BUS;
 BEGIN
- DUT : datapath
+ DUT : CPU_BUS
 --port mapping: between the dut and the testbench signals
  PORT MAP (
 PCout => PCout_tb,
@@ -98,8 +98,8 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  PCout_tb <= '0'; Zlowout_tb <= '0'; MDRout_tb <= '0'; -- initialize the signals
  R2out_tb <= '0'; R3out_tb <= '0'; MARin_tb <= '0'; Zin_tb <= '0'; 
  PCin_tb <='0'; MDRin_tb <= '0'; IRin_tb <= '0'; Yin_tb <= '0'; 
- IncPC_tb <= '0'; Read_tb <= '0';  AND_tb <= '0';
- R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x”00000000”; 
+ IncPC_tb <= '0'; Read_tb <= '0';  OR_tb <= '0';
+ R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
  Mdatain_tb <= x"00000012"; 
@@ -127,7 +127,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
  WHEN T1 => 
  Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1';
- Mdatain_tb <= x”28918000”; -- opcode for “and R1, R2, R3” 
+ Mdatain_tb <= x"28918000"; -- opcode for “and R1, R2, R3” 
  WHEN T2 =>
  MDRout_tb <= '1'; IRin_tb <= '1';
  WHEN T3 =>
