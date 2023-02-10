@@ -11,7 +11,7 @@ port(
 );
 end entity;
 
-architecture behavior of CLA16 is
+architecture behavior of CLA32 is
 
 signal cout1 : std_logic;
 

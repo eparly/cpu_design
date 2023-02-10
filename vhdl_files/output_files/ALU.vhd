@@ -17,7 +17,8 @@ end entity;
 
 architecture behavior of ALU is 
 --signal definition
-signal And_result, Or_result, Add_result, Sub_result, Shr_result, Shl_result, Shra_result, Ror_result, Rol_result, Neg_result, Not_result, IncPC_result: std_logic_vector(31 downto 0);
+signal And_result, Or_result, Add_result, Sub_result, Shr_result, Shl_result, Shra_result, Ror_result, Rol_result, Neg_result, Not_result: std_logic_vector(31 downto 0);
+signal IncPC_result : std_logic_vector(31 downto 0);
 
 signal Mul_result , Div_result: std_logic_vector(63 downto 0); --careful
 
@@ -144,7 +145,7 @@ port(
 
     PCReg: in std_logic_vector(31 downto 0);
 
-    ZReg: out std_logic_vector(63 downto 0)
+    ZReg: out std_logic_vector(31 downto 0)
 );
 end component;
 
@@ -160,8 +161,8 @@ Mulop : MUL32 port map(ra => YReg, rb => BReg, rz => Mul_result);
 Negop : NEG32 port map(AReg => YReg, ZReg => Neg_result);
 Notop : NOT32 port map(AReg => YReg, ZReg => Not_result);
 Orop : OR32 port map(AReg => YReg, BReg => BReg, ZReg => Or_result);
-Rolop : ROL32 port map(AReg => YReg, BReg => BReg, ZReg => Rol_result);
-Rorop : ROR32 port map(AReg => YReg, BReg => BReg, ZReg => Ror_result);
+Rolop : ROL32 port map(AReg => YReg, BReg => BReg(4 downto 0), ZReg => Rol_result);
+Rorop : ROR32 port map(AReg => YReg, BReg => BReg(4 downto 0), ZReg => Ror_result);
 Shlop : SHL32 port map(AReg => YReg, BReg => BReg, ZReg => Shl_result);
 Shrop : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
 Shraop : SHRA32 port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);

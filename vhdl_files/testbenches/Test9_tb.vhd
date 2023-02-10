@@ -31,7 +31,7 @@ ARCHITECTURE datapath_tb_arch OF test9 IS -- Add any other signals to see in you
  );
 END COMPONENT CPU_BUS;
 BEGIN
- DUT : datapath
+ DUT : CPU_BUS
 --port mapping: between the dut and the testbench signals
  PORT MAP (
 PCout => PCout_tb,
@@ -99,7 +99,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  R3out_tb <= '0'; R5out_tb <= '0'; MARin_tb <= '0'; Zin_tb <= '0'; 
  PCin_tb <='0'; MDRin_tb <= '0'; IRin_tb <= '0'; Yin_tb <= '0'; 
  IncPC_tb <= '0'; Read_tb <= '0';  SHL_tb <= '0';
- R1in_tb <= '0'; R3in_tb <= '0'; R5in_tb <= '0'; Mdatain_tb <= x”00000000”; 
+ R1in_tb <= '0'; R3in_tb <= '0'; R5in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
  Mdatain_tb <= x"00000012"; 
@@ -127,7 +127,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
  WHEN T1 => 
  Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1';
- Mdatain_tb <= x”28918000”; -- opcode for “and R1, R2, R3” once again we don't care about the opcode
+ Mdatain_tb <= x"28918000"; -- opcode for “and R1, R2, R3” once again we don't care about the opcode
  WHEN T2 =>
  MDRout_tb <= '1'; IRin_tb <= '1';
  WHEN T3 =>

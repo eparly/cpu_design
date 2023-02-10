@@ -140,7 +140,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  R7out_tb <= '1'; DIV_tb <= '1'; Zin_tb <= '1';
  WHEN T5 =>
  Zlowout_tb <= '1' after 100 ns; LOin_tb <= '1' after 100 ns; --give the multiplier some extra time to finish
- WHEN T5 =>
+ WHEN T6 =>
  Zhiout_tb <= '1'; HIin_tb <= '1';
 WHEN OTHERS =>
 END CASE;

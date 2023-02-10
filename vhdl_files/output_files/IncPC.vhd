@@ -7,7 +7,7 @@ port(
 
     PCReg: in std_logic_vector(31 downto 0);
 
-    ZReg: out std_logic_vector(63 downto 0)
+    ZReg: out std_logic_vector(31 downto 0)
 );
 end entity;
 

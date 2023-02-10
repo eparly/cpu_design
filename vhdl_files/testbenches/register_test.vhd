@@ -16,10 +16,10 @@ architecture behavior of register_tb is
   end component;
 
   signal clk : std_logic := '0';
-  signal reg_input : std_logic_vector := "00000000000000000000000000000000";
+  signal reg_input : std_logic_vector (31 downto 0) := "00000000000000000000000000000000";
   signal writeEnable : std_logic := '0';
   signal clear: std_logic := '0';
-  signal reg_out : std_logic_vector;
+  signal reg_out : std_logic_vector (31 downto 0);
 
 begin
 

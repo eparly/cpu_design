@@ -22,7 +22,7 @@ begin
 
 addM := ra;
 subM := (0-rb); --we are allowed the use +- for mul and div
-result := "00000000000000000000000000000000000000000000000000000000000000000000";
+result := "0000000000000000000000000000000000000000000000000000000000000000";
 zeros := "00000000000000000000000000000000";
 
 for i in 0 to 31 loop
@@ -36,7 +36,7 @@ for i in 0 to 31 loop
         elsif (rb(i)='0' and rb(i-1)='1') then -- +1
             tempResult(31 downto 0) := addM;
         else
-            tempResult := zeros;
+            tempResult(31 downto 0) := zeros;
         end if;
     end if;
     --tempResult is only holding 32 bits, need to extend to 64 via what sign it has

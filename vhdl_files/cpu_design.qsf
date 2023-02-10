@@ -38,7 +38,7 @@
 
 set_global_assignment -name FAMILY "Cyclone III"
 set_global_assignment -name DEVICE EP3C16F484C6
-set_global_assignment -name TOP_LEVEL_ENTITY cpu_design
+set_global_assignment -name TOP_LEVEL_ENTITY CPU_BUS
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:54:25  JANUARY 23, 2023"
 set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
@@ -49,18 +49,24 @@ set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR 1
 set_global_assignment -name NOMINAL_CORE_SUPPLY_VOLTAGE 1.2V
 set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (VHDL)"
 set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulation
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH register_test -section_id eda_simulation
-set_global_assignment -name EDA_TEST_BENCH_NAME register_test -section_id eda_simulation
-set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_test
-set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id register_test
-set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME register_test -section_id register_test
-set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/register_test.vhd -section_id register_test
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH phase1_tb -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_NAME phase1_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id phase1_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME phase1_tb -section_id phase1_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test1_tb.vhd -section_id phase1_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test2_tb.vhd -section_id phase1_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test3_tb.vhd -section_id phase1_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test4_tb.vhd -section_id phase1_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test5_tb.vhd -section_id phase1_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test6_tb.vhd -section_id phase1_tb
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name VHDL_FILE output_files/IncPC.vhd
+set_global_assignment -name VHDL_FILE output_files/CPU_BUS.vhd
 set_global_assignment -name VHDL_FILE testbenches/Test13_tb.vhd
 set_global_assignment -name VHDL_FILE testbenches/Test12_tb.vhd
 set_global_assignment -name VHDL_FILE testbenches/Test11_tb.vhd
