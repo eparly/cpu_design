@@ -22,7 +22,7 @@ ARCHITECTURE datapath_tb_arch OF datapath_tb IS -- Add any other signals to see 
 
  PCout, ZLOout, MDRout, R2out, R3out: in std_logic;
  MAREn, ZEn, PCEn, MDREn, IREn, YEn: in std_logic;
- IncPC, MDRRead, AND_select, R1En, R2En, R3En: in std_logic;
+ IncPC, MDRRead, AND_sig, R1En, R2En, R3En: in std_logic;
  
  clk: in Std_logic;
  Memdatain: in std_logic_vector (31 downto 0)
@@ -45,13 +45,13 @@ MDRin => MDRin_tb,
 IRin => IRin_tb,
 Yin => Yin_tb,
 IncPC => IncPC_tb,
-Read => Read_tb,
-AND_select => AND_tb,
+MDRRead => Read_tb,
+AND_sig => AND_tb,
 R1in => R1in_tb,
 R2in => R2in_tb,
 R3in => R3in_tb,
-Clock => Clock_tb,
-Mdatain => Mdatain_tb);
+clk => Clock_tb,
+Memdatain => Mdatain_tb);
 --add test logic here
 Clock_process: PROCESS IS
 BEGIN
