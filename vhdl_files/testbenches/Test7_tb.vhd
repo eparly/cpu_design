@@ -107,7 +107,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRin_tb <= '0', '1' after 10 ns, '0' after 25 ns;
  WHEN Reg_load1b => 
  MDRout_tb <= '1' after 10 ns, '0' after 25 ns; 
- R4in_tb <= '1' after 10 ns, '0' after 25 ns; -- initialize R4 with the value $12 
+ R3in_tb <= '1' after 10 ns, '0' after 25 ns; -- initialize R4 with the value $12 
  WHEN Reg_load2a => 
  Mdatain_tb <= x"00000014"; 
  Read_tb <= '1' after 10 ns, '0' after 25 ns; 
@@ -121,7 +121,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRin_tb <= '1' after 10 ns, '0' after 25 ns;
  WHEN Reg_load3b => 
  MDRout_tb <= '1' after 10 ns, '0' after 25 ns; 
- R0in_tb <= '1' after 10 ns, '0' after 25 ns; -- initialize R0 with the value $18 idk why this is needed, this register holds the result?
+ R1in_tb <= '1' after 10 ns, '0' after 25 ns; -- initialize R0 with the value $18 idk why this is needed, this register holds the result?
  
  WHEN T0 => -- see if you need to de-assert these signals
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
