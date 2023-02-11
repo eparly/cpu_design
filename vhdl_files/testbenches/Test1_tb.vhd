@@ -7,14 +7,16 @@ ENTITY test1 IS
 END ENTITY test1;
 -- Architecture of the testbench with the signal names
 ARCHITECTURE datapath_tb_arch OF test1 IS -- Add any other signals to see in your simulation
- SIGNAL PCout_tb, Zlowout_tb, MDRout_tb, R2out_tb, R3out_tb: std_logic;
- SIGNAL MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb: std_logic;
- SIGNAL IncPC_tb, Read_tb, AND_tb, R1in_tb, R2in_tb, R3in_tb: std_logic;
- SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb: std_logic;
- SIGNAL R0out_tb, R1out_tb, R4out_tb, R5out_tb, R6out_tb, R7out_tb, R8out_tb, R9out_tb, R10out_tb, R11out_tb, R12out_tb, R13out_tb, R14out_tb, R15out_tb, HIout_tb, LOout_tb, ZHIout_tb, Portout_tb, Cout_tb : std_logic;
- SIGNAL R0in_tb, R4in_tb, R5in_tb, R6in_tb, R7in_tb, R8in_tb, R9in_tb, R10in_tb, R11in_tb, R12in_tb, R13in_tb, R14in_tb, R15in_tb, HIin_tb, LOin_tb, Portin_tb, Cin_tb : std_logic;
+ --operation signals
+ SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb, AND_tb : std_logic;
+ --signals for the out ports (go into encoder)
+ SIGNAL R0out_tb, R1out_tb, R2out_tb, R3out_tb, R4out_tb, R5out_tb, R6out_tb, R7out_tb, R8out_tb, R9out_tb, R10out_tb, R11out_tb, R12out_tb, R13out_tb, R14out_tb, R15out_tb, HIout_tb, LOout_tb, ZHIout_tb, Portout_tb, Cout_tb, PCout_tb, Zlowout_tb, MDRout_tb : std_logic;
+ --signals for the write/enable ports on each register
+ SIGNAL R0in_tb, R1in_tb, R2in_tb, R3in_tb R4in_tb, R5in_tb, R6in_tb, R7in_tb, R8in_tb, R9in_tb, R10in_tb, R11in_tb, R12in_tb, R13in_tb, R14in_tb, R15in_tb, HIin_tb, LOin_tb, Portin_tb, Cin_tb, MARin_tb, Zin_tb, PCin_tb, MDRin_tb, IRin_tb, Yin_tb : std_logic;
+ --other misc ports needed
  SIGNAL Clock_tb: std_logic; 
  SIGNAL Clear_tb: std_logic;
+ SIGNAL Read_tb, : std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
  SIGNAL Opcode_tb : std_logic_vector(4 downto 0);
  
