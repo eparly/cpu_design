@@ -20,7 +20,7 @@ ARCHITECTURE datapath_tb_arch OF test1 IS -- Add any other signals to see in you
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
  SIGNAL Opcode_tb : std_logic_vector(4 downto 0);
  --hold output of the register
- SIGNAL R0Data, R1Data, R2Data; std_logic_vector(31 downto 0);
+ SIGNAL R0Data, R1Data, R2Data : std_logic_vector(31 downto 0);
  
  TYPE State IS (default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, T0, T1, 
  T2, T3, T4, T5);
@@ -38,9 +38,9 @@ port( --needed to be done this way to implement the control unit later <- see co
     MDRout, MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
     MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
     --opcode signals from control unit (single bit)
-    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic
+    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
     --shows outputs of the registers
-    R0Data, R1Data, R2Data: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data: out std_logic_vector(31 downto 0)
 );
 end component;
 
@@ -198,7 +198,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
  WHEN T1 => 
  Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1';
- Mdatain_tb <= x"28918000"; -- opcode for â€œand R1, R2, R3â€
+ Mdatain_tb <= x"28918000"; -- opcode for Ã¢â‚¬Å“and R1, R2, R3Ã¢â‚¬Â
  WHEN T2 =>
  MDRout_tb <= '1'; IRin_tb <= '1';
  WHEN T3 =>

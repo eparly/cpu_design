@@ -23,7 +23,7 @@ architecture behavior of register_tb is
 
 begin
 
-  dout : reg
+  dut : reg
     port map (
       clk => clk,
       reg_input => reg_input,

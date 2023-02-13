@@ -13,9 +13,9 @@ port( --needed to be done this way to implement the control unit later <- see co
     MDRout, MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
     MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
     --opcode signals from control unit (single bit)
-    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic
+    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
     --ports for the outputs of the registers (used for the testbenches only)
-    R0Data, R1Data, R2Data: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data: out std_logic_vector(31 downto 0)
 );
 end CPU_BUS;
 
@@ -91,6 +91,8 @@ end component;
 
 begin
 --ports recieve the register outputs
+process (clk) is
+begin
 R0Data <= R0in;
 R1Data <= R1in;
 R2Data <= R2in;
@@ -119,7 +121,7 @@ encoderInput(20) <= PCout;
 encoderInput(21) <= MDRout;
 encoderInput(22) <= PORTout;
 encoderInput(23) <= Cout;
-
+end process;
 --port mapping, for the main components
 Encode : encoder32_5 port map(encoderOutput => encoderOutput, encoderInput => encoderInput);
 BusMUX : mux32_1 port map(sel => encoderOutput, bus_mux_in_0 => R0in,bus_mux_in_1 => R1in, bus_mux_in_2 => R2in, bus_mux_in_3 => R3in, bus_mux_in_4 => R4in, bus_mux_in_5 => R5in, bus_mux_in_6 => R6in, bus_mux_in_7 => R7in, bus_mux_in_8 => R8in, bus_mux_in_9 => R9in, bus_mux_in_10 => R10in, bus_mux_in_11 => R11in, bus_mux_in_12 => R12in, bus_mux_in_13 => R13in, bus_mux_in_14 => R14in, bus_mux_in_15 => R15in, bus_mux_in_HI => HIin, bus_mux_in_LO => LOin, bus_mux_in_Z_high => ZHIin, bus_mux_in_Z_low => ZLOin, bus_mux_in_PC => PCin, bus_mux_in_MDR => MDRin, bus_mux_in_InPort => PORTin, bus_mux_in_C_sign_extended => Cin, Bus_mux_out => BusMuxOut);
