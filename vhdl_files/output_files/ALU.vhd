@@ -6,7 +6,7 @@ port(
     signal clk: in std_logic;
     signal clear: in std_logic;
 
-    AReg, BReg, YReg: in std_logic_vector(31 downto 0);
+    AReg, BReg: in std_logic_vector(31 downto 0);
 --replacing the opcode with individual signals
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
 
@@ -154,20 +154,20 @@ begin
 AddCin <= '0';
 SubCin <= '0';
 
-Addop : CLA32 port map(ra => YReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
-Andop : AND32 port map(AReg => YReg, BReg => BReg, ZReg => And_result);
-Divop : DIV32 port map(ra => YReg, rb => BReg, rz => Div_result);
-Mulop : MUL32 port map(ra => YReg, rb => BReg, rz => Mul_result);
-Negop : NEG32 port map(AReg => YReg, ZReg => Neg_result);
-Notop : NOT32 port map(AReg => YReg, ZReg => Not_result);
-Orop : OR32 port map(AReg => YReg, BReg => BReg, ZReg => Or_result);
-Rolop : ROL32 port map(AReg => YReg, BReg => BReg(4 downto 0), ZReg => Rol_result);
-Rorop : ROR32 port map(AReg => YReg, BReg => BReg(4 downto 0), ZReg => Ror_result);
-Shlop : SHL32 port map(AReg => YReg, BReg => BReg, ZReg => Shl_result);
-Shrop : SHR32 port map(AReg => YReg, BReg => BReg, ZReg => Shr_result);
-Shraop : SHRA32 port map(AReg => YReg, BReg => BReg, ZReg => Shra_result);
-Subop : SUB32 port map(ra => YReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
-IncPCop : IncPC port map(clk => clk, PCReg => YReg, ZReg => IncPC_result);
+Addop : CLA32 port map(ra => AReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
+Andop : AND32 port map(AReg => AReg, BReg => BReg, ZReg => And_result);
+Divop : DIV32 port map(ra => AReg, rb => BReg, rz => Div_result);
+Mulop : MUL32 port map(ra => AReg, rb => BReg, rz => Mul_result);
+Negop : NEG32 port map(AReg => AReg, ZReg => Neg_result);
+Notop : NOT32 port map(AReg => AReg, ZReg => Not_result);
+Orop : OR32 port map(AReg => AReg, BReg => BReg, ZReg => Or_result);
+Rolop : ROL32 port map(AReg => AReg, BReg => BReg(4 downto 0), ZReg => Rol_result);
+Rorop : ROR32 port map(AReg => AReg, BReg => BReg(4 downto 0), ZReg => Ror_result);
+Shlop : SHL32 port map(AReg => AReg, BReg => BReg, ZReg => Shl_result);
+Shrop : SHR32 port map(AReg => AReg, BReg => BReg, ZReg => Shr_result);
+Shraop : SHRA32 port map(AReg => AReg, BReg => BReg, ZReg => Shra_result);
+Subop : SUB32 port map(ra => AReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
+IncPCop : IncPC port map(clk => clk, PCReg => AReg, ZReg => IncPC_result);
 --actual process of checking _sigcode to determine what _sigeration to do
 process(clk, clear, AReg, BReg, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig)
 begin
