@@ -60,8 +60,8 @@ end component;
 
 component ALU is
 port(
-    signal clk: in std_logic;
-    signal clear: in std_logic;
+--    signal clk: in std_logic;
+--    signal clear: in std_logic;
 
     AReg, BReg: in std_logic_vector(31 downto 0);
 --replacing the opcode with individual signals
@@ -91,7 +91,7 @@ end component;
 
 begin
 --ports recieve the register outputs
-process (clk) is
+process (clk, R1out, R2out, R3out, R4out) is
 begin
 R0Data <= R0in;
 R1Data <= R1in;
@@ -128,7 +128,7 @@ BusMUX : mux32_1 port map(sel => encoderOutput, bus_mux_in_0 => R0in,bus_mux_in_
 
 --ALU
 ----------------------------------
-ALU1 : ALU port map(clk => clk, clear => clear, AReg => Yin, BReg => BusMuxOut, And_sig => And_sig, Or_sig => Or_sig, Add_sig => Add_sig, Sub_sig => Sub_sig, Mul_sig => Mul_sig, Div_sig => Div_sig, Shr_sig => Shr_sig, Shl_sig => Shl_sig, Shra_sig => Shra_sig, Ror_sig => Ror_sig, Rol_sig => Rol_sig, Neg_sig => Neg_sig, Not_sig => Not_sig, IncPC_sig => IncPC_sig, ZReg => ZOut);
+ALU1 : ALU port map(AReg => Yin, BReg => BusMuxOut, And_sig => And_sig, Or_sig => Or_sig, Add_sig => Add_sig, Sub_sig => Sub_sig, Mul_sig => Mul_sig, Div_sig => Div_sig, Shr_sig => Shr_sig, Shl_sig => Shl_sig, Shra_sig => Shra_sig, Ror_sig => Ror_sig, Rol_sig => Rol_sig, Neg_sig => Neg_sig, Not_sig => Not_sig, IncPC_sig => IncPC_sig, ZReg => ZOut);
 ----------------------------------
 --all (for now) registers
 R0 : reg port map(reg_input =>BusMuxOut, clk => clk, clear => clear, writeEnable => R0En, reg_out => R0in);

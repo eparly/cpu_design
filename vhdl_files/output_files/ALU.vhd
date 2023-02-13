@@ -3,8 +3,8 @@ use IEEE.std_logic_1164.all;
 
 entity ALU is
 port(
-    signal clk: in std_logic;
-    signal clear: in std_logic;
+--    signal clk: in std_logic;
+--    signal clear: in std_logic;
 
     AReg, BReg: in std_logic_vector(31 downto 0);
 --replacing the opcode with individual signals
@@ -141,7 +141,7 @@ end component;
 
 component IncPC is
 port(
-    signal clk: in std_logic;
+    
 
     PCReg: in std_logic_vector(31 downto 0);
 
@@ -167,9 +167,9 @@ Shlop : SHL32 port map(AReg => AReg, BReg => BReg, ZReg => Shl_result);
 Shrop : SHR32 port map(AReg => AReg, BReg => BReg, ZReg => Shr_result);
 Shraop : SHRA32 port map(AReg => AReg, BReg => BReg, ZReg => Shra_result);
 Subop : SUB32 port map(ra => AReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
-IncPCop : IncPC port map(clk => clk, PCReg => AReg, ZReg => IncPC_result);
+IncPCop : IncPC port map(PCReg => AReg, ZReg => IncPC_result);
 --actual process of checking _sigcode to determine what _sigeration to do
-process(clk, clear, AReg, BReg, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig)
+process(And_result,Add_result, Or_result, shl_result, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig)
 begin
 if And_sig = '1' then
     ZReg(31 downto 0) <= And_result;

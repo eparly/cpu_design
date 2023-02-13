@@ -3,8 +3,7 @@ use IEEE.std_logic_1164.all;
 
 entity IncPC is
 port(
-    signal clk: in std_logic;
-
+    
     PCReg: in std_logic_vector(31 downto 0);
 
     ZReg: out std_logic_vector(31 downto 0)

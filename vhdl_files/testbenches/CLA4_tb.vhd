@@ -23,11 +23,11 @@ dut: CLA4 port map (ra => ra, rb => rb, sum => sum, cin => cin, cout => cout);
 
 	testcase1: process
 		begin
-        wait for 10 ns;
+        wait for 50 ns;
 		ra <= "0010";
 		rb <= "0101";
 		cin <= '0';
-		wait for 10 ns;
+		wait for 50 ns;
 		wait;
 	end process;
 

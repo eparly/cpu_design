@@ -52,7 +52,7 @@ Test_process : process
 		sel<='0';
 		clear <='0';
 		wait until rising_edge(clk);
-		MDin_tb <=x"0F0F0F0F";
+		MemDataIn <=x"0F0F0F0F";
 		sel <= '1';
 		writeEnable <= '0';
 		wait;

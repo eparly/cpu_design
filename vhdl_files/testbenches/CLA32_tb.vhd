@@ -4,9 +4,9 @@ use ieee.std_logic_1164.all;
 entity CLA32_tb is
 end entity;
 
-architecture behavior of CLA32 is
-signal ra, rb, sum : std_logic_vector(31 downto 0);
-signal cin, cout : std_logic;
+architecture behavior of CLA32_tb is
+signal cla_ra, cla_rb, cla_sum : std_logic_vector(31 downto 0);
+signal cla_cin, cla_cout : std_logic;
 
 component CLA32 is
 port(
@@ -19,12 +19,16 @@ port(
 end component;
 
 begin
-DUT : CLA32 port map(ra=>ra, rb=>rb, cin=>cin, sum=>sum, cout=>cout);
+DUT : CLA32 port map(ra=>cla_ra, rb=>cla_rb, cin=>cla_cin, sum=>cla_sum, cout=>cla_cout);
 
 Test_process : process
 begin
-cin <= '0';
-ra <= x"00000001";
-rb <= x"00000001";
+wait for 30 ns;
+cla_cin <= '0';
+wait for 10 ns;
+cla_ra <= x"00000001";
+wait for 10 ns;
+cla_rb <= x"00000001";
+wait for 30 ns;
 end process;
 end behavior;
