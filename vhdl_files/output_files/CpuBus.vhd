@@ -14,6 +14,8 @@ port( --needed to be done this way to implement the control unit later <- see co
     MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic
+    --ports for the outputs of the registers (used for the testbenches only)
+    R0Data, R1Data, R2Data: out std_logic_vector(31 downto 0);
 );
 end CPU_BUS;
 
@@ -88,6 +90,10 @@ component encoder32_5 is
 end component;
 
 begin
+--ports recieve the register outputs
+R0Data <= R0in;
+R1Data <= R1in;
+R2Data <= R2in;
 --encoder inputs, putting all of the encoder input signals into 1 vector
 encoderInput(0) <= R0out;
 encoderInput(1) <= R1out;

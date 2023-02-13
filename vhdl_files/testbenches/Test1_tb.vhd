@@ -19,6 +19,8 @@ ARCHITECTURE datapath_tb_arch OF test1 IS -- Add any other signals to see in you
  SIGNAL Read_tb : std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
  SIGNAL Opcode_tb : std_logic_vector(4 downto 0);
+ --hold output of the register
+ SIGNAL R0Data, R1Data, R2Data; std_logic_vector(31 downto 0);
  
  TYPE State IS (default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, T0, T1, 
  T2, T3, T4, T5);
@@ -37,6 +39,8 @@ port( --needed to be done this way to implement the control unit later <- see co
     MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic
+    --shows outputs of the registers
+    R0Data, R1Data, R2Data: out std_logic_vector(31 downto 0);
 );
 end component;
 
@@ -115,7 +119,11 @@ shra_sig => SHRA_tb,
 ror_sig => ROR_tb,
 rol_sig => ROL_tb,
 Neg_sig => NEG_tb,
-Not_sig => NOT_tb);
+Not_sig => NOT_tb,
+--output data of the register
+R0Data => R0Data,
+R1Data => R1Data,
+R2Data => R2Data);
 --add test logic here
 Clock_process: PROCESS IS
 BEGIN
