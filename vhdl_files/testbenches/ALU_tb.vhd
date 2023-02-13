@@ -7,7 +7,8 @@ end entity;
 architecture behavior of ALU_tb is
 
 signal clk, clear, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: std_logic;
-signal AReg, BReg, ZReg : std_logic_vector(31 downto 0);
+signal AReg, BReg: std_logic_vector(31 downto 0);
+signal ZReg : std_logic_vector(63 downto 0); 
 
 component ALU is
 port(
