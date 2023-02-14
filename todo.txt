@@ -33,3 +33,26 @@ testbench file naming:
 12. neg R0, R1 => Test12_tb.vhd
 13. not R0, R1 => Test13_tb.vhd
 
+
+UPDATES:
+
+WORKING OPERATIONS
+CLA4
+CLA16
+CLA32
+AND32
+NOT
+NEG
+OR
+ROL
+ROR
+SHL
+SHR
+SHRA
+
+Not Tested yet
+MUL
+DIV
+SUB
+
+I haven't pushed any of this to the repo yet
