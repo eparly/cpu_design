@@ -1,6 +1,6 @@
 library IEEE;
-use IEEE.std_logic_1164.all;
 use IEEE.numeric_std.all;
+use IEEE.std_logic_1164.all;
 
 entity SHRA32 is
 port(
@@ -12,11 +12,12 @@ port(
 end entity;
 
 architecture behavior of SHRA32 is
-
 begin
 --idk if works
 process(AReg, BReg)
+variable BTemp : integer range 0 to 31;
 begin
---Zreg <= AReg sra BReg;
+BTemp := to_integer(unsigned(BReg));
+ZReg <= std_logic_vector(shift_right(signed(AReg), BTemp));
 end process;
 end behavior;

@@ -16,36 +16,37 @@ architecture behavior of DIV32 is
 begin
 
 process(ra, rb)
-variable A : std_logic_vector(31 downto 0); --will hold the eventual remainder
-variable Q : std_logic_vector(31 downto 0); --will hold the quotient
-variable subM : std_logic_vector(31 downto 0);
-variable addM : std_logic_vector(31 downto 0);
-begin
-A := "00000000000000000000000000000000";
-Q := rb;
-subM := (0-ra);
-addM := ra;
+    variable A, Q, M : unsigned(31 downto 0);
+    variable count : integer := 32;
+    begin
+            Q := resize(unsigned(ra), Q'length);
+            A := (others => '0');
+            M := resize(unsigned(rb), M'length);
 
-for i in 0 to 31 loop
-    A := std_logic_vector(SHIFT_LEFT(UNSIGNED(A), 1));
-
-    Q := std_logic_vector(SHIFT_LEFT(UNSIGNED(Q), 1));
-    if (A < 0) then
-        A := A + addM;
-    else
-        A := A - subM;
-    end if;
-    if (A < 0) then
-        Q(0) := '0';
-    else
-        Q(0) := '1';
-    end if;
-end loop;
-if (A<0) then
-    A := A + addM;
-end if;
---A holds the remainder, Q holds the quotient
-rz(31 downto 0) <= Q;
-rz(63 downto 32) <= A;
-end process;
+            for i in 0 to 31 loop
+				--shifting, but weird
+					 A := SHIFT_LEFT(UNSIGNED(A), 1);
+					 if (Q(31) = '1') then
+						 A(0) := '1';
+					 else
+						 A(0) := '0';
+					 end if;
+					 Q := SHIFT_LEFT(UNSIGNED(Q), 1);
+                if A(31) = '0' then
+                    A := (unsigned(A) - unsigned(M)); 
+                else
+                    A := (unsigned(A) + unsigned(M));
+					 end if;
+					 if A(31) = '0' then
+                    Q(0) := '1';   
+                else
+                    Q(0) := '0';
+                end if;
+            end loop;
+				if A(31) = '1' then
+					 A := (unsigned(A) + unsigned(M));
+				end if;
+            rz(63 downto 32) <= std_logic_vector(A);
+            rz(31 downto 0) <= std_logic_vector(Q);
+    end process;
 end behavior;

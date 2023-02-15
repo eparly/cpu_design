@@ -21,7 +21,7 @@ variable addM, subM, zeros: std_logic_vector(31 downto 0);
 begin
 
 addM := ra;
-subM := (0-rb); --we are allowed the use +- for mul and div
+subM := (0-ra); --we are allowed the use +- for mul and div
 result := "0000000000000000000000000000000000000000000000000000000000000000";
 zeros := "00000000000000000000000000000000";
 
