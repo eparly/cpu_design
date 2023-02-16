@@ -36,6 +36,4 @@ testbench file naming:
 
 UPDATES:
 
-ALU is fully working now
-
-I haven't pushed any of this to the repo yet
+everything is tested and working besides CpuBus, Mux and Encoder tb/changes not pushed yet
