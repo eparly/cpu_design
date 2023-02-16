@@ -169,7 +169,7 @@ Shraop : SHRA32 port map(AReg => AReg, BReg => BReg, ZReg => Shra_result);
 Subop : SUB32 port map(ra => AReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
 IncPCop : IncPC port map(PCReg => AReg, ZReg => IncPC_result);
 --actual process of checking _sigcode to determine what _sigeration to do
-process(And_result,Add_result, Or_result, shl_result, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig)
+process(And_result, Or_result, Add_result, Sub_result, Shr_result, Shl_result, Shra_result, Ror_result, Rol_result, Neg_result, Not_result, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig)
 begin
 if And_sig = '1' then
     ZReg(31 downto 0) <= And_result;
