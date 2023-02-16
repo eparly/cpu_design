@@ -36,23 +36,6 @@ testbench file naming:
 
 UPDATES:
 
-WORKING OPERATIONS
-CLA4
-CLA16
-CLA32
-AND32
-NOT
-NEG
-OR
-ROL
-ROR
-SHL
-SHR
-SHRA
-
-Not Tested yet
-MUL
-DIV
-SUB
+ALU is fully working now
 
 I haven't pushed any of this to the repo yet
