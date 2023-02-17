@@ -17,6 +17,7 @@ end entity;
 
 architecture behavior of ALU is 
 --signal definition
+signal RAIN, RBIN : std_logic_vector(31 downto 0);
 signal And_result, Or_result, Add_result, Sub_result, Shr_result, Shl_result, Shra_result, Ror_result, Rol_result, Neg_result, Not_result: std_logic_vector(31 downto 0);
 signal IncPC_result : std_logic_vector(31 downto 0);
 
@@ -154,23 +155,25 @@ begin
 AddCin <= '0';
 SubCin <= '0';
 
-Addop : CLA32 port map(ra => AReg, rb => BReg, cin => AddCin, sum => Add_result, cout => AddCout);
-Andop : AND32 port map(AReg => AReg, BReg => BReg, ZReg => And_result);
-Divop : DIV32 port map(ra => AReg, rb => BReg, rz => Div_result);
-Mulop : MUL32 port map(ra => AReg, rb => BReg, rz => Mul_result);
-Negop : NEG32 port map(AReg => AReg, ZReg => Neg_result);
-Notop : NOT32 port map(AReg => AReg, ZReg => Not_result);
-Orop : OR32 port map(AReg => AReg, BReg => BReg, ZReg => Or_result);
-Rolop : ROL32 port map(AReg => AReg, BReg => BReg(4 downto 0), ZReg => Rol_result);
-Rorop : ROR32 port map(AReg => AReg, BReg => BReg(4 downto 0), ZReg => Ror_result);
-Shlop : SHL32 port map(AReg => AReg, BReg => BReg, ZReg => Shl_result);
-Shrop : SHR32 port map(AReg => AReg, BReg => BReg, ZReg => Shr_result);
-Shraop : SHRA32 port map(AReg => AReg, BReg => BReg, ZReg => Shra_result);
-Subop : SUB32 port map(ra => AReg, rb => BReg, cin => SubCin, sum => Sub_result, cout => SubCout);
-IncPCop : IncPC port map(PCReg => AReg, ZReg => IncPC_result);
+Addop : CLA32 port map(ra => RAIN, rb => RBIN, cin => AddCin, sum => Add_result, cout => AddCout);
+Andop : AND32 port map(AReg => RAIN, BReg => RBIN, ZReg => And_result);
+Divop : DIV32 port map(ra => RAIN, rb => RBIN, rz => Div_result);
+Mulop : MUL32 port map(ra => RAIN, rb => RBIN, rz => Mul_result);
+Negop : NEG32 port map(AReg => RAIN, ZReg => Neg_result);
+Notop : NOT32 port map(AReg => RAIN, ZReg => Not_result);
+Orop : OR32 port map(AReg => RAIN, BReg => RBIN, ZReg => Or_result);
+Rolop : ROL32 port map(AReg => RAIN, BReg => RBIN(4 downto 0), ZReg => Rol_result);
+Rorop : ROR32 port map(AReg => RAIN, BReg => RBIN(4 downto 0), ZReg => Ror_result);
+Shlop : SHL32 port map(AReg => RAIN, BReg => RBIN, ZReg => Shl_result);
+Shrop : SHR32 port map(AReg => RAIN, BReg => RBIN, ZReg => Shr_result);
+Shraop : SHRA32 port map(AReg => RAIN, BReg => RBIN, ZReg => Shra_result);
+Subop : SUB32 port map(ra => RAIN, rb => RBIN, cin => SubCin, sum => Sub_result, cout => SubCout);
+IncPCop : IncPC port map(PCReg => RAIN, ZReg => IncPC_result);
 --actual process of checking _sigcode to determine what _sigeration to do
 process(And_result, Or_result, Add_result, Sub_result, Shr_result, Shl_result, Shra_result, Ror_result, Rol_result, Neg_result, Not_result, And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig)
 begin
+RAIN <= AReg;
+RBIN <= BReg;
 if And_sig = '1' then
     ZReg(31 downto 0) <= And_result;
     ZReg(63 downto 32) <= (others => '0');
