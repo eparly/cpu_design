@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY test2 IS
-END ENTITY test2;
+ENTITY Test2_tb IS
+END ENTITY Test2_tb;
 -- Architecture of the testbench with the signal names
-ARCHITECTURE datapath_tb_arch OF test2 IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF Test2_tb IS -- Add any other signals to see in your simulation
  --operation signals
  SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb, AND_tb : std_logic;
  --signals for the out ports (go into encoder)
@@ -18,14 +18,16 @@ ARCHITECTURE datapath_tb_arch OF test2 IS -- Add any other signals to see in you
  SIGNAL Clear_tb: std_logic;
  SIGNAL Read_tb : std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
- SIGNAL Opcode_tb : std_logic_vector(4 downto 0);
+ --signals used for testing
+ SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents : std_logic_vector(31 downto 0);
+ SIGNAL wireEncodercontents : std_logic_vector(4 downto 0);
+ SIGNAL wireEncodercontentsIN : std_logic_vector(31 downto 0);
  
  TYPE State IS (default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, T0, T1, 
- T2, T3, T4, T5);
+ T2, T3, T4, T5, final);
  SIGNAL Present_state: State := default;
-
  -- component instantiation of the datapath
-component CPU_BUS is 
+component CpuBus is 
 port( --needed to be done this way to implement the control unit later <- see comments at the bottom
     signal clk: in std_logic;
     signal clear: in std_logic;
@@ -37,12 +39,16 @@ port( --needed to be done this way to implement the control unit later <- see co
     MDRout, MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
     MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
     --opcode signals from control unit (single bit)
-    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic
+    And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
+    --shows outputs of the registers
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
+	 Encodercontents : out std_logic_vector(4 downto 0);
+	 EncodercontentsIN : out std_logic_vector(31 downto 0)
 );
 end component;
 
 BEGIN
- DUT : CPU_BUS
+ DUT : CpuBus
 --port mapping: between the dut and the testbench signals
  PORT MAP (
 --out -> out port maps
@@ -100,10 +106,10 @@ YEn => Yin_tb,
 --misc ports
 clk => Clock_tb,
 clear => Clear_tb,
+IncPC_sig => IncPC_tb,
 MDRRead => Read_tb,
 Memdatain => Mdatain_tb,
 --opcode ports
-IncPC_sig => IncPC_tb,
 And_sig => AND_tb,
 Or_sig => OR_tb,
 Add_sig => ADD_tb,
@@ -116,7 +122,30 @@ shra_sig => SHRA_tb,
 ror_sig => ROR_tb,
 rol_sig => ROL_tb,
 Neg_sig => NEG_tb,
-Not_sig => NOT_tb);
+Not_sig => NOT_tb,
+--output data of the register
+R0Data => R0Data,
+R1Data => R1Data,
+R2Data => R2Data,
+R3Data => R3Data,
+R4Data => R4Data,
+R5Data => R5Data,
+R6Data => R6Data,
+R7Data => R7Data,
+R8Data => R8Data,
+R9Data => R9Data,
+R10Data => R10Data,
+R11Data => R11Data,
+R12Data => R12Data,
+R13Data => R13Data,
+R14Data => R14Data,
+R15Data => R15Data,
+MDRData => MDRData,
+YData => YData,
+ZLODATA => ZLODATA,
+Buscontents => Buscontents,
+Encodercontents => wireEncodercontents,
+EncodercontentsIN => wireEncodercontentsIN);
 --add test logic here
 Clock_process: PROCESS IS
 BEGIN
@@ -151,6 +180,8 @@ WHEN T3 =>
 Present_state <= T4;
 WHEN T4 =>
 Present_state <= T5;
+WHEN T5 =>
+Present_state <= final;
 WHEN OTHERS =>
 END CASE;
 END IF;
@@ -159,47 +190,83 @@ PROCESS (Present_state) IS -- do the required job in each state
 BEGIN 
 CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN Default =>
- PCout_tb <= '0'; Zlowout_tb <= '0'; MDRout_tb <= '0'; -- initialize the signals
- R2out_tb <= '0'; R3out_tb <= '0'; MARin_tb <= '0'; Zin_tb <= '0'; 
+  -- initialize the signals
+ R0out_tb <= '0'; R1out_tb <= '0'; R2out_tb <= '0'; R3out_tb <= '0'; R4out_tb <= '0'; 
+ R5out_tb <= '0'; R6out_tb <= '0'; R7out_tb <= '0'; R8out_tb <= '0'; R9out_tb <= '0'; 
+ R10out_tb <= '0'; R11out_tb <= '0'; R12out_tb <= '0'; R13out_tb <= '0'; R14out_tb <= '0'; 
+ R15out_tb <= '0'; HIout_tb <= '0'; LOout_tb <= '0'; ZHIout_tb <= '0'; Zlowout_tb <= '0';
+ PCout_tb <= '0'; MDRout_tb <= '0'; Portout_tb <= '0'; Cout_tb <= '0';
+ 
+ MARin_tb <= '0'; Zin_tb <= '0'; 
  PCin_tb <='0'; MDRin_tb <= '0'; IRin_tb <= '0'; Yin_tb <= '0'; 
- IncPC_tb <= '0'; Read_tb <= '0';  OR_tb <= '0';
+ IncPC_tb <= '0'; Read_tb <= '0';  AND_tb <= '0';
  R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
  Mdatain_tb <= x"00000012"; 
- Read_tb <= '0', '1' after 10 ns, '0' after 25 ns; -- the first zero is there for completeness
- MDRin_tb <= '0', '1' after 10 ns, '0' after 25 ns;
+ Read_tb <= '0', '1' after 10 ns; -- the first zero is there for completeness
+ MDRin_tb <= '0', '1' after 10 ns;
  WHEN Reg_load1b => 
- MDRout_tb <= '1' after 10 ns, '0' after 25 ns; 
- R2in_tb <= '1' after 10 ns, '0' after 25 ns; -- initialize R2 with the value $12 
+ Read_tb <= '0'; 
+ MDRin_tb <= '0';
+ 
+ MDRout_tb <= '1' after 10 ns; 
+ R2in_tb <= '1' after 10 ns; -- initialize R2 with the value $12 
  WHEN Reg_load2a => 
+ MDRout_tb <= '0';
+ R2in_tb <= '0';
+ 
  Mdatain_tb <= x"00000014"; 
- Read_tb <= '1' after 10 ns, '0' after 25 ns; 
- MDRin_tb <= '1' after 10 ns, '0' after 25 ns;
+ Read_tb <= '1' after 10 ns; 
+ MDRin_tb <= '1' after 10 ns;
  WHEN Reg_load2b => 
- MDRout_tb <= '1' after 10 ns, '0' after 25 ns; 
- R3in_tb <= '1' after 10 ns, '0' after 25 ns; -- initialize R3 with the value $14 
+ Read_tb <= '0';
+ MDRin_tb <= '0';
+ 
+ MDRout_tb <= '1' after 10 ns; 
+ R3in_tb <= '1' after 10 ns; -- initialize R3 with the value $14 
  WHEN Reg_load3a => 
+ MDRout_tb <= '0';
+ R3in_tb <= '0';
+ 
  Mdatain_tb <= x"00000018";
- Read_tb <= '1' after 10 ns, '0' after 25 ns; 
- MDRin_tb <= '1' after 10 ns, '0' after 25 ns;
+ Read_tb <= '1' after 10 ns; 
+ MDRin_tb <= '1' after 10 ns;
  WHEN Reg_load3b => 
- MDRout_tb <= '1' after 10 ns, '0' after 25 ns; 
- R1in_tb <= '1' after 10 ns, '0' after 25 ns; -- initialize R1 with the value $18 
+ Read_tb <= '0';
+ MDRin_tb <= '0';
+ 
+ MDRout_tb <= '1' after 10 ns; 
+ R1in_tb <= '1' after 10 ns; -- initialize R1 with the value $18 
  
  WHEN T0 => -- see if you need to de-assert these signals
- PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1';
+ MDRout_tb <= '0';
+ R1in_tb <= '0';
+ 
+ PCout_tb <= '1' after 10 ns; MARin_tb <= '1' after 10 ns; IncPC_tb <= '1' after 10 ns; Zin_tb <= '1' after 10 ns;
  WHEN T1 => 
- Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1';
+ PCout_tb <= '0'; MARin_tb <= '0'; IncPC_tb <= '0'; Zin_tb <= '0';
+ 
+ Zlowout_tb <= '1' after 10 ns; PCin_tb <= '1' after 10 ns; Read_tb <= '1' after 10 ns; MDRin_tb <= '1' after 10 ns;
  Mdatain_tb <= x"28918000"; -- opcode for “and R1, R2, R3” 
  WHEN T2 =>
- MDRout_tb <= '1'; IRin_tb <= '1';
+ Zlowout_tb <= '0'; PCin_tb <= '0'; Read_tb <= '0'; MDRin_tb <= '0';
+ 
+ MDRout_tb <= '1' after 10 ns; IRin_tb <= '1' after 10 ns;
  WHEN T3 =>
- R2out_tb <= '1'; Yin_tb <= '1';
+ MDRout_tb <= '0'; IRin_tb <= '0';
+ 
+ R2out_tb <= '1' after 10 ns; Yin_tb <= '1' after 10 ns;
  WHEN T4 =>
- R3out_tb <= '1'; OR_tb <= '1'; Zin_tb <= '1';
+ R2out_tb <= '0'; Yin_tb <= '0';
+ 
+ R3out_tb <= '1' after 10 ns; OR_tb <= '1' after 10 ns; Zin_tb <= '1' after 10 ns;
  WHEN T5 =>
- Zlowout_tb <= '1'; R1in_tb <= '1'; 
+ R3out_tb <= '0'; OR_tb <= '0'; Zin_tb <= '0';
+ 
+ Zlowout_tb <= '1' after 10 ns; R1in_tb <= '1' after 10 ns; 
+ WHEN final =>
+ Zlowout_tb <= '0'; R1in_tb <= '0';
 WHEN OTHERS =>
 END CASE;
 END PROCESS; 
