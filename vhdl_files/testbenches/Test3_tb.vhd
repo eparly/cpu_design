@@ -18,7 +18,7 @@ ARCHITECTURE datapath_tb_arch OF Test3 IS -- Add any other signals to see in you
  SIGNAL Clear_tb: std_logic;
  SIGNAL Read_tb : std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
-
+ --signals used for testing
  SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents : std_logic_vector(31 downto 0);
  SIGNAL wireEncodercontents : std_logic_vector(4 downto 0);
  SIGNAL wireEncodercontentsIN : std_logic_vector(31 downto 0);
@@ -26,9 +26,8 @@ ARCHITECTURE datapath_tb_arch OF Test3 IS -- Add any other signals to see in you
  TYPE State IS (default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, T0, T1, 
  T2, T3, T4, T5, final);
  SIGNAL Present_state: State := default;
-
  -- component instantiation of the datapath
-component CPU_BUS is 
+component CpuBus is 
 port( --needed to be done this way to implement the control unit later <- see comments at the bottom
     signal clk: in std_logic;
     signal clear: in std_logic;
@@ -41,14 +40,15 @@ port( --needed to be done this way to implement the control unit later <- see co
     MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
-	 R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
+    --shows outputs of the registers
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 EncodercontentsIN : out std_logic_vector(31 downto 0)
-	 );
+);
 end component;
 
 BEGIN
- DUT : CPU_BUS
+ DUT : CpuBus
 --port mapping: between the dut and the testbench signals
  PORT MAP (
 --out -> out port maps
@@ -190,31 +190,31 @@ PROCESS (Present_state) IS -- do the required job in each state
 BEGIN 
 CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN Default =>
- -- initialize the signals
+  -- initialize the signals
  R0out_tb <= '0'; R1out_tb <= '0'; R2out_tb <= '0'; R3out_tb <= '0'; R4out_tb <= '0'; 
  R5out_tb <= '0'; R6out_tb <= '0'; R7out_tb <= '0'; R8out_tb <= '0'; R9out_tb <= '0'; 
  R10out_tb <= '0'; R11out_tb <= '0'; R12out_tb <= '0'; R13out_tb <= '0'; R14out_tb <= '0'; 
  R15out_tb <= '0'; HIout_tb <= '0'; LOout_tb <= '0'; ZHIout_tb <= '0'; Zlowout_tb <= '0';
- PCout_tb <= '0'; MDRout_tb <= '0'; Portout_tb <= '0'; Cout_tb <= '0'; 
+ PCout_tb <= '0'; MDRout_tb <= '0'; Portout_tb <= '0'; Cout_tb <= '0';
  
  MARin_tb <= '0'; Zin_tb <= '0'; 
  PCin_tb <='0'; MDRin_tb <= '0'; IRin_tb <= '0'; Yin_tb <= '0'; 
- IncPC_tb <= '0'; Read_tb <= '0';  AND_tb <= '0';
+ IncPC_tb <= '0'; Read_tb <= '0';  AND_tb <= '0'; ADD_tb <='0';
  R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
  Mdatain_tb <= x"00000012"; 
- Read_tb <= '0', '1' after 10 ns, '0' after 25 ns; -- the first zero is there for completeness
- MDRin_tb <= '0', '1' after 10 ns, '0' after 25 ns;
+ Read_tb <= '0', '1' after 10 ns; -- the first zero is there for completeness
+ MDRin_tb <= '0', '1' after 10 ns;
  WHEN Reg_load1b => 
  Read_tb <= '0'; 
  MDRin_tb <= '0';
  
  MDRout_tb <= '1' after 10 ns; 
- R2in_tb <= '1' after 10 ns; -- initialize R2 with the value $12 
+ R4in_tb <= '1' after 10 ns; -- initialize R2 with the value $12 
  WHEN Reg_load2a => 
  MDRout_tb <= '0';
- R2in_tb <= '0';
+ R4in_tb <= '0';
  
  Mdatain_tb <= x"00000014"; 
  Read_tb <= '1' after 10 ns; 
@@ -224,10 +224,10 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRin_tb <= '0';
  
  MDRout_tb <= '1' after 10 ns; 
- R3in_tb <= '1' after 10 ns; -- initialize R3 with the value $14 
+ R5in_tb <= '1' after 10 ns; -- initialize R3 with the value $14 
  WHEN Reg_load3a => 
  MDRout_tb <= '0';
- R3in_tb <= '0';
+ R5in_tb <= '0';
  
  Mdatain_tb <= x"00000018";
  Read_tb <= '1' after 10 ns; 
@@ -237,17 +237,18 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRin_tb <= '0';
  
  MDRout_tb <= '1' after 10 ns; 
- R1in_tb <= '1' after 10 ns; -- initialize R1 with the value $18 
+ R0in_tb <= '1' after 10 ns; -- initialize R1 with the value $18 
+ 
  WHEN T0 => -- see if you need to de-assert these signals
  MDRout_tb <= '0';
- R1in_tb <= '0';
+ R0in_tb <= '0';
  
  PCout_tb <= '1' after 10 ns; MARin_tb <= '1' after 10 ns; IncPC_tb <= '1' after 10 ns; Zin_tb <= '1' after 10 ns;
  WHEN T1 => 
  PCout_tb <= '0'; MARin_tb <= '0'; IncPC_tb <= '0'; Zin_tb <= '0';
  
  Zlowout_tb <= '1' after 10 ns; PCin_tb <= '1' after 10 ns; Read_tb <= '1' after 10 ns; MDRin_tb <= '1' after 10 ns;
- Mdatain_tb <= x"28918000" after 10 ns; -- opcode for “and R1, R2, R3” once again we don't care about the opcode
+ Mdatain_tb <= x"28918000"; -- opcode for “and R1, R2, R3” 
  WHEN T2 =>
  Zlowout_tb <= '0'; PCin_tb <= '0'; Read_tb <= '0'; MDRin_tb <= '0';
  
@@ -257,15 +258,15 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  
  R4out_tb <= '1' after 10 ns; Yin_tb <= '1' after 10 ns;
  WHEN T4 =>
- R2out_tb <= '0'; Yin_tb <= '0';
-
- R5out_tb <= '1' after 10 ns; ADD_tb <= '1' after 10 ns; Zin_tb <= '1' after 10 ns;
+ R4out_tb <= '0'; Yin_tb <= '0';
+ 
+ R5out_tb <= '1' after 10 ns; Add_tb <= '1' after 10 ns; Zin_tb <= '1' after 10 ns;
  WHEN T5 =>
- R3out_tb <= '0'; ADD_tb <= '0'; Zin_tb <= '0';
-
+ R5out_tb <= '0'; Add_tb <= '0'; Zin_tb <= '0';
+ 
  Zlowout_tb <= '1' after 10 ns; R0in_tb <= '1' after 10 ns; 
  WHEN final =>
- Zlowout_tb <= '0' after 10 ns; R1in_tb <= '0' after 10 ns;
+ Zlowout_tb <= '0'; R0in_tb <= '0';
 WHEN OTHERS =>
 END CASE;
 END PROCESS; 
