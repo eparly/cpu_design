@@ -19,7 +19,7 @@ ARCHITECTURE datapath_tb_arch OF Test1_tb IS -- Add any other signals to see in 
  SIGNAL Read_tb : std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
  --signals used for testing
- SIGNAL R1Data, R2Data, R3Data, MDRData, YData, ZLODATA, Buscontents : std_logic_vector(31 downto 0);
+ SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents : std_logic_vector(31 downto 0);
  SIGNAL wireEncodercontents : std_logic_vector(4 downto 0);
  SIGNAL wireEncodercontentsIN : std_logic_vector(31 downto 0);
  
@@ -41,7 +41,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
     --shows outputs of the registers
-    R1Data, R2Data, R3Data, MDRData, YData, ZLODATA, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 EncodercontentsIN : out std_logic_vector(31 downto 0)
 );
@@ -124,9 +124,22 @@ rol_sig => ROL_tb,
 Neg_sig => NEG_tb,
 Not_sig => NOT_tb,
 --output data of the register
+R0Data => R0Data,
 R1Data => R1Data,
 R2Data => R2Data,
 R3Data => R3Data,
+R4Data => R4Data,
+R5Data => R5Data,
+R6Data => R6Data,
+R7Data => R7Data,
+R8Data => R8Data,
+R9Data => R9Data,
+R10Data => R10Data,
+R11Data => R11Data,
+R12Data => R12Data,
+R13Data => R13Data,
+R14Data => R14Data,
+R15Data => R15Data,
 MDRData => MDRData,
 YData => YData,
 ZLODATA => ZLODATA,

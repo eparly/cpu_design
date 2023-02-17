@@ -15,7 +15,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
     --ports for the outputs of the registers (used for the testbenches only) Test ports
-    R1Data, R2Data, R3Data, MDRData, YData, ZLODATA, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 EncodercontentsIN : out std_logic_vector(31 downto 0)
 );
@@ -136,7 +136,7 @@ MARReg : reg port map(reg_input =>BusMuxOut, clk => wireclk, clear => wireclear,
 RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => MemDatain, sel => MDRRead, MDROut=> MDRin, clk => clk, clear=> clear, writeEnable=> MDREn);
 
 --ports recieve the register outputs
-process (clk, clear, R1out, R2out, R3out, R4out, MDRout, R0in, R1in, R2in, Yin, ZLOin, MDRin, 
+process (clk, clear,  
 R0En, R1En, R2En, R3En, R4En, R5En, R6En, R7En, R8En, R9En, R10En, 
 R11En, R12En, R13En, R14En, R15En, HIEn, LOEn, ZEn, PCEn, IREn, MDREn, 
 PORTEn, CEn, YEn, MAREn, BusMuxOut) is
@@ -172,11 +172,25 @@ wireMAREn <= MAREn;
 wireclk <= clk;
 wireclear <= clear;
 --test signals
+R0Data <= R0in;
 R1Data <= R1in;
 R2Data <= R2in;
 R3Data <= R3in;
+R4Data <= R4in;
+R5Data <= R5in;
+R6Data <= R6in;
+R7Data <= R7in;
+R8Data <= R8in;
+R9Data <= R9in;
+R10Data <= R10in;
+R11Data <= R11in;
+R12Data <= R12in;
+R13Data <= R13in;
+R14Data <= R14in;
+R15Data <= R15in;
 YData <= Yin;
 ZLODATA <= ZLOin;
+ZHIData <= ZHIin;
 MDRData <= MDRin;
 --encoder inputs, putting all of the encoder input signals into 1 vector
 Buscontents <= BusMuxOut;
