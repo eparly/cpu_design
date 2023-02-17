@@ -1,13 +1,13 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity encoder32_5 is
+entity encoder32to5 is
     port( 
         signal encoderOutput : out std_logic_vector(4 downto 0);
 	    signal encoderInput : in std_logic_vector(31 downto 0)
 	);
-end encoder32_5;
-architecture behavior of encoder32_5 is
+end encoder32to5;
+architecture behavior of encoder32to5 is
 
 begin
 --encoding input from the registers is the same order as in the 32-1 MUX

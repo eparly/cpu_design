@@ -1,7 +1,7 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
 
-entity mux32_1 is
+entity mux32 is
 	port( 
 		signal sel : in std_logic_vector(4 downto 0);
 			-- maps to the "in" signals from CpuBus, which is the data output from all the registers (expect for MAR)
@@ -9,11 +9,11 @@ entity mux32_1 is
 			-- the actual 'bus' data
 		bus_mux_out: out std_logic_vector(31 downto 0)
 	);
-end mux32_1;
+end mux32;
 
 
 
-architecture behavior of mux32_1 is
+architecture behavior of mux32 is
 
 component reg is
 port( signal reg_input : in std_logic_vector(31 downto 0);
