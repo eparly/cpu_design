@@ -19,7 +19,7 @@ begin
 --idk if works
 process(AReg, BReg)
 variable ATemp : signed(31 downto 0);
-variable BTemp : integer range 0 to 31;
+variable BTemp : integer;
 variable ZTemp : signed(31 downto 0);
 begin
 ATemp := resize(signed(AReg), ATemp'length);

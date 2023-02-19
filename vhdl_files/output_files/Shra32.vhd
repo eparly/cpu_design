@@ -15,7 +15,7 @@ architecture behavior of SHRA32 is
 begin
 --idk if works
 process(AReg, BReg)
-variable BTemp : integer range 0 to 31;
+variable BTemp : integer;
 begin
 BTemp := to_integer(unsigned(BReg));
 ZReg <= std_logic_vector(shift_right(signed(AReg), BTemp));

@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY Test5 IS
-END ENTITY Test5;
+ENTITY Test5_tb IS
+END ENTITY Test5_tb;
 
-ARCHITECTURE datapath_tb_arch OF Test5 IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF Test5_tb IS -- Add any other signals to see in your simulation
  --operation signals
  SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb, AND_tb : std_logic;
  --signals for the out ports (go into encoder)
@@ -143,6 +143,7 @@ R15Data => R15Data,
 MDRData => MDRData,
 YData => YData,
 ZLODATA => ZLODATA,
+ZHIDATA => ZHIDATA,
 Buscontents => Buscontents,
 Encodercontents => wireEncodercontents,
 EncodercontentsIN => wireEncodercontentsIN);
@@ -205,7 +206,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
- Mdatain_tb <= x"00000002"; 
+ Mdatain_tb <= x"80000000"; 
  Read_tb <= '0', '1' after 10 ns; -- the first zero is there for completeness
  MDRin_tb <= '0', '1' after 10 ns;
  WHEN Reg_load1b => 
@@ -218,7 +219,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRout_tb <= '0';
  R6in_tb <= '0';
  
- Mdatain_tb <= x"00000010"; 
+ Mdatain_tb <= x"FFFFFFFF"; 
  Read_tb <= '1' after 10 ns; 
  MDRin_tb <= '1' after 10 ns;
  WHEN Reg_load2b => 
@@ -254,7 +255,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN T2 =>
  Zlowout_tb <= '0'; PCin_tb <= '0'; Read_tb <= '0'; MDRin_tb <= '0';
  
- MDRout_tb <= '1' after 10 ns; IRin_tb <= '1' after 10 ns;
+ --MDRout_tb <= '1' after 10 ns; IRin_tb <= '1' after 10 ns;
  WHEN T3 =>
  MDRout_tb <= '0'; IRin_tb <= '0';
  
@@ -272,7 +273,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  
  Zhiout_tb <= '1'; HIin_tb <= '1';
  WHEN final =>
- Zhiout_tb <= '0'; R0in_tb <= '0';
+ Zhiout_tb <= '0'; 
 WHEN OTHERS =>
 END CASE;
 END PROCESS; 
