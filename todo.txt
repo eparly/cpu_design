@@ -20,3 +20,17 @@ Phase 1 is ready to demo
 PHASE 2
 
 - The ram module has been created, I used the megafunction wizard (allowed) to make it, copying and pasting it straight probably won't work, you might have to follow the same steps to recreate the module for your project, and any changes make to the ram module (shouldn't be many/any) will be manually added in later
+
+Steps to recreate ram module:
+
+- Tools -> MegaFunction Plug-in Manager
+- Create new custom MegaFunction variation
+- Search for "1-PORT" and select that
+- I called the main vhd file "RAM.vhd" but you can probably call it whatever you want
+- Make sure this gets created in the top level directory, wherever the main project .bpf file is (AKA make sure that when you compile afterwards, there are 0 warnings referring to the ram)
+- it'll take you through a few screens to specify a few settings....
+- specify 32 bits, 512 word memory, and that is has both 'rden' and 'wren' signals
+- on ram startup, instead of starting from blank, choose to import a .mif file (you'll have to make a blank one)
+- on the last step, check of all the boxes (include all the files it suggests to you)
+
+to be able to compile, fine the "whatever_you_called_it....._inst.vhd" file and comment out the entire thing, its simply an example showing us how to import the ram module into our main project
