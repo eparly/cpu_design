@@ -16,3 +16,7 @@ testbench file naming:
 UPDATES
 
 Phase 1 is ready to demo
+
+PHASE 2
+
+- The ram module has been created, I used the megafunction wizard (allowed) to make it, copying and pasting it straight probably won't work, you might have to follow the same steps to recreate the module for your project, and any changes make to the ram module (shouldn't be many/any) will be manually added in later
