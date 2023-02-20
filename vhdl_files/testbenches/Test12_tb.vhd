@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY Test12 IS
-END ENTITY Test12;
+ENTITY Test12_tb IS
+END ENTITY Test12_tb;
 -- Architecture of the testbench with the signal names
-ARCHITECTURE datapath_tb_arch OF Test12 IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF Test12_tb IS -- Add any other signals to see in your simulation
  --operation signals
  SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb, AND_tb : std_logic;
  --signals for the out ports (go into encoder)
@@ -212,32 +212,32 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  
  MDRout_tb <= '1' after 10 ns; 
  R1in_tb <= '1' after 10 ns; -- initialize R2 with the value $12 
--- WHEN Reg_load2a => 
--- MDRout_tb <= '0';
--- R1in_tb <= '0';
--- 
--- Mdatain_tb <= x"00000003"; 
--- Read_tb <= '1' after 10 ns; 
--- MDRin_tb <= '1' after 10 ns;
--- WHEN Reg_load2b => 
--- Read_tb <= '0';
--- MDRin_tb <= '0';
--- 
--- MDRout_tb <= '1' after 10 ns; 
--- R1in_tb <= '1' after 10 ns; -- initialize R3 with the value $14 
--- WHEN Reg_load3a => 
--- MDRout_tb <= '0';
--- R1in_tb <= '0';
--- 
--- Mdatain_tb <= x"00000018";
--- Read_tb <= '1' after 10 ns; 
--- MDRin_tb <= '1' after 10 ns;
--- WHEN Reg_load3b => 
--- Read_tb <= '0';
--- MDRin_tb <= '0';
--- 
--- MDRout_tb <= '1' after 10 ns; 
--- R1in_tb <= '1' after 10 ns; -- initialize R1 with the value $18 
+ WHEN Reg_load2a => 
+ MDRout_tb <= '0';
+ R1in_tb <= '0';
+ 
+ Mdatain_tb <= x"00000003"; 
+ Read_tb <= '1' after 10 ns; 
+ MDRin_tb <= '1' after 10 ns;
+ WHEN Reg_load2b => 
+ Read_tb <= '0';
+ MDRin_tb <= '0';
+ 
+ MDRout_tb <= '1' after 10 ns; 
+ R1in_tb <= '1' after 10 ns; -- initialize R3 with the value $14 
+ WHEN Reg_load3a => 
+ MDRout_tb <= '0';
+ R1in_tb <= '0';
+ 
+ Mdatain_tb <= x"00001000";
+ Read_tb <= '1' after 10 ns; 
+ MDRin_tb <= '1' after 10 ns;
+ WHEN Reg_load3b => 
+ Read_tb <= '0';
+ MDRin_tb <= '0';
+ 
+ MDRout_tb <= '1' after 10 ns; 
+ R1in_tb <= '1' after 10 ns; -- initialize R1 with the value $18 
  
  WHEN T0 => -- see if you need to de-assert these signals
  MDRout_tb <= '0';

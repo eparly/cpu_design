@@ -18,13 +18,9 @@ architecture behavior of SHR32 is
 begin
 --idk if works
 process(AReg, BReg)
-variable ATemp : signed(31 downto 0);
 variable BTemp : integer;
-variable ZTemp : signed(31 downto 0);
 begin
-ATemp := resize(signed(AReg), ATemp'length);
 BTemp := to_integer(unsigned(BReg));
-ZTemp := ATemp srl BTemp;
-ZReg <= std_logic_vector(ZTemp);
+ZReg <= std_logic_vector(shift_right(unsigned(AReg), BTemp));
 end process;
 end behavior;

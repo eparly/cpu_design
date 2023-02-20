@@ -18,8 +18,12 @@ process(ra, rb)
 
 variable result, tempResult: std_logic_vector(63 downto 0);
 variable addM, subM, zeros: std_logic_vector(31 downto 0);
+--variable TempRa, TempRb, TempPro: std_logic_vector(31 downto 0);
+--variable flag : std_logic;
 begin
+--to make things more convienent, we convert both number to positive, perform the algorithm, then convert the final answer if needed
 
+--beginning of booth algorithm
 addM := ra;
 subM := (0-ra); --we are allowed the use +- for mul and div
 result := "0000000000000000000000000000000000000000000000000000000000000000";
@@ -45,7 +49,7 @@ for i in 0 to 31 loop
     else
         tempResult(63 downto 32) := "11111111111111111111111111111111";
     end if;
-	 tempResult := std_logic_vector(SHIFT_LEFT(UNSIGNED(tempResult), i));
+	 tempResult := std_logic_vector(SHIFT_LEFT(SIGNED(tempResult), i));
     --tempResult := tempResult sll i; --remember in booth algorithm every time we add something its shifted by one
     result := result + tempResult;
 end loop; 

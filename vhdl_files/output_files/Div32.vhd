@@ -18,10 +18,30 @@ begin
 process(ra, rb)
     variable A, Q, M : unsigned(31 downto 0);
     variable count : integer := 32;
+	 variable TempRa, TempRb, TempQuo: std_logic_vector(31 downto 0);
+	 variable flag : std_logic;
     begin
-            Q := resize(unsigned(ra), Q'length);
+
+				TempQuo := x"00000000";
+				TempRa := ra;
+				TempRb := rb;
+				flag := '0';
+				if (ra(31) = '1') then
+					if (rb(31) = '1') then
+						TempRa := (0-ra);
+						TempRb := (0-rb);
+					else 
+						TempRa := (0-ra);
+						flag := '1';
+						end if;
+				elsif (rb(31) = '1') then
+					TempRb := (0-rb);
+					flag := '1';
+				end if;
+				
+            Q := resize(unsigned(TempRa), Q'length);
             A := (others => '0');
-            M := resize(unsigned(rb), M'length);
+            M := resize(unsigned(TempRb), M'length);
 
             for i in 0 to 31 loop
 				--shifting, but weird
@@ -46,7 +66,14 @@ process(ra, rb)
 				if A(31) = '1' then
 					 A := (unsigned(A) + unsigned(M));
 				end if;
+
+				TempRa := std_logic_vector(Q);
+				if (flag = '1') then
+					TempQuo := (0-TempRa);
+				else
+					TempQuo := TempRa;
+				end if;
             rz(63 downto 32) <= std_logic_vector(A);
-            rz(31 downto 0) <= std_logic_vector(Q);
+            rz(31 downto 0) <= TempQuo;
     end process;
 end behavior;

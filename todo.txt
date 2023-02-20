@@ -15,9 +15,4 @@ testbench file naming:
 
 UPDATES
 
-bug with the shift operations on values higher than 32 have been fixed
-
-TODO
-
-Multiplier bug when negative multiplicand and positive or negavtive multiplier
-Modify div operation to accomodate negative dividends and divisors
+Phase 1 is ready to demo

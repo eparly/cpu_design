@@ -264,9 +264,9 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN T5 =>
  R4out_tb <= '0'; rol_tb <= '0'; Zin_tb <= '0';
  
- Zlowout_tb <= '1' after 10 ns; R1in_tb <= '1' after 10 ns; 
+ Zlowout_tb <= '1' after 10 ns; R6in_tb <= '1' after 10 ns; 
  WHEN final =>
- Zlowout_tb <= '0'; R1in_tb <= '0';
+ Zlowout_tb <= '0'; R6in_tb <= '0';
 WHEN OTHERS =>
 END CASE;
 END PROCESS; 
