@@ -15,7 +15,8 @@ testbench file naming:
 
 UPDATES
 
-Phase 1 is ready to demo
+- Phase 1 is ready to demo
+- Phase 2: Components created, need to make testbenches and create/modify a new CpuBus
 
 PHASE 2
 
