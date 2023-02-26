@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY Test5_tb IS
-END ENTITY Test5_tb;
+ENTITY Test5 IS
+END ENTITY Test5;
 
-ARCHITECTURE datapath_tb_arch OF Test5_tb IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF Test5 IS -- Add any other signals to see in your simulation
  --operation signals
  SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb, AND_tb : std_logic;
  --signals for the out ports (go into encoder)
@@ -19,7 +19,7 @@ ARCHITECTURE datapath_tb_arch OF Test5_tb IS -- Add any other signals to see in 
  SIGNAL Read_tb : std_logic;
  SIGNAL Mdatain_tb : std_logic_vector (31 downto 0);
  --signals used for testing
- SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents : std_logic_vector(31 downto 0);
+ SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, Buscontents : std_logic_vector(31 downto 0);
  SIGNAL wireEncodercontents : std_logic_vector(4 downto 0);
  SIGNAL wireEncodercontentsIN : std_logic_vector(31 downto 0);
  
@@ -41,7 +41,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
     --shows outputs of the registers
-    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 EncodercontentsIN : out std_logic_vector(31 downto 0)
 );
@@ -144,6 +144,8 @@ MDRData => MDRData,
 YData => YData,
 ZLODATA => ZLODATA,
 ZHIDATA => ZHIDATA,
+HIData => HIData,
+LOData => LOData,
 Buscontents => Buscontents,
 Encodercontents => wireEncodercontents,
 EncodercontentsIN => wireEncodercontentsIN);
@@ -206,7 +208,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
- Mdatain_tb <= x"80000000"; 
+ Mdatain_tb <= x"FFFFFF00"; 
  Read_tb <= '0', '1' after 10 ns; -- the first zero is there for completeness
  MDRin_tb <= '0', '1' after 10 ns;
  WHEN Reg_load1b => 
@@ -219,7 +221,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRout_tb <= '0';
  R6in_tb <= '0';
  
- Mdatain_tb <= x"FFFFFFFF"; 
+ Mdatain_tb <= x"FFFFFFFF"; -- -1
  Read_tb <= '1' after 10 ns; 
  MDRin_tb <= '1' after 10 ns;
  WHEN Reg_load2b => 
@@ -267,13 +269,13 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN T5 =>
  R7out_tb <= '0'; Mul_tb <= '0'; Zin_tb <= '0';
  
- Zlowout_tb <= '1' after 100 ns; LOin_tb <= '1' after 100 ns; --give the multiplier some extra time to finish
+ Zlowout_tb <= '1'; LOin_tb <= '1'; --give the multiplier some extra time to finish
  WHEN T6 =>
- Zlowout_tb <='0'; LOin_tb <='0';
+ Zlowout_tb <='0'; LOin_tb <='0'; 
  
  Zhiout_tb <= '1'; HIin_tb <= '1';
  WHEN final =>
- Zhiout_tb <= '0'; 
+ Zhiout_tb <= '0'; HIin_tb<='0'; 
 WHEN OTHERS =>
 END CASE;
 END PROCESS; 

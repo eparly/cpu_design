@@ -3,10 +3,10 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.all;
 -- entity declaration only; no definition here
-ENTITY Test12_tb IS
-END ENTITY Test12_tb;
+ENTITY Test12 IS
+END ENTITY Test12;
 -- Architecture of the testbench with the signal names
-ARCHITECTURE datapath_tb_arch OF Test12_tb IS -- Add any other signals to see in your simulation
+ARCHITECTURE datapath_tb_arch OF Test12 IS -- Add any other signals to see in your simulation
  --operation signals
  SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb, AND_tb : std_logic;
  --signals for the out ports (go into encoder)
@@ -41,7 +41,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
     --shows outputs of the registers
-    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 EncodercontentsIN : out std_logic_vector(31 downto 0)
 );

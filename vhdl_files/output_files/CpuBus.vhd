@@ -15,7 +15,7 @@ port( --needed to be done this way to implement the control unit later <- see co
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
     --ports for the outputs of the registers (used for the testbenches only) Test ports
-    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 EncodercontentsIN : out std_logic_vector(31 downto 0)
 );
@@ -192,6 +192,8 @@ YData <= Yin;
 ZLODATA <= ZLOin;
 ZHIData <= ZHIin;
 MDRData <= MDRin;
+HIData <= HIin;
+LOData <= Loin;
 --encoder inputs, putting all of the encoder input signals into 1 vector
 Buscontents <= BusMuxOut;
 --alu operations
