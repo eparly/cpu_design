@@ -203,7 +203,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  R1in_tb <= '0'; R2in_tb <= '0'; R3in_tb <= '0'; Mdatain_tb <= x"00000000"; 
  
  WHEN Reg_load1a => 
- Mdatain_tb <= x"00000012"; 
+ Mdatain_tb <= x"F0000012"; 
  Read_tb <= '0', '1' after 10 ns; -- the first zero is there for completeness
  MDRin_tb <= '0', '1' after 10 ns;
  WHEN Reg_load1b => 
@@ -229,7 +229,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRout_tb <= '0';
  R5in_tb <= '0';
  
- Mdatain_tb <= x"00000018";
+ Mdatain_tb <= x"00000000";
  Read_tb <= '1' after 10 ns; 
  MDRin_tb <= '1' after 10 ns;
  WHEN Reg_load3b => 

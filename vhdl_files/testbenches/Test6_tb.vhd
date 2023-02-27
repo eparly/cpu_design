@@ -234,7 +234,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRout_tb <= '0';
  R7in_tb <= '0';
  
- Mdatain_tb <= x"00000018";
+ Mdatain_tb <= x"00000000";
  Read_tb <= '1' after 10 ns; 
  MDRin_tb <= '1' after 10 ns;
  WHEN Reg_load3b => 

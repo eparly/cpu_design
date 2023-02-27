@@ -52,7 +52,7 @@ set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulati
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH Test6 -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH Test12 -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME register_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id register_tb
@@ -178,7 +178,6 @@ set_global_assignment -name EDA_TEST_BENCH_NAME Test13 -section_id eda_simulatio
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id Test13
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id Test13
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME Test13 -section_id Test13
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/register_test.vhd -section_id register_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/MDR_tb.vhd -section_id MDR_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ALU_tb.vhd -section_id ALU_tb
@@ -198,3 +197,5 @@ set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test10_tb.vhd -secti
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test11_tb.vhd -section_id Test11
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test12_tb.vhd -section_id Test12
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test13_tb.vhd -section_id Test13
+set_global_assignment -name QIP_FILE RAM.qip
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
