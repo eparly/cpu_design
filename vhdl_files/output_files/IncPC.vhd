@@ -14,6 +14,7 @@ architecture behavior of IncPC is
 signal Plus1 : std_logic_vector(31 downto 0);
 signal cout : std_logic;
 signal cin : std_logic;
+signal result : std_logic_vector(31 downto 0);
 
 component CLA32 is
 port(
@@ -28,5 +29,9 @@ end component;
 begin
     cin <= '0';
     Plus1 <= "00000000000000000000000000000001";
-    CLA32_1 : CLA32 port map(ra => PCReg, rb => Plus1, cin => cin, sum => ZReg, cout => cout); --at the result of the not operation with 1
+    CLA32_1 : CLA32 port map(ra => PCReg, rb => Plus1, cin => cin, sum => result, cout => cout);
+	 process(result)
+	 begin
+	 ZReg <= result;
+	 end process;
 end behavior;
