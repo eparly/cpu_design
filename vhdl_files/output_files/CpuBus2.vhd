@@ -14,7 +14,7 @@ port(
 	 --RAM enable signals
 	 RAMReadEn, RAMWriteEn: in std_logic;
 	 --enable signals that have to come from the 'control unit'
-	 HIEn, LOEn, ZEn, PCEn, IREn, MDREn, inPORTEn, outPORTEn, YEn, MAREn : std_logic;
+	 HIEn, LOEn, ZEn, PCEn, IREn, MDREn, inPORTEn, outPORTEn, YEn, MAREn : in std_logic;
 	 PortCONFFEn : in std_logic;
 	 --signals for the encoder that have to come from the 'control unit'
 	 HIout, LOout, ZHIout, ZLOout, PCout, MDROut, PORTout, Cout : std_logic;

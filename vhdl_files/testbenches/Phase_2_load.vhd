@@ -1,5 +1,5 @@
 library ieee;
-use ieee.std_logic_1164;
+use ieee.std_logic_1164.all;
 
 entity load_tb is
 end entity;
@@ -7,113 +7,103 @@ end entity;
 
 architecture load_tb_arch of load_tb is
 
-component CpuBus is 
-port( --needed to be done this way to implement the control unit later <- see comments at the bottom
+component CpuBus2 is 
+port( 
     clk: in std_logic;
     clear: in std_logic;
---Comes from the control unit, maps to each registers 'writeEnable' port
-    R0En, R1En, R2En, R3En, R4En, R5En, R6En, R7En, R8En, R9En, R10En, R11En, R12En, R13En, R14En, R15En, HIEn, LOEn, ZEn, PCEn, IREn, MDREn, PORTEn, CEn, YEn, MAREn : in std_logic;
---From the control unit, maps into the encoder, dictates which register can put its data onto the bus
-    R0out, R1out, R2out, R3out, R4out, R5out, R6out, R7out, R8out, R9out, R10out, R11out, R12out, R13out, R14out, R15out, HIout, LOout, ZHIout, ZLOout, PCout, PORTout, Cout : in std_logic;
     --MDR requires a slightly different setup
-    MDRout, MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
-    MemDatain : in std_logic_vector(31 downto 0); --output from memory that is an input for the MDR's MUX
+    MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
+	 --signal from the Control Unit for the select and encode logic
+	 gra, grb, grc, rin, rout, baout : in std_logic;
+	 --RAM enable signals
+	 RAMReadEn, RAMWriteEn: in std_logic;
+	 --enable signals that have to come from the 'control unit'
+	 HIEn, LOEn, ZEn, PCEn, IREn, MDREn, inPORTEn, outPORTEn, YEn, MAREn : std_logic;
+	 PortCONFFEn : in std_logic;
+	 --signals for the encoder that have to come from the 'control unit'
+	 HIout, LOout, ZHIout, ZLOout, PCout, MDROut, PORTout, Cout : std_logic;
+	 
     --ports for the outputs of the registers (used for the testbenches only) Test ports
     R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
-	 EncodercontentsIN : out std_logic_vector(31 downto 0)
+	 EncodercontentsIN : out std_logic_vector(31 downto 0);
+	 CONFFout : out std_logic;
+	 --i dont really know what to do about the data regarding the in and output ports right now, so for now they will be signals to and from the CPUBUS
+	 OutportData : out std_logic_vector(31 downto 0);
+	 IncomingData : in std_logic_vector(31 downto 0)
 );
 end component;
-
-type state is (T0, T1, T2, T3, T4, T5, T6, T7);
+type state is (Default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, 
+					T0, T1, T2, T3, T4, T5, T6, T7, final);
 type operation is (Default, LoadR2, LoadR3, LoadR4, LoadR5, LoadR6, LoadR7,
 		Add, Sub, Mul, Div, AndOp, OrOp, SHR, SHL, RotRight, RotLeft, Neg, NotOp,
 		Load, LoadI, LoadR, Store, StoreR, AddI, AndI, OrI, BranchZero, BranchNZero, BranchPos, BranchNeg,
 		Jump, JumpAL, Movefhi, Moveflo, Input, Output
 		);
 signal currentOp : operation;
-signal currentState: state;
+signal Present_State: state;
 
-signal clk_tb, clr_tb, IncPC_tb, MemRd_tb, WriteSig_tb, strobe_tb, Outport_en_tb, BAout_tb, GRA_tb, GRB_tb, GRC_tb, Rin_tb,
-	Rout_tb, RA_en_tb, HIin_tb, LOin_tb, PCIn_tb, IRin_tb, Zin_tb, Yin_tb, MARin_tb, MDRin_tb, Conin_tb, HIout_tb, LOout_tb,
-	ZHIout_tb, Zlowout_tb, PCout_tb, MDRout_tb, PortOut_tb, Cout_tb : std_logic;
+signal clk_tb, clr_tb, IncPC_tb, MemRd_tb, WriteSig_tb, strobe_tb, Outport_en_tb, Inport_en_tb, BAout_tb, GRA_tb, GRB_tb, GRC_tb, Rin_tb,
+	Rout_tb, RA_en_tb, HIin_tb, LOin_tb, PCIn_tb, IRin_tb, Zin_tb, Yin_tb, MARin_tb, MDRin_tb, ConIn_tb, ConOut_tb, HIout_tb, LOout_tb,
+	ZHIout_tb, Zlowout_tb, PCout_tb, MDRout_tb, PortOut_tb, Cout_tb, read_tb : std_logic;
 	
-signal InPort_tb, OutPort_tb : std_logic_vector(31 downto 0);
+signal ram_read_tb, ram_write_tb: std_logic;
+signal InPort_tb, OutPort_tb, mdatain_tb : std_logic_vector(31 downto 0);
 
-SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, IncPC_tb, AND_tb : std_logic;
+SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, AND_tb : std_logic;
  --signals for the out ports (go into encoder)
 SIGNAL R0out_tb, R1out_tb, R2out_tb, R3out_tb, R4out_tb, R5out_tb, R6out_tb, R7out_tb, R8out_tb, R9out_tb, R10out_tb, R11out_tb, R12out_tb, R13out_tb, R14out_tb, R15out_tb : std_logic;
  --signals for the write/enable ports on each register
 SIGNAL R0in_tb, R1in_tb, R2in_tb, R3in_tb, R4in_tb, R5in_tb, R6in_tb, R7in_tb, R8in_tb, R9in_tb, R10in_tb, R11in_tb, R12in_tb, R13in_tb, R14in_tb, R15in_tb: std_logic;
 
-SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents : std_logic_vector(31 downto 0);
+SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents, LOData, HIData : std_logic_vector(31 downto 0);
 SIGNAL wireEncodercontents : std_logic_vector(4 downto 0);
 SIGNAL wireEncodercontentsIN : std_logic_vector(31 downto 0);
 
 begin 
 
-DUT: CPUBus 
+DUT: CpuBus2
 PORT MAP (
---out -> out port maps
-R0out => R0out_tb,
-R1out => R1out_tb,
-R2out => R2out_tb,
-R3out => R3out_tb, 
-R4out => R4out_tb,
-R5out => R5out_tb,
-R6out => R6out_tb,
-R7out => R7out_tb,
-R8out => R8out_tb,
-R9out => R9out_tb,
-R10out => R10out_tb,
-R11out => R11out_tb,
-R12out => R12out_tb,
-R13out => R13out_tb,
-R14out => R14out_tb,
-R15out => R15out_tb,
+clk => clk_tb,
+clear => clr_tb,
+
+MDRRead => read_tb,
+--Do we still need the MDREn port? we should have it covered with mdrread and mdrwrite
+MDREn => MDRin_tb,
+
 HIout => HIout_tb,
 LOout => LOout_tb,
 ZHIout => ZHIout_tb,
 PORTout => Portout_tb,
 Cout => Cout_tb,
 PCout => PCout_tb,
-ZLOout => ZLOout_tb,
+ZLOout => ZLowout_tb,
 MDRout => MDRout_tb,
 --en -> in port maps
-R1En => R1in_tb,
-R2En => R2in_tb,
-R3En => R3in_tb,
-R0En => R0in_tb,
-R4En => R4in_tb,
-R5En => R5in_tb,
-R6En => R6in_tb,
-R7En => R7in_tb,
-R8En => R8in_tb,
-R9En => R9in_tb,
-R10En => R10in_tb,
-R11En => R11in_tb,
-R12En => R12in_tb,
-R13En => R13in_tb,
-R14En => R14in_tb,
-R15En => R15in_tb,
 HIEn => HIin_tb,
 LOEn => LOin_tb,
-PORTEn => Portin_tb,
-CEn => Cin_tb,
+inPORTEn => Inport_en_tb,
+outPORTEn => Outport_en_tb,
 MAREn => MARin_tb,
 ZEn => Zin_tb,
 PCEn => PCin_tb,
-MDREn => MDRin_tb,
 IREn => IRin_tb,
 YEn => Yin_tb,
 --misc ports
-clk => Clock_tb,
-clear => Clear_tb,
+gra => gra_tb,
+grb => grb_tb,
+grc => grc_tb,
+rin => rin_tb,
+rout => rout_tb,
+baout => baout_tb,
+
+--RAM
+RAMReadEn => ram_read_tb,
+RAMWriteEn => ram_write_tb,
+
 IncPC_sig => IncPC_tb,
-MDRRead => Read_tb,
-Memdatain => Mdatain_tb,
 --opcode ports
 And_sig => AND_tb,
 Or_sig => OR_tb,
@@ -148,13 +138,20 @@ R15Data => R15Data,
 MDRData => MDRData,
 YData => YData,
 ZLODATA => ZLODATA,
+ZHIData => ZHIData,
+HIData => HIData,
+LOData => LOData,
 Buscontents => Buscontents,
 Encodercontents => wireEncodercontents,
-EncodercontentsIN => wireEncodercontentsIN);
+EncodercontentsIN => wireEncodercontentsIN,
+PortCONFFEn => ConIn_tb,
+CONFFout => ConOut_tb,
+OutportData => OutPort_tb,
+IncomingData => Inport_tb);
 
 Clock_process: PROCESS IS
 BEGIN
-Clock_tb <= '1', '0' after 10 ns;
+clk_tb <= '1', '0' after 10 ns;
  Wait for 20 ns;
 END PROCESS Clock_process;
 
