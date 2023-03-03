@@ -1,37 +1,5 @@
-testbench file naming:
-1. logical AND R1, R2, R3 => Test1_tb.vhd
-2. logical OR R1, R2, R3 => Test2_tb.vhd
-3. add R0, R4, R5 => Test3_tb.vhd
-4. sub R0, R4, R5 => Test4_tb.vhd
-5. mul R6, R7 => Test5_tb.vhd
-6. div R6, R7 => Test6_tb.vhd
-7. shr R1, R3, R5 => Test7_tb.vhd
-8. shra R1, R3, R5 => Test8_tb.vhd
-9. shl R1, R3, R5 => Test9_tb.vhd
-10. ror R6, R6, R4 => Test10_tb.vhd
-11. rol R6, R6, R4 => Test11_tb.vhd
-12. neg R0, R1 => Test12_tb.vhd
-13. not R0, R1 => Test13_tb.vhd
+PHASE 2 UPDATES
 
-UPDATES
-
-- Phase 1 is ready to demo
-- Phase 2: Components created, need to make testbenches and create/modify a new CpuBus
-
-PHASE 2
-
-- The ram module has been created, I used the megafunction wizard (allowed) to make it, copying and pasting it straight probably won't work, you might have to follow the same steps to recreate the module for your project, and any changes make to the ram module (shouldn't be many/any) will be manually added in later
-
-Steps to recreate ram module:
-
-- Tools -> MegaFunction Plug-in Manager
-- Create new custom MegaFunction variation
-- Search for "1-PORT" and select that
-- I called the main vhd file "RAM.vhd" but you can probably call it whatever you want
-- Make sure this gets created in the top level directory, wherever the main project .bpf file is (AKA make sure that when you compile afterwards, there are 0 warnings referring to the ram)
-- it'll take you through a few screens to specify a few settings....
-- specify 32 bits, 512 word memory, and that is has both 'rden' and 'wren' signals
-- on ram startup, instead of starting from blank, choose to import a .mif file (you'll have to make a blank one)
-- on the last step, check of all the boxes (include all the files it suggests to you)
-
-to be able to compile, fine the "whatever_you_called_it....._inst.vhd" file and comment out the entire thing, its simply an example showing us how to import the ram module into our main project
+- CpuBus2 finished (until debugging)
+- Need to look at/properly implement IncPC operation for the ALU
+- Create testbenches
