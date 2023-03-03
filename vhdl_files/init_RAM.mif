@@ -1,0 +1,15 @@
+-- just a filler so the project compiles, ignore whats actually in here for now
+
+WIDTH=32;
+DEPTH=512;
+
+ADDRESS_RADIX=HEX;
+DATA_RADIX=HEX;
+
+CONTENT BEGIN
+	000  :   0980001F;
+	001  :   69180025;
+	002  :   71180025;
+	003  :   79180025;
+	[004..1FF]  :   00000000;
+END;
