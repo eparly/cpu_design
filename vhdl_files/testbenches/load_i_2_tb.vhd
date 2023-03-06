@@ -1,11 +1,11 @@
---Case 3: ldi R1, $75         -----> 00001 0001 0000 0000000000001001011 -----> x"0880004B"
+--Case 4: ldi R0, $45(R1)     -----> 00001 0000 0001 0000000000000101101 -----> x"0808002D"
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity load_i_tb is
+entity load_i_2_tb is
 end entity;
 
-architecture load_tb_arch of load_i_tb is
+architecture load_tb_arch of load_i_2_tb is
 
 component CpuBus2 is 
 port( 
@@ -249,7 +249,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
 
  HIOut_tb<='0';	LOOut_tb<='0';	ZHIOut_tb<='0';
  ZLowout_tb<='0'; 	PCOut_tb<='0'; 	MDROut_tb<='0';	
- PortOut_tb<='0'; Cout_tb<='0'; wireManualData <=  x"00000002";
+ PortOut_tb<='0'; Cout_tb<='0'; wireManualData <=  x"00000003";
  
  MDRsel_tb <= '0'; R0sel_tb <= '0'; R1sel_tb <= '0'; R2sel_tb <= '0'; R3sel_tb <= '0'; R4sel_tb <= '0'; R5sel_tb <= '0'; R6sel_tb <= '0'; 
  
@@ -299,7 +299,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
 
  WHEN T0 => 
  --switch to interal signals
- MDRsel_tb <= '1'; R1sel_tb <= '1'; R2sel_tb <= '1'; R3sel_tb <= '1'; R4sel_tb <= '1'; R5sel_tb <= '1'; R6sel_tb <= '1'; 
+ MDRsel_tb <= '1'; R0sel_tb <= '1'; R1sel_tb <= '1'; R2sel_tb <= '1'; R3sel_tb <= '1'; R4sel_tb <= '1'; R5sel_tb <= '1'; R6sel_tb <= '1'; 
  --
  MDRout_tb <= '0';
  R2in_tb <= '0';
