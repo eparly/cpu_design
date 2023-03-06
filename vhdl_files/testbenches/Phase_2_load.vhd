@@ -1,9 +1,9 @@
+--Case 1: ld R1, $75          -----> 00000 0001 0000 0000000000001001011 -----> x"0080004B" @address 000 in initRam.mif
 library ieee;
 use ieee.std_logic_1164.all;
 
 entity load_tb is
 end entity;
-
 
 architecture load_tb_arch of load_tb is
 
@@ -25,24 +25,25 @@ port(
 	 --signals for the encoder that have to come from the 'control unit'
 	 HIout, LOout, ZHIout, ZLOout, PCout, MDROut, PORTout, Cout : std_logic;
 	 
+	 --only needed to manually load in register data BEFORE the actual instruction begins
+	 ManualData : in std_logic_vector(31 downto 0);
+	 ManR0En, ManR1En, ManR2En, ManR3En, ManR4En, ManR5En, ManR6En : in std_logic;
+	 MDRsel, R0sel, R1sel, R2sel, R3sel, R4sel, R5sel, R6sel : in std_logic;
+	 
     --ports for the outputs of the registers (used for the testbenches only) Test ports
-    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, PCData, IRData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
-	 EncodercontentsIN : out std_logic_vector(31 downto 0);
+	 RamOutput, RamAddress, EncodercontentsIN : out std_logic_vector(31 downto 0);
 	 CONFFout : out std_logic;
 	 --i dont really know what to do about the data regarding the in and output ports right now, so for now they will be signals to and from the CPUBUS
 	 OutportData : out std_logic_vector(31 downto 0);
 	 IncomingData : in std_logic_vector(31 downto 0)
 );
 end component;
+
 type state is (Default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, 
-					T0, T1, T2, T3, T4, T5, T6, T7, final);
-type operation is (Default, LoadR2, LoadR3, LoadR4, LoadR5, LoadR6, LoadR7,
-		Add, Sub, Mul, Div, AndOp, OrOp, SHR, SHL, RotRight, RotLeft, Neg, NotOp,
-		Load, LoadI, LoadR, Store, StoreR, AddI, AndI, OrI, BranchZero, BranchNZero, BranchPos, BranchNeg,
-		Jump, JumpAL, Movefhi, Moveflo, Input, Output
-		);
-signal currentOp : operation;
+					T0, T1, Delay1, Delay2, Delay3, Delay4, Delay5, Delay6, Delay7, T2, T3, T4, T5, T6, T7, final);
+
 signal Present_State: state;
 
 signal clk_tb, clr_tb, IncPC_tb, MemRd_tb, WriteSig_tb, strobe_tb, Outport_en_tb, Inport_en_tb, BAout_tb, GRA_tb, GRB_tb, GRC_tb, Rin_tb,
@@ -50,18 +51,18 @@ signal clk_tb, clr_tb, IncPC_tb, MemRd_tb, WriteSig_tb, strobe_tb, Outport_en_tb
 	ZHIout_tb, Zlowout_tb, PCout_tb, MDRout_tb, PortOut_tb, Cout_tb, read_tb : std_logic;
 	
 signal ram_read_tb, ram_write_tb: std_logic;
-signal InPort_tb, OutPort_tb, mdatain_tb : std_logic_vector(31 downto 0);
+signal InPort_tb, OutPort_tb : std_logic_vector(31 downto 0);
 
 SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, AND_tb : std_logic;
- --signals for the out ports (go into encoder)
-SIGNAL R0out_tb, R1out_tb, R2out_tb, R3out_tb, R4out_tb, R5out_tb, R6out_tb, R7out_tb, R8out_tb, R9out_tb, R10out_tb, R11out_tb, R12out_tb, R13out_tb, R14out_tb, R15out_tb : std_logic;
- --signals for the write/enable ports on each register
-SIGNAL R0in_tb, R1in_tb, R2in_tb, R3in_tb, R4in_tb, R5in_tb, R6in_tb, R7in_tb, R8in_tb, R9in_tb, R10in_tb, R11in_tb, R12in_tb, R13in_tb, R14in_tb, R15in_tb: std_logic;
 
-SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents, LOData, HIData : std_logic_vector(31 downto 0);
+SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents, LOData, HIData, PCData, IRData : std_logic_vector(31 downto 0);
 SIGNAL wireEncodercontents : std_logic_vector(4 downto 0);
-SIGNAL wireEncodercontentsIN : std_logic_vector(31 downto 0);
+SIGNAL wireEncodercontentsIN, RAMOutput_tb, RAMAddress_tb : std_logic_vector(31 downto 0);
 
+signal R0in_tb, R1in_tb, R2in_tb, R3in_tb, R4in_tb, R5in_tb, R6in_tb : std_logic; 
+
+signal wireManualData : std_logic_vector(31 downto 0);
+signal MDRsel_tb, R0sel_tb, R1sel_tb, R2sel_tb, R3sel_tb, R4sel_tb, R5sel_tb, R6sel_tb : std_logic;
 begin 
 
 DUT: CpuBus2
@@ -70,7 +71,7 @@ clk => clk_tb,
 clear => clr_tb,
 
 MDRRead => read_tb,
---Do we still need the MDREn port? we should have it covered with mdrread and mdrwrite
+--Do we still need the MDREn port --yep, MDRread is for the MDR mux, MDREn is for the register part, they are two different signals
 MDREn => MDRin_tb,
 
 HIout => HIout_tb,
@@ -81,6 +82,23 @@ Cout => Cout_tb,
 PCout => PCout_tb,
 ZLOout => ZLowout_tb,
 MDRout => MDRout_tb,
+--map for manually loading values into the MDR
+ManualData => wireManualData,
+ManR0En => R0in_tb,
+ManR1En => R1in_tb,
+ManR2En => R2in_tb,
+ManR3En => R3in_tb,
+ManR4En => R4in_tb,
+ManR5En => R5in_tb,
+ManR6En => R6in_tb,
+MDRsel => MDRsel_tb,
+R0sel => R0sel_tb,
+R1sel => R1sel_tb,
+R2sel => R2sel_tb,
+R3sel => R3sel_tb,
+R4sel => R4sel_tb,
+R5sel => R5sel_tb,
+R6sel => R6sel_tb,
 --en -> in port maps
 HIEn => HIin_tb,
 LOEn => LOin_tb,
@@ -141,8 +159,12 @@ ZLODATA => ZLODATA,
 ZHIData => ZHIData,
 HIData => HIData,
 LOData => LOData,
+PCData => PCData,
+IRData => IRData,
 Buscontents => Buscontents,
 Encodercontents => wireEncodercontents,
+RAMOutput => RAMOutput_tb,
+RAMAddress => RAMAddress_tb,
 EncodercontentsIN => wireEncodercontentsIN,
 PortCONFFEn => ConIn_tb,
 CONFFout => ConOut_tb,
@@ -151,11 +173,9 @@ IncomingData => Inport_tb);
 
 Clock_process: PROCESS IS
 BEGIN
-clk_tb <= '1', '0' after 10 ns;
- Wait for 20 ns;
+clk_tb <= '1', '0' after 5 ns;
+ Wait for 10 ns;
 END PROCESS Clock_process;
-
-
 
 PROCESS (Clk_tb) IS -- finite state machine
 BEGIN
@@ -178,16 +198,30 @@ Present_state <= T0;
 WHEN T0 =>
 Present_state <= T1;
 WHEN T1 =>
+Present_state <= Delay1; --we need to stall for additional clock cycles on every RAM read in order to keep pace
+WHEN Delay1 =>
+Present_state <= Delay2;
+WHEN Delay2 =>
+Present_state <= Delay3;
+WHEN Delay3 =>
 Present_state <= T2;
 WHEN T2 =>
 Present_state <= T3;
 WHEN T3 =>
+Present_state <= Delay4;
+WHEN Delay4 =>
 Present_state <= T4;
 WHEN T4 =>
 Present_state <= T5;
 WHEN T5 =>
 Present_state <= T6;
 WHEN T6 =>
+Present_state <= Delay5;
+WHEN Delay5 =>
+Present_state <= Delay6;
+WHEN Delay6 =>
+Present_state <= Delay7;
+WHEN Delay7 =>
 Present_state <= T7;
 WHEN T7 =>
 Present_state <= final;
@@ -202,100 +236,109 @@ BEGIN
 CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN Default =>
   -- initialize the signals
-  
-  --general purpose registers
- R0out_tb <= '0'; R1out_tb <= '0'; R2out_tb <= '0'; R3out_tb <= '0'; R4out_tb <= '0'; 
- R5out_tb <= '0'; R6out_tb <= '0'; R7out_tb <= '0'; R8out_tb <= '0'; R9out_tb <= '0'; 
- R10out_tb <= '0'; R11out_tb <= '0'; R12out_tb <= '0'; R13out_tb <= '0'; R14out_tb <= '0'; 
- R15out_tb <= '0'; 
  
  --other register enables
- clr_tb <='1';	
+ clr_tb <='0';	
  IncPC_tb<='0'; Read_tb <= '0'; WriteSig_tb<='0';	strobe_tb<='0'; 
  GRA_tb<='0';	GRB_tb<='0';	GRC_tb<='0';		
  BAout_tb<='0';	Rin_tb<='0';	Rout_tb<='0';	
  Outport_en_tb<='0';	
  HIin_tb<='0';	LOin_tb<='0'; 	PCin_tb<='0';	IRin_tb<='0';	
  Zin_tb<='0';	Yin_tb<='0';	MARin_tb<='0';	MDRin_tb<='0';	Conin_tb<='0';
+ R0in_tb<='0'; R1in_tb<='0'; R2in_tb<='0'; R3in_tb<='0'; R4in_tb<='0'; R5in_tb<='0'; R6in_tb<='0';
 
  HIOut_tb<='0';	LOOut_tb<='0';	ZHIOut_tb<='0';
  ZLowout_tb<='0'; 	PCOut_tb<='0'; 	MDROut_tb<='0';	
- PortOut_tb<='0'; Cout_tb<='0'; 
- Mdatain_tb <= x"00000000"; 
+ PortOut_tb<='0'; Cout_tb<='0'; wireManualData <=  x"00000000";
  
- WHEN Reg_load1a => 
- Mdatain_tb <= x"00000000"; 
- Read_tb <= '0', '1' after 10 ns; -- the first zero is there for completeness
- MDRin_tb <= '0', '1' after 10 ns;
+ MDRsel_tb <= '0'; R0sel_tb <= '0'; R1sel_tb <= '0'; R2sel_tb <= '0'; R3sel_tb <= '0'; R4sel_tb <= '0'; R5sel_tb <= '0'; R6sel_tb <= '0'; 
+ 
+ --we only have to load the PC register with the initial value of 0 (address of the first instruction)
+ WHEN Reg_load1a =>  
+ Read_tb <= '1'; -- the first zero is there for completeness
+ MDRin_tb <= '1';
  WHEN Reg_load1b => 
  Read_tb <= '0'; 
  MDRin_tb <= '0';
  
- MDRout_tb <= '1' after 10 ns; 
- R2in_tb <= '1' after 10 ns; -- initialize R2 with the value $12 
+ MDRout_tb <= '1'; 
+ --R0in_tb <= '1';
+ --Yin_tb <= '1';
+ PCin_tb <= '1'; -- initialize R2 with the value $12 
  WHEN Reg_load2a => 
  MDRout_tb <= '0';
- R2in_tb <= '0';
+ PCin_tb <= '0';
+ --Yin_tb <= '0';
+ --R0in_tb <= '0';
  
- Mdatain_tb <= x"00000014"; 
- Read_tb <= '1' after 10 ns; 
- MDRin_tb <= '1' after 10 ns;
+ wireManualData <=  x"00000003";
+ Read_tb <= '1'; 
+ MDRin_tb <= '1';
  WHEN Reg_load2b => 
  Read_tb <= '0';
  MDRin_tb <= '0';
  
- MDRout_tb <= '1' after 10 ns; 
- R3in_tb <= '1' after 10 ns; -- initialize R3 with the value $14 
+ MDRout_tb <= '1'; 
+ R1in_tb <= '1'; -- initialize R3 with the value $14 
+ R0in_tb <= '1';
+ Yin_tb <= '1';
  WHEN Reg_load3a => 
  MDRout_tb <= '0';
- R3in_tb <= '0';
- 
- Mdatain_tb <= x"00000000";
- Read_tb <= '1' after 10 ns; 
- MDRin_tb <= '1' after 10 ns;
+ R1in_tb <= '0';
+ R0in_tb <= '0';
+ Yin_tb <= '0';
+	
+ Read_tb <= '1'; 
+ MDRin_tb <= '1';
  WHEN Reg_load3b => 
  Read_tb <= '0';
  MDRin_tb <= '0';
  
- MDRout_tb <= '1' after 10 ns; 
- R1in_tb <= '1' after 10 ns; -- initialize R1 with the value $18 
- 
+ MDRout_tb <= '1'; 
+ R2in_tb <= '1'; -- initialize R1 with the value $18 
+
  WHEN T0 => 
+ --switch to interal signals
+ MDRsel_tb <= '1'; R1sel_tb <= '1'; R2sel_tb <= '1'; R3sel_tb <= '1'; R4sel_tb <= '1'; R5sel_tb <= '1'; R6sel_tb <= '1'; 
+ --
  MDRout_tb <= '0';
- R1in_tb <= '0';
+ R2in_tb <= '0';
  
- PCout_tb <= '1' after 10 ns; MARin_tb <= '1' after 10 ns; IncPC_tb <= '1' after 10 ns; Zin_tb <= '1' after 10 ns;
+ PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1'; 
  WHEN T1 => 
- PCout_tb <= '0'; MARin_tb <= '0'; IncPC_tb <= '0'; Zin_tb <= '0';
+ PCout_tb <= '0'; MARin_tb <= '0'; IncPC_tb <= '0'; Zin_tb <= '0'; 
  
- Zlowout_tb <= '1' after 10 ns; PCin_tb <= '1' after 10 ns; Read_tb <= '1' after 10 ns; MDRin_tb <= '1' after 10 ns;
- Mdatain_tb <= x"28918000"; -- opcode for “and R1, R2, R3” 
+ Zlowout_tb <= '1'; PCin_tb <= '1'; Read_tb <= '1'; MDRin_tb <= '1'; ram_read_tb <= '1';
  WHEN T2 =>
- Zlowout_tb <= '0'; PCin_tb <= '0'; Read_tb <= '0'; MDRin_tb <= '0';
+ Zlowout_tb <= '0'; PCin_tb <= '0'; Read_tb <= '0'; MDRin_tb <= '0'; ram_read_tb <= '0';
  
- MDRout_tb <= '1' after 10 ns; IRin_tb <= '1' after 10 ns;
+ MDRout_tb <= '1'; IRin_tb <= '1';
  WHEN T3 =>
  MDRout_tb <= '0'; IRin_tb <= '0';
  
- Grb_tb <= '1' after 10 ns; BAout_tb <= '1' after 10 ns; Yin_tb<='1' after 10 ns;
+ Grb_tb <= '1'; BAout_tb <= '1'; --Yin_tb <= '1';
+ WHEN Delay4 =>
+ Yin_tb<='1';
+ --Yin_tb <= '0';
+ 
  WHEN T4 =>
  Grb_tb <='0'; BAout_tb <= '0'; Yin_tb <= '0';
  
- Cout_tb <= '1' after 10 ns; ADD_tb <= '1' after 10 ns; Zin_tb <= '1' after 10 ns;
+ Cout_tb <= '1'; ADD_tb <= '1'; Zin_tb <= '1';
  WHEN T5 =>
  Cout_tb <= '0'; ADD_tb <= '0'; Zin_tb <= '0';
  
- Zlowout_tb <= '1' after 10 ns; MARin_tb <= '1' after 10 ns; 
+ Zlowout_tb <= '1'; MARin_tb <= '1'; 
  WHEN T6 =>
  Zlowout_tb <='0'; MARin_tb <='0';
  
- Read_tb <= '1' after 10 ns; Mdatain_tb <=x"00000000" after 10 ns; MDRin_tb <= '1' after 10 ns;
+ Read_tb <= '1'; MDRin_tb <= '1'; ram_read_tb <= '1';
  WHEN T7 =>
- Read_tb <='0'; MDRin_tb <='0';
+ Read_tb <='0'; MDRin_tb <='0'; ram_read_tb <= '0';
  
- MDROut_tb <='1' after 10 ns; GRA_tb <= '1' after 10 ns; R1in_tb <='1' after 10 ns;
+ MDROut_tb <='1'; GRA_tb <= '1'; Rin_tb <='1';
  WHEN final =>
- MDROut_tb <='0'; GRA_tb <='0'; R1in_tb <= '0';
+ MDROut_tb <='0'; GRA_tb <='0'; Rin_tb <= '0';
 WHEN OTHERS =>
 END CASE;
 END PROCESS; 

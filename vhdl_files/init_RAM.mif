@@ -6,8 +6,10 @@ DEPTH=512;
 ADDRESS_RADIX=HEX;
 DATA_RADIX=HEX;
 
+--set address 75 to have some number (or keep it at zero)
+
 CONTENT BEGIN
-	000  :   0980001F;
+	000  :   0080004B;
 	001  :   69180025;
 	002  :   71180025;
 	003  :   79180025;

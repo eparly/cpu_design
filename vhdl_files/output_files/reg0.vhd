@@ -10,7 +10,7 @@ baout : in std_logic;
 writeEnable: in std_logic; --R#In
 reg_out : out std_logic_vector(31 downto 0)
 );
-end reg0;
+end entity;
 
 architecture behavior of reg0 is
 
@@ -35,7 +35,7 @@ begin
 
 interalReg : reg port map(reg_input => wire_reg_input, clk => wire_clk, clear => wire_clr, writeEnable => wire_writeEnable, reg_out => tempOutput);
 
-process(clk)
+process(clk, baout)
 begin
 wire_reg_input <= reg_input;
 wire_baout <= baout;

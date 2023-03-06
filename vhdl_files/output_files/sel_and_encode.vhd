@@ -33,7 +33,7 @@ elsif (grb = '1') then
 elsif (grc = '1') then
 	wire_regID <= ir_in(18 downto 15);
 else
-	wire_regID <= ir_in(22 downto 19); --default to assuming RA because i can
+	wire_regID <= ir_in(26 downto 23); --default to assuming RA because i can
 end if;
 end process;
 

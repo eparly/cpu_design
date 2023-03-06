@@ -3,3 +3,10 @@ PHASE 2 UPDATES
 - CpuBus2 finished (until debugging)
 - Need to look at/properly implement IncPC operation for the ALU
 - Create testbenches
+
+Case 1: ld R1, $75          -----> 00000 0001 0000 0000000000001001011 -----> x"0080004B"
+Case 2: ld R0, $45(R1)      -----> 00000 0000 0001 0000000000000101101 -----> x"0008002D"
+Case 3: ldi R1, $75         -----> 00001 0001 0000 0000000000001001011 -----> x"0880004B"
+Case 4: ldi R0, $45(R1)     -----> 00001 0000 0001 0000000000000101101 -----> x"0808002D"
+
+slight issues - it takes 5 clock cycles to read from memory, theres nothing we can do to fix it, but the testbenches will need to be changed
