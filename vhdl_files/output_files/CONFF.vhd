@@ -35,12 +35,14 @@ if (CONFFEn = '1') then
 			else
 				passed <= '0';
 			end if;
-		when "01" => --branch if negative, test buscontents
+		when "11" => --branch if negative, test buscontents
 			if (busInput(31) = '1') then
 				passed <= '1';
 			else
 				passed <= '0';
 			end if;
+		when others => 
+			passed <= '0';
 	end case;
 else
 passed <= '0';

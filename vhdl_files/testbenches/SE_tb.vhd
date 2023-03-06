@@ -28,6 +28,7 @@ Test_process : process
 		wait for 50 ns;
 		ir_in <= x"0080004B";
 		gra <= '1';
+		rin <= '1';
 		wait;
 end process Test_process;
 
