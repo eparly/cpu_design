@@ -41,11 +41,11 @@ if (CONFFEn = '1') then
 			else
 				passed <= '0';
 			end if;
-		when others => 
+		when others =>
 			passed <= '0';
 	end case;
-else
-passed <= '0';
+--else
+	--passed <= '0';
 end if;
 end process;
 end behavior;
