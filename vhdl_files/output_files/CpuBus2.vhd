@@ -25,7 +25,7 @@ port(
 	 MDRsel, R0sel, R1sel, R2sel, R3sel, R4sel, R5sel, R6sel : in std_logic;
 	 
     --ports for the outputs of the registers (used for the testbenches only) Test ports
-    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, PCData, IRData, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, PCData, IRData, CData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 RamOutput, RamAddress, EncodercontentsIN : out std_logic_vector(31 downto 0);
 	 CONFFout : out std_logic;
@@ -239,7 +239,7 @@ HIEn, LOEn, ZEn, PCEn, IREn, MDREn,
 InPORTEn, OutPORTEn, YEn, MAREn, BusMuxOut,
 gra, grb, grc, rin, rout, baout, R0in, R1in, R2in, R3in, 
 R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, 
-R13in, R14in, R15in, PCin, Yin) is
+R13in, R14in, R15in, PCin, Yin, CSE) is
 
 begin
 wireHIEn <= HIEn;
@@ -290,6 +290,7 @@ HIData <= HIin;
 LOData <= Loin;
 PCData <= PCin;
 IRData <= IRin;
+CData <= CSE;
 OutportData <= outPORTin;
 InportInput <= IncomingData;
 Buscontents <= BusMuxOut;

@@ -1,11 +1,11 @@
---Case 3: ldi R1, $75         -----> 00001 0001 0000 0000000000001001011 -----> x"0880004B"
+--Case 7: addi R2, R3, -3     -----> 01100 0010 0011 1111111111111111101 -----> x"611FFFFD"
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity load_i_tb is
+entity addi_tb is
 end entity;
 
-architecture load_tb_arch of load_i_tb is
+architecture load_tb_arch of addi_tb is
 
 component CpuBus2 is 
 port( 
@@ -42,7 +42,7 @@ port(
 end component;
 
 type state is (Default, Reg_load1a, Reg_load1b, Reg_load2a, Reg_load2b, Reg_load3a, Reg_load3b, 
-					T0, T1, Delay1, Delay2, Delay3, Delay4, Delay5, Delay6, Delay7, T2, T3, T4, T5, T6, T7, final);
+					T0, T1, Delay1, Delay2, Delay3, Delay4, T2, T3, T4, T5, final);
 
 signal Present_State: state;
 
@@ -215,16 +215,6 @@ Present_state <= T4;
 WHEN T4 =>
 Present_state <= T5;
 WHEN T5 =>
-Present_state <= T6;
-WHEN T6 =>
-Present_state <= Delay5;
-WHEN Delay5 =>
-Present_state <= Delay6;
-WHEN Delay6 =>
-Present_state <= Delay7;
-WHEN Delay7 =>
-Present_state <= T7;
-WHEN T7 =>
 Present_state <= final;
 WHEN OTHERS =>
 END CASE;
@@ -250,7 +240,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
 
  HIOut_tb<='0';	LOOut_tb<='0';	ZHIOut_tb<='0';
  ZLowout_tb<='0'; 	PCOut_tb<='0'; 	MDROut_tb<='0';	
- PortOut_tb<='0'; Cout_tb<='0'; wireManualData <=  x"00000002";
+ PortOut_tb<='0'; Cout_tb<='0'; wireManualData <=  x"00000006";
  
  MDRsel_tb <= '0'; R0sel_tb <= '0'; R1sel_tb <= '0'; R2sel_tb <= '0'; R3sel_tb <= '0'; R4sel_tb <= '0'; R5sel_tb <= '0'; R6sel_tb <= '0'; 
  
@@ -272,7 +262,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  --Yin_tb <= '0';
  --R0in_tb <= '0';
  
- wireManualData <=  x"00000003";
+ wireManualData <=  x"00000000";
  Read_tb <= '1'; 
  MDRin_tb <= '1';
  WHEN Reg_load2b => 
@@ -280,14 +270,15 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRin_tb <= '0';
  
  MDRout_tb <= '1'; 
- R1in_tb <= '1'; -- initialize R3 with the value $14 
+ R2in_tb <= '1'; -- initialize R3 with the value $14 
  R0in_tb <= '1';
  Yin_tb <= '1';
  WHEN Reg_load3a => 
  MDRout_tb <= '0';
- R1in_tb <= '0';
+ R2in_tb <= '0';
  R0in_tb <= '0';
  Yin_tb <= '0';
+ wireManualData <=  x"0000000B";
 	
  Read_tb <= '1'; 
  MDRin_tb <= '1';
@@ -296,14 +287,14 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  MDRin_tb <= '0';
  
  MDRout_tb <= '1'; 
- R2in_tb <= '1'; -- initialize R1 with the value $18 
+ R3in_tb <= '1'; -- initialize R1 with the value $18 
 
  WHEN T0 => 
  --switch to interal signals
- MDRsel_tb <= '1'; R1sel_tb <= '1'; R2sel_tb <= '1'; R3sel_tb <= '1'; R4sel_tb <= '1'; R5sel_tb <= '1'; R6sel_tb <= '1'; 
+ MDRsel_tb <= '1'; R0sel_tb <= '1'; R1sel_tb <= '1'; R2sel_tb <= '1'; R3sel_tb <= '1'; R4sel_tb <= '1'; R5sel_tb <= '1'; R6sel_tb <= '1'; 
  --
  MDRout_tb <= '0';
- R2in_tb <= '0';
+ R3in_tb <= '0';
  
  PCout_tb <= '1'; MARin_tb <= '1'; IncPC_tb <= '1'; Zin_tb <= '1'; 
  WHEN T1 => 
@@ -317,22 +308,22 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN T3 =>
  MDRout_tb <= '0'; IRin_tb <= '0';
  
- Grb_tb <= '1'; BAout_tb <= '1'; --Yin_tb <= '1';
+ Grb_tb <= '1'; rout_tb <= '1'; --Yin_tb <= '1';
  WHEN Delay4 =>
  Yin_tb<='1';
  --Yin_tb <= '0';
  
  WHEN T4 =>
- Grb_tb <='0'; BAout_tb <= '0'; Yin_tb <= '0';
+ Grb_tb <='0'; rout_tb <= '0'; Yin_tb <= '0';
  
  Cout_tb <= '1'; ADD_tb <= '1'; Zin_tb <= '1';
  WHEN T5 =>
  Cout_tb <= '0'; ADD_tb <= '0'; Zin_tb <= '0';
  
- Zlowout_tb <= '1'; Gra_tb <= '1'; Rin_tb <= '1';
- 
+ Zlowout_tb <= '1'; gra_tb <= '1'; rin_tb <= '1'; 
  WHEN final =>
- Zlowout_tb <= '0'; Gra_tb <= '0'; Rin_tb <= '0';
+ Zlowout_tb <= '0'; gra_tb <= '0'; rin_tb <= '0'; 
+ 
 WHEN OTHERS =>
 END CASE;
 END PROCESS; 

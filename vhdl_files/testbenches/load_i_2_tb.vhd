@@ -2,10 +2,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity load_i_2_tb is
+entity loadi2_tb is
 end entity;
 
-architecture load_tb_arch of load_i_2_tb is
+architecture load_tb_arch of loadi2_tb is
 
 component CpuBus2 is 
 port( 
@@ -31,7 +31,7 @@ port(
 	 MDRsel, R0sel, R1sel, R2sel, R3sel, R4sel, R5sel, R6sel : in std_logic;
 	 
     --ports for the outputs of the registers (used for the testbenches only) Test ports
-    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, PCData, IRData, Buscontents: out std_logic_vector(31 downto 0);
+    R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, PCData, IRData, CData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 RamOutput, RamAddress, EncodercontentsIN : out std_logic_vector(31 downto 0);
 	 CONFFout : out std_logic;
@@ -55,7 +55,7 @@ signal InPort_tb, OutPort_tb : std_logic_vector(31 downto 0);
 
 SIGNAL OR_tb, ADD_tb, SUB_tb, MUL_tb, DIV_tb, SHR_tb, SHL_tb, SHRA_tb, ROR_tb, ROL_tb, NEG_tb, NOT_tb, AND_tb : std_logic;
 
-SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents, LOData, HIData, PCData, IRData : std_logic_vector(31 downto 0);
+SIGNAL R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, Buscontents, LOData, HIData, PCData, IRData, CData : std_logic_vector(31 downto 0);
 SIGNAL wireEncodercontents : std_logic_vector(4 downto 0);
 SIGNAL wireEncodercontentsIN, RAMOutput_tb, RAMAddress_tb : std_logic_vector(31 downto 0);
 
@@ -161,6 +161,7 @@ HIData => HIData,
 LOData => LOData,
 PCData => PCData,
 IRData => IRData,
+CData => CData,
 Buscontents => Buscontents,
 Encodercontents => wireEncodercontents,
 RAMOutput => RAMOutput_tb,
@@ -316,13 +317,13 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  WHEN T3 =>
  MDRout_tb <= '0'; IRin_tb <= '0';
  
- Grb_tb <= '1'; BAout_tb <= '1'; --Yin_tb <= '1';
+ Grb_tb <= '1'; rout_tb <= '1'; --Yin_tb <= '1';
  WHEN Delay4 =>
  Yin_tb<='1';
  --Yin_tb <= '0';
  
  WHEN T4 =>
- Grb_tb <='0'; BAout_tb <= '0'; Yin_tb <= '0';
+ Grb_tb <='0'; rout_tb <= '0'; Yin_tb <= '0';
  
  Cout_tb <= '1'; ADD_tb <= '1'; Zin_tb <= '1';
  WHEN T5 =>
