@@ -1,5 +1,5 @@
 PHASE 2 UPDATES
-- Create testbenches
+- I think 'Delay 4' could be removed from all the testbenches, Cases 16-19 are able to run without it, when before it would of been needed
 
 Case 1: ld R1, $75          -----> 00000 0001 0000 0000000000001001011 -----> x"0080004B" DONE
 Case 2: ld R0, $45(R1)      -----> 00000 0000 0001 0000000000000101101 -----> x"0008002D" DONE
