@@ -15,6 +15,7 @@ port(
     MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
+	 AddCin_sig: std_logic;
 	 --signal from the Control Unit for the select and encode logic
 	 gra, grb, grc, rin, rout, baout : in std_logic;
 	 --RAM enable signals
@@ -48,7 +49,7 @@ signal Present_State: state;
 
 signal clk_tb, clr_tb, IncPC_tb, MemRd_tb, WriteSig_tb, strobe_tb, Outport_en_tb, Inport_en_tb, BAout_tb, GRA_tb, GRB_tb, GRC_tb, Rin_tb,
 	Rout_tb, RA_en_tb, HIin_tb, LOin_tb, PCIn_tb, IRin_tb, Zin_tb, Yin_tb, MARin_tb, MDRin_tb, ConIn_tb, ConOut_tb, HIout_tb, LOout_tb,
-	ZHIout_tb, Zlowout_tb, PCout_tb, MDRout_tb, PortOut_tb, Cout_tb, read_tb : std_logic;
+	ZHIout_tb, Zlowout_tb, PCout_tb, MDRout_tb, PortOut_tb, Cout_tb, read_tb, AddCin_tb : std_logic;
 	
 signal ram_read_tb, ram_write_tb: std_logic;
 signal InPort_tb, OutPort_tb : std_logic_vector(31 downto 0);
@@ -122,6 +123,7 @@ RAMReadEn => ram_read_tb,
 RAMWriteEn => ram_write_tb,
 
 IncPC_sig => IncPC_tb,
+AddCin_sig => AddCin_tb,
 --opcode ports
 And_sig => AND_tb,
 Or_sig => OR_tb,
@@ -279,7 +281,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  --Yin_tb <= '0';
  --R0in_tb <= '0';
  
- wireManualData <=  x"00000043";
+ wireManualData <=  x"00000067";
  Read_tb <= '1'; 
  MDRin_tb <= '1';
  WHEN Reg_load2b => 

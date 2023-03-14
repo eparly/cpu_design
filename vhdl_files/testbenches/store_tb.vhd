@@ -279,7 +279,7 @@ CASE Present_state IS -- assert the required signals in each clock cycle
  --Yin_tb <= '0';
  --R0in_tb <= '0';
  
- wireManualData <=  x"00000043";
+ wireManualData <=  x"00000067";
  Read_tb <= '1'; 
  MDRin_tb <= '1';
  WHEN Reg_load2b => 

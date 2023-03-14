@@ -2,10 +2,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity loadi2_tb is
+entity load_i_2_tb is
 end entity;
 
-architecture load_tb_arch of loadi2_tb is
+architecture load_tb_arch of load_i_2_tb is
 
 component CpuBus2 is 
 port( 

@@ -38,7 +38,7 @@
 
 set_global_assignment -name FAMILY "Cyclone III"
 set_global_assignment -name DEVICE EP3C16F484C6
-set_global_assignment -name TOP_LEVEL_ENTITY CpuBus
+set_global_assignment -name TOP_LEVEL_ENTITY CpuBus2
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "13.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "14:54:25  JANUARY 23, 2023"
 set_global_assignment -name LAST_QUARTUS_VERSION "13.0 SP1"
@@ -52,7 +52,7 @@ set_global_assignment -name EDA_OUTPUT_DATA_FORMAT VHDL -section_id eda_simulati
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"
 set_global_assignment -name EDA_TEST_BENCH_ENABLE_STATUS TEST_BENCH_MODE -section_id eda_simulation
-set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH Test12 -section_id eda_simulation
+set_global_assignment -name EDA_NATIVELINK_SIMULATION_TEST_BENCH store_tb -section_id eda_simulation
 set_global_assignment -name EDA_TEST_BENCH_NAME register_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id register_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id register_tb
@@ -73,59 +73,10 @@ set_global_assignment -name EDA_TEST_BENCH_NAME CLA4_tb -section_id eda_simulati
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id CLA4_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id CLA4_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME CLA4_tb -section_id CLA4_tb
-set_global_assignment -name VHDL_FILE testbenches/CLA16_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/CLA4_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/CLA32_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/MUX_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/MDR_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Encoder_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/ALU_tb.vhd
-set_global_assignment -name VHDL_FILE output_files/IncPC.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test13_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test12_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test11_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test10_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test9_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test8_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test7_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test6_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test5_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test4_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test3_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test2_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/Test1_tb.vhd
-set_global_assignment -name VHDL_FILE testbenches/DataPathtb.vhd
-set_global_assignment -name VHDL_FILE output_files/CpuBus.vhd
-set_global_assignment -name VHDL_FILE output_files/Mul32.vhd
-set_global_assignment -name VHDL_FILE output_files/Div32.vhd
-set_global_assignment -name VHDL_FILE output_files/Sub32.vhd
-set_global_assignment -name VHDL_FILE output_files/Shra32.vhd
-set_global_assignment -name VHDL_FILE output_files/Shr32.vhd
-set_global_assignment -name VHDL_FILE output_files/Shla32.vhd
-set_global_assignment -name VHDL_FILE output_files/Shl32.vhd
-set_global_assignment -name VHDL_FILE output_files/Ror32.vhd
-set_global_assignment -name VHDL_FILE output_files/Rol32.vhd
-set_global_assignment -name VHDL_FILE output_files/Or32.vhd
-set_global_assignment -name VHDL_FILE output_files/Not32.vhd
-set_global_assignment -name VHDL_FILE output_files/Neg32.vhd
-set_global_assignment -name VHDL_FILE output_files/CLA32.vhd
-set_global_assignment -name VHDL_FILE output_files/CLA16.vhd
-set_global_assignment -name VHDL_FILE output_files/CLA4.vhd
-set_global_assignment -name VHDL_FILE output_files/And32.vhd
-set_global_assignment -name VHDL_FILE output_files/register.vhd
-set_global_assignment -name VHDL_FILE testbenches/register_test.vhd
-set_global_assignment -name VHDL_FILE "output_files/mux32-1.vhd"
-set_global_assignment -name VHDL_FILE output_files/MDR.vhd
-set_global_assignment -name VHDL_FILE "output_files/encoder32-5.vhd"
-set_global_assignment -name VHDL_FILE output_files/ALU.vhd
-set_global_assignment -name BDF_FILE cpu_design.bdf
 set_global_assignment -name EDA_TEST_BENCH_NAME CLA16_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id CLA16_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id CLA16_tb
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME CLA16_tb -section_id CLA16_tb
-set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
-set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
-set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_NAME Test1_tb -section_id eda_simulation
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id Test1_tb
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id Test1_tb
@@ -178,6 +129,169 @@ set_global_assignment -name EDA_TEST_BENCH_NAME Test13 -section_id eda_simulatio
 set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id Test13
 set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id Test13
 set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME Test13 -section_id Test13
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id phase_2_load
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id phase_2_load
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME load_tb -section_id Phase_2_load
+set_global_assignment -name EDA_TEST_BENCH_NAME Phase_2_load -section_id eda_simulation
+set_global_assignment -name EDA_TEST_BENCH_NAME SE -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id SE
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id SE
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME SE_tb -section_id SE
+set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
+set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
+set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_NAME load_i_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id load_i_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id load_i_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME load_i_tb -section_id load_i_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME load_i_2_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id load_i_2_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id load_i_2_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME load_i_2_tb -section_id load_i_2_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME store_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id store_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id store_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME store_tb -section_id store_tb
+set_global_assignment -name VHDL_FILE testbenches/store2_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/out_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/ori_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/mflo_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/mfhi_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/load2_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/jr_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/jal_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/in_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/brzr_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/brpl_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/brnz_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/brmi_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/andi_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/addi_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/SE_tb.vhd
+set_global_assignment -name VHDL_FILE output_files/RegEnMux.vhd
+set_global_assignment -name VHDL_FILE output_files/MDRMux2.vhd
+set_global_assignment -name MIF_FILE init_RAM.mif
+set_global_assignment -name VHDL_FILE output_files/CpuBus2.vhd
+set_global_assignment -name SOURCE_FILE RAM.cmp
+set_global_assignment -name VHDL_FILE RAM_inst.vhd
+set_global_assignment -name VHDL_FILE output_files/sel_and_encode.vhd
+set_global_assignment -name VHDL_FILE output_files/reg0.vhd
+set_global_assignment -name VHDL_FILE output_files/OutputPort.vhd
+set_global_assignment -name VHDL_FILE output_files/InputPort.vhd
+set_global_assignment -name VHDL_FILE output_files/CONFF.vhd
+set_global_assignment -name VHDL_FILE output_files/CLA4_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/CLA16_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/CLA4_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/CLA32_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/MUX_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/MDR_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Encoder_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/ALU_tb.vhd
+set_global_assignment -name VHDL_FILE output_files/IncPC.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test13_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test12_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test11_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test10_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test9_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test8_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test7_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test6_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test5_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test4_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test3_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test2_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/Test1_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/DataPathtb.vhd
+set_global_assignment -name VHDL_FILE output_files/CpuBus.vhd
+set_global_assignment -name VHDL_FILE output_files/Mul32.vhd
+set_global_assignment -name VHDL_FILE output_files/Div32.vhd
+set_global_assignment -name VHDL_FILE output_files/Sub32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shra32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shr32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shla32.vhd
+set_global_assignment -name VHDL_FILE output_files/Shl32.vhd
+set_global_assignment -name VHDL_FILE output_files/Ror32.vhd
+set_global_assignment -name VHDL_FILE output_files/Rol32.vhd
+set_global_assignment -name VHDL_FILE output_files/Or32.vhd
+set_global_assignment -name VHDL_FILE output_files/Not32.vhd
+set_global_assignment -name VHDL_FILE output_files/Neg32.vhd
+set_global_assignment -name VHDL_FILE output_files/CLA32.vhd
+set_global_assignment -name VHDL_FILE output_files/CLA16.vhd
+set_global_assignment -name VHDL_FILE output_files/CLA4.vhd
+set_global_assignment -name VHDL_FILE output_files/And32.vhd
+set_global_assignment -name VHDL_FILE output_files/register.vhd
+set_global_assignment -name VHDL_FILE testbenches/register_test.vhd
+set_global_assignment -name VHDL_FILE "output_files/mux32-1.vhd"
+set_global_assignment -name VHDL_FILE output_files/MDR.vhd
+set_global_assignment -name VHDL_FILE "output_files/encoder32-5.vhd"
+set_global_assignment -name VHDL_FILE output_files/ALU.vhd
+set_global_assignment -name BDF_FILE cpu_design.bdf
+set_global_assignment -name QIP_FILE RAM.qip
+set_global_assignment -name VHDL_FILE testbenches/Phase_2_load.vhd
+set_global_assignment -name VHDL_FILE testbenches/load_i_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/load_i_2_tb.vhd
+set_global_assignment -name VHDL_FILE testbenches/store_tb.vhd
+set_global_assignment -name EDA_TEST_BENCH_NAME load2_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id load2_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id load2_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME load2_tb -section_id load2_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME store2_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id store2_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id store2_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME store2_tb -section_id store2_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME addi_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id addi_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id addi_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME addi_tb -section_id addi_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME andi_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id andi_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME andi_tb -section_id andi_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id andi_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME ori_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id ori_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id ori_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME ori_tb -section_id ori_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME brzr_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id brzr_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id brzr_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME brzr_tb -section_id brzr_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME jr_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id jr_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id jr_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME jr_tb -section_id jr_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME jal_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id jal_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id jal_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME jal_tb -section_id jal_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME mfhi_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id mfhi_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id mfhi_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME mfhi_tb -section_id mfhi_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME mflo_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id mflo_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id mflo_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME mflo_tb -section_id mflo_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME out_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id out_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id out_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME out_tb -section_id out_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME in_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id in_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id in_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME in_tb -section_id in_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME brnz_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id brnz_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id brnz_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME brnz_tb -section_id brnz_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME brpl_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id brpl_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id brpl_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME brpl_tb -section_id brpl_tb
+set_global_assignment -name EDA_TEST_BENCH_NAME brmi_tb -section_id eda_simulation
+set_global_assignment -name EDA_DESIGN_INSTANCE_NAME NA -section_id brmi_tb
+set_global_assignment -name EDA_TEST_BENCH_RUN_SIM_FOR "500 ns" -section_id brmi_tb
+set_global_assignment -name EDA_TEST_BENCH_MODULE_NAME brmi_tb -section_id brmi_tb
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/register_test.vhd -section_id register_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/MDR_tb.vhd -section_id MDR_tb
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ALU_tb.vhd -section_id ALU_tb
@@ -197,5 +311,23 @@ set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test10_tb.vhd -secti
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test11_tb.vhd -section_id Test11
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test12_tb.vhd -section_id Test12
 set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Test13_tb.vhd -section_id Test13
-set_global_assignment -name QIP_FILE RAM.qip
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/Phase_2_load.vhd -section_id Phase_2_load
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/SE_tb.vhd -section_id SE
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/load_i_tb.vhd -section_id load_i_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/load_i_2_tb.vhd -section_id load_i_2_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/store_tb.vhd -section_id store_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/load2_tb.vhd -section_id load2_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/store2_tb.vhd -section_id store2_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/addi_tb.vhd -section_id addi_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/andi_tb.vhd -section_id andi_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/ori_tb.vhd -section_id ori_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/brzr_tb.vhd -section_id brzr_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/jr_tb.vhd -section_id jr_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/jal_tb.vhd -section_id jal_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/mfhi_tb.vhd -section_id mfhi_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/mflo_tb.vhd -section_id mflo_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/out_tb.vhd -section_id out_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/in_tb.vhd -section_id in_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/brnz_tb.vhd -section_id brnz_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/brpl_tb.vhd -section_id brpl_tb
+set_global_assignment -name EDA_TEST_BENCH_FILE testbenches/brmi_tb.vhd -section_id brmi_tb

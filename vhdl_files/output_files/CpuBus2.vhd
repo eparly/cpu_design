@@ -9,6 +9,8 @@ port(
     MDRRead : in std_logic; --from control unit, MDRout maps to encoder, MDRRead maps to MDR's MUX as the control signal
     --opcode signals from control unit (single bit)
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
+	 --be able to set carry in bit to 1 for adder (for branch instructions PC<-PC + C + 1)
+	 AddCin_sig: std_logic;
 	 --signal from the Control Unit for the select and encode logic
 	 gra, grb, grc, rin, rout, baout : in std_logic;
 	 --RAM enable signals
@@ -94,6 +96,7 @@ component ALU is
 port(
 --    signal clk: in std_logic;
 --    signal clear: in std_logic;
+    AddCin_sig: std_logic;
 
     AReg, BReg: in std_logic_vector(31 downto 0);
 --replacing the opcode with individual signals
@@ -202,7 +205,7 @@ BusMUX : mux32 port map(sel => encoderOutput, bus_mux_in_0 => R0in,bus_mux_in_1 
 --RAM
 RAM1 : RAM port map(address => MARin(8 downto 0), clock => wireclk, data => MDRin, rden => wireRAMReadEn, wren => wireRAMWriteEn, q => wireFromRAM);
 --ALU
-ALU1 : ALU port map(AReg => Yin, BReg => BusMuxOut, And_sig => wireAnd_sig, Or_sig => wireOr_sig, Add_sig => wireAdd_sig, Sub_sig => wireSub_sig, Mul_sig => wireMul_sig, Div_sig => wireDiv_sig, Shr_sig => wireShr_sig, Shl_sig => wireShl_sig, Shra_sig => wireShra_sig, Ror_sig => wireRor_sig, Rol_sig => wireRol_sig, Neg_sig => wireNeg_sig, Not_sig => wireNot_sig, IncPC_sig => wireIncPC_sig, ZReg => ZOut);
+ALU1 : ALU port map(AddCin_sig => AddCin_sig, AReg => Yin, BReg => BusMuxOut, And_sig => wireAnd_sig, Or_sig => wireOr_sig, Add_sig => wireAdd_sig, Sub_sig => wireSub_sig, Mul_sig => wireMul_sig, Div_sig => wireDiv_sig, Shr_sig => wireShr_sig, Shl_sig => wireShl_sig, Shra_sig => wireShra_sig, Ror_sig => wireRor_sig, Rol_sig => wireRol_sig, Neg_sig => wireNeg_sig, Not_sig => wireNot_sig, IncPC_sig => wireIncPC_sig, ZReg => ZOut);
 --all (for now) registers
 R0 : reg0 port map(reg_input => BusMuxOut, clk => wireclk, clear => wireclear, baout => wirebaout, writeEnable => R0EnFinal, reg_out => R0in);
 R1 : reg port map(reg_input =>BusMuxOut, clk => wireclk, clear => wireclear, writeEnable => R1EnFinal, reg_out => R1in);

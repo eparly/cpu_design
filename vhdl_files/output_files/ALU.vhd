@@ -10,6 +10,7 @@ port(
 --replacing the opcode with individual signals
     And_sig, Or_sig, Add_sig, Sub_sig, Mul_sig, Div_sig, Shr_sig, Shl_sig, Shra_sig, Ror_sig, Rol_sig, Neg_sig, Not_sig, IncPC_sig: in std_logic;
 
+	 AddCin_sig: std_logic;
     ZReg: out std_logic_vector(63 downto 0)
 );
 end entity;
