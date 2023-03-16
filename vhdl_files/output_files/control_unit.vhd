@@ -1,14 +1,13 @@
-library ieee;
-use ieee.std_logic.all;
+library IEEE;
+use IEEE.std_logic_1164.all;
 
 entity control_unit is
 port(Clock, Reset, Stop, CONFF: in std_logic;
 		Run, Clear: out std_logic;
 		IR: in std_logic_vector(31 downto 0);
-		ram_read, ram_write: std_logic;
+		ram_read, ram_write: out std_logic;
 		Gra, Grb, Grc, Rin, Rout: out std_logic;
-		HIin, LOin, CONin, CONout PCin, IRin, Yin, Zin, IncPC, MARin, MDRin, OutPortin, InPortin, Cout, BAout: out std_logic;
-		Rin, Rout, Gra, Grb, Grc: out std_logic;
+		HIin, LOin, CONin, PCin, IRin, Yin, Zin, IncPC, MARin, MDRin, OutPortin, InPortin, Cout, BAout: out std_logic;
 		PCout, MDRout, Zhighout, Zlowout, HIout, LOout: out std_logic;
 		Add_Sig, Sub_Sig, And_Sig, Or_Sig, 
 		SHR_Sig, SHL_Sig, ROTR_Sig, ROTL_Sig,
@@ -29,7 +28,7 @@ TYPE State IS (Fetch0, fetch1, fetch2,
 						And3, And4, And5,
 						Or3, Or4, Or5,
 						SHR3, SHR4, SHR5,
-						SHRA3, SHRA4, SHR5,
+						SHRA3, SHRA4, SHRA5,
 						SHL3, SHL4, SHL5,
 						RotR3, RotR4, RotR5,
 						RotL3, RotL4, RotL5,
@@ -40,7 +39,7 @@ TYPE State IS (Fetch0, fetch1, fetch2,
 						div3, div4, div5, div6,
 						neg3, neg4, neg5,
 						not3, not4, not5,
-						br3, br4,
+						br3, br4, br5, br6,
 						jr3,
 						jal3, jal4, jal5,
 						in3,
@@ -68,7 +67,7 @@ begin
 				case IR(31 downto 27) is
 					when "00000" =>
 						present_state <= load3;
-					when "00010" =>
+					when "00001" =>
 						present_state <= loadi3;
 					when "00010" => 
 						present_state <= store3;
@@ -80,7 +79,7 @@ begin
 						present_state <= and3;
 					when "00110" =>
 						present_state <= or3;
-					when "0111" =>
+					when "00111" =>
 						present_state <= shr3;
 					when "01000" =>
 						present_state <= shra3;
@@ -92,7 +91,7 @@ begin
 						present_state <= rotL3;
 					when "01100" =>
 						present_state <= addi3;
-					when "01110" => 
+					when "01101" => 
 						present_state <= andi3;
 					when "01110" =>
 						present_state <= ori3;
@@ -266,11 +265,13 @@ begin
 				Present_State <= fetch0;
 			-------------------------------------------	
 			when br3 =>
-				if (con_ff = '1') then
-					Present_State <= br4;
-				else
-					Present_State <= fetch0;
-				end if;	
+				Present_State <= br4;
+			when br4 =>
+				present_State <= br5;
+			when br5 =>
+				present_State <= br6;
+			when br6 =>
+				present_State <= fetch0;
 			-------------------------------------------	
 			when jr3 =>
 				Present_State <= fetch0;
@@ -298,6 +299,7 @@ begin
 				Present_State <= halt;
 			when others =>
 		end case;
+	end if;
 end process;
 
 process(present_State) is 
@@ -578,7 +580,7 @@ begin
 			Cout <='0'; Add_Sig <='0'; Zin <='0';
 			
 			Zlowout <='1';
-			if(CONout = '1') then
+			if(CONFF = '1') then
 				PCin <='1';
 			else
 				PCin <='0';
@@ -626,31 +628,5 @@ begin
 		when others =>
 		
 	end case;
-end process;
-end architecture;
-		
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-end behavior;
-			
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+end process;			
+end behavior;		
