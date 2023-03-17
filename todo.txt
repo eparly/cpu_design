@@ -1,4 +1,5 @@
 PHASE 3
 
 - still have to add in SHRA instruction to the control unit
-- Currently working on the CpuBus3 implementation, as well as cleaning up some other things
+- Initial CpuBus3 done, probably still needs works
+- may run into issues with the control unit, might have to implement a 'final' state similar to the testbenches to deassert all signals at the end, I don't think the current method would work

@@ -8,11 +8,11 @@ port(Clock, Reset, Stop, CONFF: in std_logic;
 		ram_read, ram_write: out std_logic;
 		Gra, Grb, Grc, Rin, Rout: out std_logic;
 		HIin, LOin, CONin, PCin, IRin, Yin, Zin, IncPC, MARin, MDRin, OutPortin, InPortin, Cout, BAout: out std_logic;
-		PCout, MDRout, Zhighout, Zlowout, HIout, LOout: out std_logic;
+		PCout, MDRout, Zhighout, Zlowout, HIout, LOout, PORTout: out std_logic;
 		Add_Sig, Sub_Sig, And_Sig, Or_Sig, 
 		SHR_Sig, SHL_Sig, ROTR_Sig, ROTL_Sig,
 		Mul_Sig, Div_Sig, Neg_Sig, Not_Sig: out std_logic;
-		Read_sig, Write_sig: out std_logic);
+		Read_sig: out std_logic);
 end control_unit;
 
 architecture behavior of control_unit is
@@ -309,11 +309,11 @@ begin
 			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
 			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
 			Rin <= '0'; Rout <= '0'; Gra <= '0'; Grb <= '0'; Grc <= '0';
-			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0';
+			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0'; PORTout <= '0';
 			Add_Sig <= '0'; Sub_Sig <= '0'; And_Sig <= '0'; Or_Sig <= '0'; 
 			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0';
 			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
-			Read_sig <= '0'; Write_sig <= '0';
+			Read_sig <= '0';
 	case present_State is 
 		when reset_State =>
 			clear <='1'; run <='0';
@@ -603,7 +603,7 @@ begin
 		when in3 =>
 			MDRout <='0'; IRin <='0';
 			
-			Gra <='1'; Rin <='1'; Inportin <='1';
+			Gra <='1'; Rin <='1'; PORTout <='1';
 		----------------------------------------------
 		when out3 =>
 			MDRout <='0'; IRin <='0';
