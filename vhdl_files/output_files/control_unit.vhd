@@ -379,7 +379,7 @@ begin
 			Cout <= '0'; Add_Sig<='0'; Zin <='0';
 			
 			Zlowout <= '1'; MARin <='1'; --might need to add more states to reflect the testbench, unsure because we loaded back
-												  -- after storing, so this might need to change
+												  -- after storing, so this might need to change <--- we can check memory in Model Sim
 		-----------------------------------
 		when add3 => --we didnt have a testbench for the form add r1, r2, r3, this is my best shot at it
 			MDRout <='0'; IRin <='0';
