@@ -18,7 +18,7 @@ end control_unit;
 architecture behavior of control_unit is
 TYPE State IS (Fetch0, fetch1, fetch2, 
 						load3, load4, load5, load6, load61, load62, load63, load7,
-						loadi3, loadi4, loadi5,
+						loadi3, loadi_delay, loadi4, loadi5,
 						store3, store4, store5,
 						loadr3, loadr4, loadr5, 
 						loadr61, loadr62, loadr63, loadr7,
@@ -142,6 +142,8 @@ begin
 				Present_State <= fetch0;
 			-------------------------------------------
 			when loadi3 =>
+				Present_State <= loadi_delay;
+			when loadi_delay =>
 				Present_State <= loadi4;
 			when loadi4 =>
 				Present_State <= loadi5;
@@ -325,7 +327,15 @@ begin
 		when reset_State =>
 			clear <='1'; run <='0';
 		when fetch0 =>
-			MDRout <='0'; Gra <='0'; Rin <='0'; -- deasserting final state of previous operation
+			Gra <= '0'; Grb <= '0'; Grc <= '0'; Rin <= '0'; Rout <= '0';
+			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
+			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
+			Rin <= '0'; Rout <= '0'; Gra <= '0'; Grb <= '0'; Grc <= '0';
+			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0'; PORTout <= '0';
+			Add_Sig <= '0'; Sub_Sig <= '0'; And_Sig <= '0'; Or_Sig <= '0'; 
+			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0';
+			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
+			Read_sig <= '0';
 		
 			PCout <='1'; MARin <='1'; INCPC <='1'; Zin <='1';
 		when fetch1 =>
@@ -364,7 +374,9 @@ begin
 		when loadi3 =>
 			MDRout <='0'; IRin <='0';
 			
-			Grb <='1'; BAout <='1'; Yin <='1';
+			Grb <='1'; BAout <='1';
+		when loadi_delay =>
+			Yin <= '1';
 		when loadi4 =>
 			Grb <='0'; BAout <='0'; Yin <='0';
 			

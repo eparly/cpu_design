@@ -3,13 +3,14 @@ use IEEE.std_logic_1164.all;
 
 entity CpuBus3 is 
 port( 
-    clk, clear, reset, stop: in std_logic;
+    clk, reset, stop: in std_logic;
 	 
     --ports for the outputs of the registers (used for the testbenches only) Test ports
     R0Data, R1Data, R2Data, R3Data, R4Data, R5Data, R6Data, R7Data, R8Data, R9Data, R10Data, R11Data, R12Data, R13Data, R14Data, R15Data, MDRData, YData, ZLODATA, ZHIData, HIData, LOData, PCData, IRData, CData, Buscontents: out std_logic_vector(31 downto 0);
 	 Encodercontents : out std_logic_vector(4 downto 0);
 	 RamOutput, RamAddress, EncodercontentsIN : out std_logic_vector(31 downto 0);
 	 CONFFout : out std_logic;
+	 run, clear : out std_logic;
 	 --i dont really know what to do about the data regarding the in and output ports right now, so for now they will be signals to and from the CPUBUS
 	 OutportData : out std_logic_vector(31 downto 0);
 	 IncomingData : in std_logic_vector(31 downto 0)
@@ -18,7 +19,7 @@ end CpuBus3;
 
 architecture behavior of CpuBus3 is
 
-signal wireclk, wireclear, wirereset, wirestop, wireMDRRead, wireRAMReadEn, wireRAMWriteEn, wireHIEn, wireLOEn, wireZEn, wirePCEn, wireIREn, wireMDREn, wireinPORTEn, wireoutPORTEn, wireYEn, wireMAREn, wireCONFFEn, wireCONFFpassed, wiregra, wiregrb, wiregrc, wirerin, wirerout, wirebaout, wireCout, wirePCout, wireMDRout, wireZHIout, wireZLOout, wireHIout, wireLOout, wirePORTout, wireAnd_sig, wireOr_sig, wireAdd_sig, wireSub_sig, wireMul_sig, wireDiv_sig, wireShr_sig, wireShl_sig, wireShra_sig, wireRor_sig, wireRol_sig, wireNeg_sig, wireNot_sig, wireIncPC_sig : std_logic;
+signal wireclk, wireclear, wirerun, wirereset, wirestop, wireMDRRead, wireRAMReadEn, wireRAMWriteEn, wireHIEn, wireLOEn, wireZEn, wirePCEn, wireIREn, wireMDREn, wireinPORTEn, wireoutPORTEn, wireYEn, wireMAREn, wireCONFFEn, wireCONFFpassed, wiregra, wiregrb, wiregrc, wirerin, wirerout, wirebaout, wireCout, wirePCout, wireMDRout, wireZHIout, wireZLOout, wireHIout, wireLOout, wirePORTout, wireAnd_sig, wireOr_sig, wireAdd_sig, wireSub_sig, wireMul_sig, wireDiv_sig, wireShr_sig, wireShl_sig, wireShra_sig, wireRor_sig, wireRol_sig, wireNeg_sig, wireNot_sig, wireIncPC_sig : std_logic;
 signal SEin, SEout : std_logic_vector(15 downto 0);
 signal encoderOutput : std_logic_vector(4 downto 0);
 signal wireMemDatain, encoderInput, BusMuxOut, CSE, R0in, R1in, R2in, R3in, R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, R13in, R14in, R15in, HIin, LOin, ZHIin, ZLOin, PCin, IRin, Yin, InPortin, OutPortin, InPortInput, MDRin, MARin : std_logic_vector(31 downto 0);
@@ -154,7 +155,7 @@ component RegEnMux is
 end component;
 
 begin
-CU: control_unit port map(clock => wireclk, Reset => wirereset, Stop => wirestop, CONFF => wireCONFFpassed, IR => IRin, ram_read => wireRAMReadEn, ram_write => wireRAMWriteEn, Gra => wiregra, Grb => wiregrb, Grc => wiregrc, Rin => wirerin, Rout => wirerout, HIin => wireHIEn, LOin => wireLOEn, CONin => wireCONFFEn, PCin => wirePCEn, IRin => wireIREn, Yin => wireYEn, Zin => wireZEn, MarIn => wireMAREn, MDRin => wireMDREn, OutPortin => wireoutPORTEn, InPORTin => wireinPORTEn, Cout => wireCout, Baout => wirebaout, PCout => wirePCout, MDRout => wireMDRout, Zhighout => wireZHIout, Zlowout => wireZLOout, HIout => wireHIout, LOout => wireLOout, PORTout => wirePORTout, Add_Sig => wireAdd_sig, Sub_Sig => wireSub_sig, And_Sig => wireAnd_sig, Or_Sig => wireOr_sig, SHR_Sig => wireShr_sig, SHL_sig => wireShl_sig, ROTR_Sig => wireRor_sig, ROTL_Sig => wireRol_sig, MUL_Sig => wireMul_sig, DIV_Sig => wireDiv_sig, Neg_Sig => wireNeg_sig, Not_Sig => wireNot_sig, IncPC => wireIncPC_sig, Read_sig => wireMDRRead);
+CU: control_unit port map(clock => wireclk, clear => wireclear, run => wirerun, Reset => wirereset, Stop => wirestop, CONFF => wireCONFFpassed, IR => IRin, ram_read => wireRAMReadEn, ram_write => wireRAMWriteEn, Gra => wiregra, Grb => wiregrb, Grc => wiregrc, Rin => wirerin, Rout => wirerout, HIin => wireHIEn, LOin => wireLOEn, CONin => wireCONFFEn, PCin => wirePCEn, IRin => wireIREn, Yin => wireYEn, Zin => wireZEn, MarIn => wireMAREn, MDRin => wireMDREn, OutPortin => wireoutPORTEn, InPORTin => wireinPORTEn, Cout => wireCout, Baout => wirebaout, PCout => wirePCout, MDRout => wireMDRout, Zhighout => wireZHIout, Zlowout => wireZLOout, HIout => wireHIout, LOout => wireLOout, PORTout => wirePORTout, Add_Sig => wireAdd_sig, Sub_Sig => wireSub_sig, And_Sig => wireAnd_sig, Or_Sig => wireOr_sig, SHR_Sig => wireShr_sig, SHL_sig => wireShl_sig, ROTR_Sig => wireRor_sig, ROTL_Sig => wireRol_sig, MUL_Sig => wireMul_sig, DIV_Sig => wireDiv_sig, Neg_Sig => wireNeg_sig, Not_Sig => wireNot_sig, IncPC => wireIncPC_sig, Read_sig => wireMDRRead);
 --CONFF
 CONFF1 : CONFF port map(BusInput => BusMuxOut, CONFFEn => wireCONFFEn, IRbits => IRin(20 downto 19), passed => wireCONFFpassed);
 --sel and encode
@@ -195,10 +196,10 @@ RINPORT : reg port map(reg_input =>InportInput, clk => wireclk, clear => wirecle
 YReg : reg port map(reg_input =>BusMuxOut, clk => wireclk, clear => wireclear, writeEnable => wireYEn, reg_out => Yin);
 MARReg : reg port map(reg_input =>BusMuxOut, clk => wireclk, clear => wireclear, writeEnable => wireMAREn, reg_out => MARin);
 --special MDR register
-RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => wireMemDatain, sel => wireMDRRead, MDROut=> MDRin, clk => clk, clear=> clear, writeEnable=> wireMDREn);
+RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => wireMemDatain, sel => wireMDRRead, MDROut=> MDRin, clk => clk, clear=> wireclear, writeEnable=> wireMDREn);
 
 --ports recieve the register outputs
-process (clk, clear, reset, stop, R0in, R1in, R2in, R3in, 
+process (clk, wireclear, reset, stop, R0in, R1in, R2in, R3in, 
 R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, 
 R13in, R14in, R15in, PCin, Yin, CSE) is
 
@@ -207,7 +208,8 @@ CONFFout <= wireCONFFpassed;
 wirereset <= reset;
 wirestop <= stop;
 wireclk <= clk;
-wireclear <= clear;
+clear <= wireclear;
+run <= wirerun;
 --test signals
 R0Data <= R0in;
 R1Data <= R1in;
