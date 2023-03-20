@@ -447,6 +447,19 @@ begin
 			
 			Zlowout <='1'; Rin <='1'; Gra <='1';
 		-------------------------------------------		
+		when SHRA3 => 
+			MDRout <='0'; IRin <='0';
+		
+			Rout <='1'; Grb <='1'; Yin <='1';
+		when SHRA4 =>
+			Rout <='0'; Grb <='0'; Yin <='0';
+			
+			Rout <='1'; Grc <='1'; SHRA_Sig <='1'; Zin <='1';
+		when SHRA5 =>
+			Rout <='0'; Grc <='0'; SHRA_Sig <='0'; Zin <='0';
+			
+			Zlowout <='1'; Rin <='1'; Gra <='1';
+		-------------------------------------------	
 		when SHL3 => 
 			MDRout <='0'; IRin <='0';
 		
