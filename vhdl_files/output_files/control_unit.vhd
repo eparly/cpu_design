@@ -10,7 +10,7 @@ port(Clock, Reset, Stop, CONFF: in std_logic;
 		HIin, LOin, CONin, PCin, IRin, Yin, Zin, IncPC, MARin, MDRin, OutPortin, InPortin, Cout, BAout: out std_logic;
 		PCout, MDRout, Zhighout, Zlowout, HIout, LOout, PORTout: out std_logic;
 		Add_Sig, Sub_Sig, And_Sig, Or_Sig, 
-		SHR_Sig, SHL_Sig, ROTR_Sig, ROTL_Sig,
+		SHR_Sig, SHRA_Sig, SHL_Sig, ROTR_Sig, ROTL_Sig,
 		Mul_Sig, Div_Sig, Neg_Sig, Not_Sig: out std_logic;
 		Read_sig: out std_logic);
 end control_unit;
@@ -188,6 +188,13 @@ begin
 			when SHR4 =>
 				Present_State <= SHR5;
 			when SHR5 =>
+				Present_State <= fetch0;	
+			-------------------------------------------
+			when SHRA3 =>
+				Present_State <= SHRA4;
+			when SHRA4 =>
+				Present_State <= SHRA5;
+			when SHRA5 =>
 				Present_State <= fetch0;	
 			-------------------------------------------
 			when SHL3 =>
