@@ -16,7 +16,7 @@ port(Clock, Reset, Stop, CONFF: in std_logic;
 end control_unit;
 
 architecture behavior of control_unit is
-TYPE State IS (Fetch0, fetch1, fetch2, 
+TYPE State IS (Fetch0, fetch1, fetchD1, fetchD2, fetchD3, fetch2, 
 						load3, load4, load5, load6, load61, load62, load63, load7,
 						loadi3, loadi_delay, loadi4, loadi5,
 						store3, store4, store5,
@@ -51,17 +51,23 @@ TYPE State IS (Fetch0, fetch1, fetch2,
 						Reset_State);
 Signal present_state: state;
 begin
-process(clock, reset)
+process(clock, reset, stop)
 begin
 	if(Reset='1') then
 		present_state <= reset_State;
-	elsif(clock'event and clock='1') then
+	elsif(rising_edge(clock) and stop = '0') then
 		case present_state is 
 			when reset_State =>
 				present_state <= fetch0;
 			when fetch0 =>
 				present_state <= fetch1;
 			when fetch1 =>
+				present_state <= fetchD1;
+			when fetchD1 =>
+				present_state <= fetchD2;
+			when fetchD2 => 
+				present_state <= fetchD3;
+			when fetchD3 =>
 				present_state <= fetch2;
 			when fetch2 =>
 				case IR(31 downto 27) is
@@ -137,7 +143,6 @@ begin
 				Present_State <= load63;
 			when load63 =>
 				Present_State <= load7;
-			
 			when load7 =>
 				Present_State <= fetch0;
 			-------------------------------------------
@@ -313,20 +318,9 @@ end process;
 
 process(present_State) is 
 begin
-			clear <= '0'; run <= '1';
-			Gra <= '0'; Grb <= '0'; Grc <= '0'; Rin <= '0'; Rout <= '0';
-			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
-			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
-			Rin <= '0'; Rout <= '0'; Gra <= '0'; Grb <= '0'; Grc <= '0';
-			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0'; PORTout <= '0';
-			Add_Sig <= '0'; Sub_Sig <= '0'; And_Sig <= '0'; Or_Sig <= '0'; 
-			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0';
-			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
-			Read_sig <= '0';
 	case present_State is 
 		when reset_State =>
 			clear <='1'; run <='0';
-		when fetch0 =>
 			Gra <= '0'; Grb <= '0'; Grc <= '0'; Rin <= '0'; Rout <= '0';
 			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
 			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
@@ -336,8 +330,18 @@ begin
 			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0';
 			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
 			Read_sig <= '0';
-		
-			PCout <='1'; MARin <='1'; INCPC <='1'; Zin <='1';
+		when fetch0 =>		
+			PCout <='1'; MARin <='1'; INCPC <='1'; Zin <='1'; Run <= '1'; clear <= '0';
+			
+			Gra <= '0'; Grb <= '0'; Grc <= '0'; Rin <= '0'; Rout <= '0';
+			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
+			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
+			Rin <= '0'; Rout <= '0'; Gra <= '0'; Grb <= '0'; Grc <= '0';
+			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0'; PORTout <= '0';
+			Add_Sig <= '0'; Sub_Sig <= '0'; And_Sig <= '0'; Or_Sig <= '0'; 
+			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0';
+			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
+			Read_sig <= '0';
 		when fetch1 =>
 			PCout <='0'; MARin <='0'; INCPC <='0'; Zin <='0';
 			
@@ -374,11 +378,16 @@ begin
 		when loadi3 =>
 			MDRout <='0'; IRin <='0';
 			
-			Grb <='1'; BAout <='1';
+			Grb <='1';
+			if(IR(22 downto 19) = "0000") then
+				rout <= '1';
+			else
+				BAout <='1';
+			end if;
 		when loadi_delay =>
-			Yin <= '1';
+			Yin <= '1'; IncPC <= '1';
 		when loadi4 =>
-			Grb <='0'; BAout <='0'; Yin <='0';
+			Grb <='0'; BAout <='0'; rout <= '0'; Yin <='0';
 			
 			Cout <= '1'; Add_Sig<='1'; Zin <='1';
 		when loadi5 =>

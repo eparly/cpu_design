@@ -13,7 +13,9 @@ port(
 	 run, clear : out std_logic;
 	 --i dont really know what to do about the data regarding the in and output ports right now, so for now they will be signals to and from the CPUBUS
 	 OutportData : out std_logic_vector(31 downto 0);
-	 IncomingData : in std_logic_vector(31 downto 0)
+	 IncomingData : in std_logic_vector(31 downto 0);
+	 --so we can debug wtf is going on with the CU
+	 Gra_DB, Grb_DB, Grc_DB, Rin_DB, Rout_DB, HIin_DB, LOin_DB, CONin_DB, PCin_DB, IRin_DB, Yin_DB, Zin_DB, IncPC_DB, MARin_DB, MDRin_DB, OutPortin_DB, InPortin_DB, Cout_DB, BAout_DB, PCout_DB, MDRout_DB, Zhighout_DB, Zlowout_DB, HIout_DB, LOout_DB, PORTout_DB, ram_read_DB, ram_write_DB, Add_Sig_DB, Sub_Sig_DB, And_Sig_DB, Or_Sig_DB, SHR_Sig_DB, SHL_Sig_DB, ROTR_Sig_DB, ROTL_Sig_DB, Mul_Sig_DB, Div_Sig_DB, Neg_Sig_DB, Not_Sig_DB, Read_sig_DB : out std_logic
 );
 end CpuBus3;
 
@@ -199,17 +201,18 @@ MARReg : reg port map(reg_input =>BusMuxOut, clk => wireclk, clear => wireclear,
 RMDR : MDR port map(BusInput => BusMuxOut, MemDataIn => wireMemDatain, sel => wireMDRRead, MDROut=> MDRin, clk => clk, clear=> wireclear, writeEnable=> wireMDREn);
 
 --ports recieve the register outputs
-process (clk, wireclear, reset, stop, R0in, R1in, R2in, R3in, 
+process (clk, reset, stop, R0in, R1in, R2in, R3in, 
 R4in, R5in, R6in, R7in, R8in, R9in, R10in, R11in, R12in, 
-R13in, R14in, R15in, PCin, Yin, CSE) is
+R13in, R14in, R15in, PCin, Yin, CSE, wireCONFFpassed, ZLOin, ZHIin, MDRin, HIin, LOin, IRin, OutPortin,
+IncomingData, MARIn) is
 
 begin
 CONFFout <= wireCONFFpassed;
 wirereset <= reset;
 wirestop <= stop;
 wireclk <= clk;
-clear <= wireclear;
-run <= wirerun;
+--clear <= wireclear;
+--run <= wirerun;
 --test signals
 R0Data <= R0in;
 R1Data <= R1in;
@@ -265,5 +268,56 @@ encoderInput(23) <= wireCout;
 --test signals
 EncodercontentsIN <= EncoderInput;
 Encodercontents <= EncoderOutput;
+end process;
+
+--special debugging process
+process(wiregra, wireclear, wirerun, wiregrb, wiregrc, wirerin, wirerout, wirebaout, wireCout, wirePCout, wireMDRout, wireZHIout, 
+wireZLOout, wireHIout, wireLOout, wirePORTout, wireRAMWriteEn, wireRAMReadEn, wireHIEn, wireLOEn, wireCONFFEn, wirePCEn,
+wireIREn, wireZEn, wireYEn, wireMDREn, wireMAREn, wireoutPORTEn, wireinPORTEn, wireMDRRead, wireAnd_sig, wireOr_sig, 
+wireAdd_sig, wireSub_sig, wireMul_sig, wireDiv_sig, wireShr_sig, wireShl_sig, wireRor_sig, wireRol_sig, wireNeg_sig, wireNot_sig, wireIncPC_sig)
+begin
+clear <= wireclear;
+run <= wirerun;
+Gra_DB <= wiregra;
+Grb_DB <= wiregrb;
+Grc_DB <= wiregrc;
+Rin_DB <= wirerin;
+Rout_DB <= wirerout;
+HIin_DB <= wireHIEn;
+LOin_DB <= wireLOEn;
+CONin_DB <= wireCONFFEn;
+PCin_DB <= wirePCEn;
+IRin_DB <= wireIREn;
+Yin_DB <= wireYEn;
+Zin_DB <= wireZEn;
+IncPC_DB <= wireIncPC_sig;
+MARin_DB <= wireMAREn;
+MDRin_DB <= wireMDREn;
+OutPortin_DB <= wireoutPORTEn;
+InPortin_DB <= wireinPORTEn;
+Cout_DB <= wireCout;
+BAout_DB <= wirebaout;
+PCout_DB <= wirePCout;
+MDRout_DB <= wireMDRout;
+Zhighout_DB <= wireZHIout;
+Zlowout_DB <= wireZLOout;
+HIout_DB <= wireHIout;
+LOout_DB <= wireLOout;
+PORTout_DB <= wirePORTout;
+ram_read_DB <= wireRAMReadEn;
+ram_write_DB <= wireRAMWriteEn;
+Add_Sig_DB <= wireAdd_sig;
+Sub_Sig_DB <= wireSub_sig;
+And_Sig_DB <= wireAnd_sig;
+Or_Sig_DB <= wireOr_sig;
+SHR_Sig_DB <= wireShr_sig;
+SHL_Sig_DB <= wireShl_sig;
+ROTR_Sig_DB <= wireRor_sig;
+ROTL_Sig_DB <= wireRol_sig;
+Mul_Sig_DB <= wireMul_sig;
+Div_Sig_DB <= wireDiv_sig;
+Neg_Sig_DB <= wireNeg_sig;
+Not_Sig_DB <= wireNot_sig;
+Read_sig_DB <= wireMDRRead;
 end process;
 end behavior;
