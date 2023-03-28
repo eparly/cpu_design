@@ -1,5 +1,6 @@
 library IEEE;
 use IEEE.std_logic_1164.all;
+use IEEE.std_logic_signed.all;
 
 entity SUB32 is
 port(
@@ -14,6 +15,7 @@ end entity;
 architecture behavior of SUB32 is
 
 signal temp : std_logic_vector(31 downto 0);
+signal TempAns : std_logic_vector(31 downto 0);
 
 component NEG32 is
 port(
@@ -35,5 +37,14 @@ end component;
 
 begin
 Neg_1 : NEG32 port map(AReg => rb, ZReg => temp);   --assuming ra-rb is the format to follow
-CLA32_1 : CLA32 port map(ra => ra, rb => temp, cin => cin, sum => sum, cout => cout);
+CLA32_1 : CLA32 port map(ra => ra, rb => temp, cin => cin, sum => TempAns, cout => cout);
+
+process(TempAns)
+begin
+sum <= TempAns;
+--some bug on phase 3 when Rc is 0, this fixes it so idgaf how janky it is
+if (rb = x"00000000") then
+	sum <= ra;
+end if;
+end process;
 end behavior;

@@ -15,7 +15,7 @@ port(
 	 OutportData : out std_logic_vector(31 downto 0);
 	 IncomingData : in std_logic_vector(31 downto 0);
 	 --so we can debug wtf is going on with the CU
-	 Gra_DB, Grb_DB, Grc_DB, Rin_DB, Rout_DB, HIin_DB, LOin_DB, CONin_DB, PCin_DB, IRin_DB, Yin_DB, Zin_DB, IncPC_DB, MARin_DB, MDRin_DB, OutPortin_DB, InPortin_DB, Cout_DB, BAout_DB, PCout_DB, MDRout_DB, Zhighout_DB, Zlowout_DB, HIout_DB, LOout_DB, PORTout_DB, ram_read_DB, ram_write_DB, Add_Sig_DB, Sub_Sig_DB, And_Sig_DB, Or_Sig_DB, SHR_Sig_DB, SHL_Sig_DB, ROTR_Sig_DB, ROTL_Sig_DB, Mul_Sig_DB, Div_Sig_DB, Neg_Sig_DB, Not_Sig_DB, Read_sig_DB : out std_logic
+	 Gra_DB, Grb_DB, Grc_DB, Rin_DB, Rout_DB, HIin_DB, LOin_DB, CONin_DB, PCin_DB, IRin_DB, Yin_DB, Zin_DB, IncPC_DB, MARin_DB, MDRin_DB, OutPortin_DB, InPortin_DB, Cout_DB, BAout_DB, PCout_DB, MDRout_DB, Zhighout_DB, Zlowout_DB, HIout_DB, LOout_DB, PORTout_DB, ram_read_DB, ram_write_DB, Add_Sig_DB, Sub_Sig_DB, And_Sig_DB, Or_Sig_DB, SHR_Sig_DB, SHL_Sig_DB, SHRA_Sig_DB, ROTR_Sig_DB, ROTL_Sig_DB, Mul_Sig_DB, Div_Sig_DB, Neg_Sig_DB, Not_Sig_DB, Read_sig_DB : out std_logic
 );
 end CpuBus3;
 
@@ -37,7 +37,7 @@ port(Clock, Reset, Stop, CONFF: in std_logic;
 		HIin, LOin, CONin, PCin, IRin, Yin, Zin, IncPC, MARin, MDRin, OutPortin, InPortin, Cout, BAout: out std_logic;
 		PCout, MDRout, Zhighout, Zlowout, HIout, LOout, PORTout: out std_logic;
 		Add_Sig, Sub_Sig, And_Sig, Or_Sig, 
-		SHR_Sig, SHL_Sig, ROTR_Sig, ROTL_Sig,
+		SHR_Sig, SHL_Sig, SHRA_sig, ROTR_Sig, ROTL_Sig,
 		Mul_Sig, Div_Sig, Neg_Sig, Not_Sig: out std_logic;
 		Read_sig: out std_logic);
 end component;
@@ -157,7 +157,7 @@ component RegEnMux is
 end component;
 
 begin
-CU: control_unit port map(clock => wireclk, clear => wireclear, run => wirerun, Reset => wirereset, Stop => wirestop, CONFF => wireCONFFpassed, IR => IRin, ram_read => wireRAMReadEn, ram_write => wireRAMWriteEn, Gra => wiregra, Grb => wiregrb, Grc => wiregrc, Rin => wirerin, Rout => wirerout, HIin => wireHIEn, LOin => wireLOEn, CONin => wireCONFFEn, PCin => wirePCEn, IRin => wireIREn, Yin => wireYEn, Zin => wireZEn, MarIn => wireMAREn, MDRin => wireMDREn, OutPortin => wireoutPORTEn, InPORTin => wireinPORTEn, Cout => wireCout, Baout => wirebaout, PCout => wirePCout, MDRout => wireMDRout, Zhighout => wireZHIout, Zlowout => wireZLOout, HIout => wireHIout, LOout => wireLOout, PORTout => wirePORTout, Add_Sig => wireAdd_sig, Sub_Sig => wireSub_sig, And_Sig => wireAnd_sig, Or_Sig => wireOr_sig, SHR_Sig => wireShr_sig, SHL_sig => wireShl_sig, ROTR_Sig => wireRor_sig, ROTL_Sig => wireRol_sig, MUL_Sig => wireMul_sig, DIV_Sig => wireDiv_sig, Neg_Sig => wireNeg_sig, Not_Sig => wireNot_sig, IncPC => wireIncPC_sig, Read_sig => wireMDRRead);
+CU: control_unit port map(clock => wireclk, clear => wireclear, run => wirerun, Reset => wirereset, Stop => wirestop, CONFF => wireCONFFpassed, IR => IRin, ram_read => wireRAMReadEn, ram_write => wireRAMWriteEn, Gra => wiregra, Grb => wiregrb, Grc => wiregrc, Rin => wirerin, Rout => wirerout, HIin => wireHIEn, LOin => wireLOEn, CONin => wireCONFFEn, PCin => wirePCEn, IRin => wireIREn, Yin => wireYEn, Zin => wireZEn, MarIn => wireMAREn, MDRin => wireMDREn, OutPortin => wireoutPORTEn, InPORTin => wireinPORTEn, Cout => wireCout, Baout => wirebaout, PCout => wirePCout, MDRout => wireMDRout, Zhighout => wireZHIout, Zlowout => wireZLOout, HIout => wireHIout, LOout => wireLOout, PORTout => wirePORTout, Add_Sig => wireAdd_sig, Sub_Sig => wireSub_sig, And_Sig => wireAnd_sig, Or_Sig => wireOr_sig, SHR_Sig => wireShr_sig, SHL_sig => wireShl_sig, SHRA_sig => wireShra_sig, ROTR_Sig => wireRor_sig, ROTL_Sig => wireRol_sig, MUL_Sig => wireMul_sig, DIV_Sig => wireDiv_sig, Neg_Sig => wireNeg_sig, Not_Sig => wireNot_sig, IncPC => wireIncPC_sig, Read_sig => wireMDRRead);
 --CONFF
 CONFF1 : CONFF port map(BusInput => BusMuxOut, CONFFEn => wireCONFFEn, IRbits => IRin(20 downto 19), passed => wireCONFFpassed);
 --sel and encode
@@ -241,9 +241,14 @@ IRData <= IRin;
 CData <= CSE;
 OutportData <= outPORTin;
 InportInput <= IncomingData;
-Buscontents <= BusMuxOut;
 RamAddress <= MARin;
+Buscontents <= BusMuxOut;
 end process;
+
+--process(BusMuxOut)
+--begin
+--Buscontents <= BusMuxOut;
+--end process;
 
 process(wireMemDataIn)
 begin
@@ -311,6 +316,7 @@ Sub_Sig_DB <= wireSub_sig;
 And_Sig_DB <= wireAnd_sig;
 Or_Sig_DB <= wireOr_sig;
 SHR_Sig_DB <= wireShr_sig;
+SHRA_Sig_DB <= wireShra_sig;
 SHL_Sig_DB <= wireShl_sig;
 ROTR_Sig_DB <= wireRor_sig;
 ROTL_Sig_DB <= wireRol_sig;

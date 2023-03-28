@@ -16,13 +16,12 @@ port(Clock, Reset, Stop, CONFF: in std_logic;
 end control_unit;
 
 architecture behavior of control_unit is
-TYPE State IS (Fetch0, fetch1, fetchD1, fetchD2, fetchD3, fetch2, 
-						load3, load4, load5, load6, load61, load62, load63, load7,
+TYPE State IS (Fetch0, fetch1, fetchD1, fetchD2, fetchD3, fetch2, fetch3, 
+						load3, loadD, load4, load5, load6, load61, load62, load63, load7,
 						loadi3, loadi_delay, loadi4, loadi5,
-						store3, store4, store5,
+						store3, storeD, store4, store5, store6, store7,
 						loadr3, loadr4, loadr5, 
 						loadr61, loadr62, loadr63, loadr7,
-						storer3, storer4, storer5, storer6, storer7,
 						Add3, Add4, Add5,
 						Sub3, Sub4, Sub5,
 						And3, And4, And5,
@@ -70,6 +69,8 @@ begin
 			when fetchD3 =>
 				present_state <= fetch2;
 			when fetch2 =>
+				present_state <= fetch3;
+			when fetch3 =>
 				case IR(31 downto 27) is
 					when "00000" =>
 						present_state <= load3;
@@ -130,7 +131,9 @@ begin
 					when others =>
 				end case;
 			when load3 =>
-				Present_State <= load4;
+				Present_State <= loadD;
+			when loadD =>
+				Present_state <= load4;
 			when load4 =>
 				Present_State <= load5;
 			when load5 =>
@@ -156,10 +159,16 @@ begin
 				Present_State <= fetch0;
 			-------------------------------------------
 			when store3 =>
+				Present_State <= storeD;
+			when storeD =>
 				Present_State <= store4;
 			when store4 =>
 				Present_State <= store5;
 			when store5 =>
+				Present_State <= store6;
+			when store6 =>
+				Present_State <= store7;
+			when store7 =>
 				Present_State <= fetch0;
 			-------------------------------------------
 			when add3 =>
@@ -318,45 +327,59 @@ end process;
 
 process(present_State) is 
 begin
+			clear <='0'; run <='0'; ram_write <='0'; ram_read <='0';
+			PCout <='0'; MARin <='0'; INCPC <='0'; Zin <='0'; Run <= '1'; clear <= '0';
+			Gra <= '0'; Grb <= '0'; Grc <= '0'; Rin <= '0'; Rout <= '0';
+			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
+			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
+			Rin <= '0'; Rout <= '0'; Gra <= '0'; Grb <= '0'; Grc <= '0';
+			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0'; PORTout <= '0';
+			Add_Sig <= '0'; Sub_Sig <= '0'; And_Sig <= '0'; Or_Sig <= '0'; 
+			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0'; SHRA_Sig <= '0';
+			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
+			Read_sig <= '0';
 	case present_State is 
 		when reset_State =>
 			clear <='1'; run <='0';
-			Gra <= '0'; Grb <= '0'; Grc <= '0'; Rin <= '0'; Rout <= '0';
-			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
-			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
-			Rin <= '0'; Rout <= '0'; Gra <= '0'; Grb <= '0'; Grc <= '0';
-			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0'; PORTout <= '0';
-			Add_Sig <= '0'; Sub_Sig <= '0'; And_Sig <= '0'; Or_Sig <= '0'; 
-			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0';
-			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
-			Read_sig <= '0';
 		when fetch0 =>		
 			PCout <='1'; MARin <='1'; INCPC <='1'; Zin <='1'; Run <= '1'; clear <= '0';
 			
-			Gra <= '0'; Grb <= '0'; Grc <= '0'; Rin <= '0'; Rout <= '0';
-			HIin <= '0'; LOin <= '0'; CONin <= '0'; PCin <= '0'; IRin <= '0'; Yin <= '0'; Zin <= '0'; 
-			IncPC <= '0'; MARin <= '0'; MDRin <= '0'; OutPortin <= '0'; InPortin <= '0'; Cout <= '0'; BAout <= '0';
-			Rin <= '0'; Rout <= '0'; Gra <= '0'; Grb <= '0'; Grc <= '0';
-			PCout <= '0'; MDRout <= '0'; Zhighout <= '0'; Zlowout <= '0'; HIout <= '0'; LOout <= '0'; PORTout <= '0';
-			Add_Sig <= '0'; Sub_Sig <= '0'; And_Sig <= '0'; Or_Sig <= '0'; 
-			SHR_Sig <= '0'; SHL_Sig <= '0'; ROTR_Sig <= '0'; ROTL_Sig <= '0';
-			Mul_Sig <= '0'; Div_Sig <= '0'; Neg_Sig <= '0'; Not_Sig <= '0';
-			Read_sig <= '0';
 		when fetch1 =>
 			PCout <='0'; MARin <='0'; INCPC <='0'; Zin <='0';
 			
 			Zlowout <='1'; PCin <='1'; read_sig <='1'; mdrin <='1'; ram_read <='1';
+			
+		when fetchD1 =>
+			Zlowout <='1'; PCin <='1'; read_sig <='1'; mdrin <='1'; ram_read <='1';
+		when fetchD2 =>
+			Zlowout <='1'; PCin <='1'; read_sig <='1'; mdrin <='1'; ram_read <='1';
+		when fetchD3 =>
+			Zlowout <='1'; PCin <='1'; read_sig <='1'; mdrin <='1'; ram_read <='1';
+		
 		when fetch2 =>
 			Zlowout <='0'; PCin <='0'; read_sig <='0'; mdrin <='0'; ram_read <='0';
 			
 			mdrout <='1'; IRin <='1';
-		
+		when fetch3 =>
+			mdrout <='1'; IRin <='1';
 		----------------------------
 		
 		when load3 =>
 			mdrout <='0'; IRin <='0';
 			
-			Grb <='1'; BAout <='1'; yin <='1'; --might need to add in delay step for Yin signal, if not working do this for all ops!!!
+			Grb <='1';
+			if(IR(22 downto 19) = "0000") then
+				BAout <='1';
+			else
+				rout <= '1';
+			end if;
+		when loadD =>
+			yin <= '1'; Grb <='1'; 
+			if(IR(22 downto 19) = "0000") then
+				BAout <='1';
+			else
+				rout <= '1';
+			end if;
 		when load4 =>
 			Grb <='0'; BAout <='0'; yin <='0';
 			
@@ -369,6 +392,12 @@ begin
 			Zlowout <='0'; MARin <='0';
 			
 			read_sig <= '1'; MDRin <='1'; ram_read <='1';
+		when load61 =>
+			read_sig <= '1'; MDRin <='1'; ram_read <='1';
+		when load62 =>
+			read_sig <= '1'; MDRin <='1'; ram_read <='1';
+		when load63 =>
+			read_sig <= '1'; MDRin <='1'; ram_read <='1';
 		when load7 =>
 			read_sig <= '0'; MDRin <='0'; ram_read <='0';
 			
@@ -380,12 +409,17 @@ begin
 			
 			Grb <='1';
 			if(IR(22 downto 19) = "0000") then
-				rout <= '1';
-			else
 				BAout <='1';
+			else
+				rout <= '1';
 			end if;
 		when loadi_delay =>
-			Yin <= '1'; IncPC <= '1';
+			Yin <= '1'; Grb <='1';
+			if(IR(22 downto 19) = "0000") then
+				BAout <='1';
+			else
+				rout <= '1';
+			end if;
 		when loadi4 =>
 			Grb <='0'; BAout <='0'; rout <= '0'; Yin <='0';
 			
@@ -398,7 +432,20 @@ begin
 		when store3 =>
 			MDRout <='0'; IRin <='0';
 			
-			Grb <='1'; BAout <='1'; Yin <='1';
+			Grb <='1'; 
+			if(IR(22 downto 19) = "0000") then
+				BAout <='1';
+			else
+				rout <= '1';
+			end if;
+		when storeD =>
+			Yin <='1'; Grb <='1';
+			Grb <='1'; 
+			if(IR(22 downto 19) = "0000") then
+				BAout <='1';
+			else
+				rout <= '1';
+			end if;
 		when store4 =>
 			Grb <='0'; BAout <='0'; Yin <='0';
 			
@@ -406,8 +453,15 @@ begin
 		when store5 =>
 			Cout <= '0'; Add_Sig<='0'; Zin <='0';
 			
-			Zlowout <= '1'; MARin <='1'; --might need to add more states to reflect the testbench, unsure because we loaded back
-												  -- after storing, so this might need to change <--- we can check memory in Model Sim
+			Zlowout <= '1'; MARin <='1';
+		when store6 =>
+			Zlowout <= '0'; MARin <='0';
+			
+			Gra <= '1'; rout <= '1'; Mdrin <= '1';
+		when store7 =>
+			Gra <= '0'; rout <= '0'; Mdrin <= '0';
+			
+			Ram_write <= '1';
 		-----------------------------------
 		when add3 => --we didnt have a testbench for the form add r1, r2, r3, this is my best shot at it
 			MDRout <='0'; IRin <='0';
@@ -553,6 +607,20 @@ begin
 				
 			Zlowout <='1'; Gra <='1'; Rin<='1';
 		-------------------------------------------
+		--forgot to implement the andi instruction
+		when andi3 =>
+			MDRout <='0'; IRin <='0';
+		
+			Rout <='1'; Grb <='1'; Yin <='1';
+		when andi4 =>
+			Rout <='0'; Grb <='0'; Yin <='0';
+			
+			Cout <= '1'; and_Sig <='1'; Zin <='1';
+		when andi5 =>
+			Cout <= '0'; and_Sig <='0'; Zin <='0';
+			
+			Zlowout <='1'; Rin <='1'; Gra <='1';
+		-------------------------------------------
 		when mul3 =>
 			MDRout <='0'; IRin <='0';
 		
@@ -590,16 +658,20 @@ begin
 		when neg3 => 
 			MDRout <='0'; IRin <='0';
 			
-			Rout <='1'; Grb <='1'; Yin <='1'; NEG_Sig <='1'; Zin <='1'; -- might need to break into 2 steps
-		when neg4 =>
-			Rout <='0'; Grb <='0'; Yin <='0'; NEG_Sig <='0'; Zin <='0';
+			Rout <='1'; Grb <='1'; Yin <='1'; -- might need to break into 2 steps <- turns out this was a fact
+		when neg4 => 
+			Rout <='0'; Grb <='0'; Yin <='0'; 
+			
+			NEG_Sig <='1'; Zin <='1'; 
+		when neg5 =>
+			NEG_Sig <='0'; Zin <='0';
 			
 			Zlowout <='1'; Gra <='1'; Rin <='1';
 		--------------------------------------------
 		when not3 => 
 			MDRout <='0'; IRin <='0';
 			
-			Rout <='1'; Grb <='1'; Yin <='1'; NOT_Sig <='1'; Zin <='1'; -- might need to break into 2 steps
+			Rout <='1'; Grb <='1'; Yin <='1'; NOT_Sig <='1'; Zin <='1'; -- might need to break into 2 steps, probably, but we never use this
 		when not4 =>
 			Rout <='0'; Grb <='0'; Yin <='0'; NOT_Sig <='0'; Zin <='0';
 			
@@ -637,7 +709,7 @@ begin
 			
 			Grb <='1'; Rin <='1'; PCout <='1';
 		when jal4 =>
-			Grb <='1'; Rin <='1'; PCout <='1';
+			Grb <='0'; Rin <='0'; PCout <='0';
 			
 			Gra <='1'; Rout <='1'; PCin <='1';
 		----------------------------------------------
